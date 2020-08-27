@@ -1,11 +1,15 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This project is the back-end implementation of EdTech.\r ## Development Environment\r - Node.js Version: 12.18.3 (includes npm 6.14.6)\r - Express\r - MySQL Version: Community-8.0.21.0\r ### Set up handbook\r - [Node.js](https://nodejs.org/en/download/)\r - [Express](http://expressjs.com/en/starter/installing.html)\r - [MySQL](https://dev.mysql.com/downloads/mysql/)\r ## How to compile\r Use 'node EdTech.js' to compile",
+  "main": "EdTech.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
