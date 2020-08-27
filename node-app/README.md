@@ -8,7 +8,7 @@ This project is the back-end implementation of EdTech.
 1. [Node.js](https://nodejs.org/en/download/)
 2. [Express](http://expressjs.com/en/starter/installing.html)
 3. [MySQL](https://dev.mysql.com/downloads/mysql/)
-4. After finishing the above steps, go into your project folder and open command line. Use 'npm install mysql' to install MySQL driver.
+4. After finishing the above steps, go into your project folder and open command line. Use `npm install mysql` to install MySQL driver.
 ## How to compile
 Use 'node EdTech.js' to compile
-Then you can enter (http://localhost:3000/) to see the result.
+Then you can enter http://localhost:3000/ to see the result.
