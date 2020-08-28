@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "antd/dist/antd.css";
+import "./core.css";
+import "./googleFont.css"
 import App from "./LoginPage/App";
 import HomePage from "./HomePage/HomePage";
 import * as serviceWorker from "./serviceWorker";

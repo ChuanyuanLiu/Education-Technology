@@ -1,0 +1,13 @@
+.Header {
+    color: white;
+    background-color: #1A1F71;
+    font-size: 20px;
+    text-align: center;
+}
+
+
+.Col {
+    border: 2px solid black;
+    text-align: center;
+    padding: 10px;
+}
