@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import "./core.css";
 import "./googleFont.css"
-import App from "./LoginPage/App";
+import Login from "./LoginPage/Login";
 import HomePage from "./HomePage/HomePage";
 import * as serviceWorker from "./serviceWorker";
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
@@ -21,7 +21,7 @@ ReactDOM.render(
             </ul>
 
             <Route exact path='/' component={HomePage} />
-            <Route path='/login' component={App} />
+            <Route path='/login' component={Login} />
         </Router>
     </React.StrictMode>,
     document.getElementById("root")
