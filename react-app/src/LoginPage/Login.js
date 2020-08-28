@@ -2,17 +2,21 @@ import { Form, Input, Button} from 'antd';
 import React from "react"
 import "./Login.css"
 import 'antd/dist/antd.css';
-// import {StyleSheet, Image, View} from "react-native"
+import { useHistory } from "react-router-dom";
+
 
 
 function Login(){
     const onFinish = values => {
         console.log('Success:', values);
     };
-    
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
+    const history = useHistory();
+    function onClickHandle(){
+        history.push('/')
+    }
     return (
             <div className="Login">
                 <img src={require("./ee_logo.png")} 
@@ -36,7 +40,8 @@ function Login(){
                     },
                     ]}
                 >
-                    <Input placeholder="Please enter your username"/>
+                    <Input placeholder="Please enter your username"
+                          size="large"/>
                 </Form.Item>
             
                 <Form.Item
@@ -48,12 +53,15 @@ function Login(){
                     },
                     ]}
                 >
-                    <Input.Password placeholder="Please enter your password"/>
+                    <Input.Password placeholder="Please enter your password"
+                                    size="large"/>
                 </Form.Item>
             
                 <Form.Item>
-                    <Button type="primary" size="large" htmlType="submit"
-                            shape="round" block>
+                    <Button onClick={onClickHandle}
+                            type="primary" size="large" htmlType="submit"
+                            shape="round" block
+                            >
                     Login
                     </Button>
                 </Form.Item>

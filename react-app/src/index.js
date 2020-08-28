@@ -21,7 +21,7 @@ ReactDOM.render(
             </ul>
 
             <Route exact path='/' component={HomePage} />
-            <Route path='/login' component={Login} />
+            <Route path='/login' component={Login}/>
         </Router>
     </React.StrictMode>,
     document.getElementById("root")
