@@ -1,9 +1,10 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "This project is the back-end implementation of EdTech.\r ## Development Environment\r - Node.js Version: 12.18.3 (includes npm 6.14.6)\r - Express\r - MySQL Version: Community-8.0.21.0\r ### Set up handbook\r - [Node.js](https://nodejs.org/en/download/)\r - [Express](http://expressjs.com/en/starter/installing.html)\r - [MySQL](https://dev.mysql.com/downloads/mysql/)\r ## How to compile\r Use 'node EdTech.js' to compile",
-  "main": "EdTech.js",
+  "description": "This project is the back-end server implementation of EdTech Evaluation.\r ## Development Environment\r - Node.js Version: 12.18.3 (includes npm 6.14.6)\r - Express\r - MySQL Version: Community-8.0.21.0\r ### Set up handbook\r - [Node.js](https://nodejs.org/en/download/)\r - [Express](http://expressjs.com/en/starter/installing.html)\r - [MySQL](https://dev.mysql.com/downloads/mysql/)\r ## How to compile\r Use 'node server.js' or 'npm start' to compile",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

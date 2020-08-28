@@ -1,7 +1,5 @@
-var express = require('express');  //Import express module
 var mysql = require('mysql');      //Import mysql module
-var app = express();               //Create an instance of express
- 
+
 /*
 Create an instance of MySQL.
 Now I am just using my local MySQL database, when we host it on server, we should modify the following configuration
@@ -25,10 +23,5 @@ connection.query(sql, function (err,result) {
     console.log(result);  //Used to show in the command line
  
 });
-app.get('/',function (req,res) {
-    res.send(str); // Server responds to request
-});
+
 connection.end();
-app.listen(3000,function () {    //Listen on port 3000
-    console.log('Server running at 3000 port');
-});
