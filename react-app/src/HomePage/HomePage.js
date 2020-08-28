@@ -1,5 +1,5 @@
 import React from "react";
-import {Layout, Row, Col} from "antd";
+import {Layout} from "antd";
 import "./HomePage.css";
 const {Header, Content} = Layout;
 
@@ -13,14 +13,16 @@ function PageOptionList() {
     ];
 
     return (
+        <div className='center'>
         <div className='PageOptionList'>
-            <Row align="center" >
-                {list_names.map((name) => (
-                    <Col className="Col" xs={24} md={7}>
-                        {name}
-                    </Col>
-                ))}
-            </Row>
+            {list_names.map((name,i) => (
+                    <div className="Option" key={i}>
+                        <div className="Button">
+                    {name}
+                    </div>
+                    </div>
+            ))}
+        </div>
         </div>
     );
 }

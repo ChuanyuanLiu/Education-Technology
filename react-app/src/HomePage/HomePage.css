@@ -1,13 +1,49 @@
 .Header {
     color: white;
-    background-color: #1A1F71;
+    background-color: #1a1f71;
     font-size: 20px;
     text-align: center;
 }
 
+/* Mobile view that is consistent with digital prototype */
+@media screen and (max-width: 600px) {
+    .Option {
+        text-align: center;
+    }
+    .Button {
+        text-align: center;
+        border: 1px solid black;
+    }
+}
 
-.Col {
-    border: 2px solid black;
-    text-align: center;
-    padding: 10px;
+/* Display two columns if screen is 600 px or greater */
+@media screen and (min-width: 600px) {
+    .center {
+        text-align: center;
+    }
+
+    .PageOptionList {
+        display: inline-block;
+        width: 600px;
+    }
+
+    .Option {
+        width: 50%;
+        float: left;
+        text-align: center;
+    }
+
+    .Button {
+        text-align: center;
+        margin: 10px;
+        padding: 12px;
+        background-color: #8c8fb8;
+        color: white;
+        border-radius: 1em;
+    }
+
+    .Button:hover {
+        background-color:#eaecff; 
+        color:black;
+    }
 }
