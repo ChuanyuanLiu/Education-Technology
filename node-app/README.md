@@ -1,5 +1,5 @@
 # Descrption
-This project is the back-end implementation of EdTech.
+This project is the back-end server implementation of EdTech Evaluation.
 ## Development Environment
 - Node.js Version: 12.18.3 (includes npm 6.14.6)
 - Express
