@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
+var sqlConnector = require('./sqlConnector');
+
 router.get('/', function(req, res, next) {
-    let testReport = {
-        testField: 'testEntry'
-    }
-    res.send(testReport);
+    sqlConnector.sqlCall("SELECT * FROM report", function(sqlRes) {
+        res.send(sqlRes);
+    });
 });
   
 module.exports = router;
