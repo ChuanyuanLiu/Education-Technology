@@ -1,7 +1,8 @@
 import React from "react";
-import {Layout} from "antd";
+import NavBar from "../Utils/NavBar";
+import {Layout} from "antd"
 import "./HomePage.css";
-const {Header, Content} = Layout;
+const {Content} = Layout;
 
 function PageOptionList() {
     const list_names = [
@@ -31,7 +32,7 @@ function HomePage() {
     return (
         <div className='HomePage'>
             <Layout>
-                <Header className='Header'>Home</Header>
+                <NavBar title='Header'/>
                 <Content>
                     <PageOptionList />
                 </Content>

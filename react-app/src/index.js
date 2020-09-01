@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import "./core.css";
 import "./googleFont.css"
 import Login from "./LoginPage/Login";
+import Evaluation from "./EvaluationPage/EvaluationPage";
 import HomePage from "./HomePage/HomePage";
 import * as serviceWorker from "./serviceWorker";
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
@@ -18,10 +19,14 @@ ReactDOM.render(
                 <li>
                     <Link to='/login'>Login Page</Link>
                 </li>
+                <li>
+                    <Link to='/evaluation'>Evaluation Page</Link>
+                </li>
             </ul>
 
             <Route exact path='/' component={HomePage} />
             <Route path='/login' component={Login}/>
+            <Route path='/evaluation' component={Evaluation}/>
         </Router>
     </React.StrictMode>,
     document.getElementById("root")
