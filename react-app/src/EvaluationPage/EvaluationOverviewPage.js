@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import NavBar from "../Utils/NavBar";
-import "./Evaluation.css";
+import "./EvaluationOverview.css";
 import framework_data from "./framework.json";
 
 /*
@@ -86,7 +86,7 @@ function SectionsList({sections}) {
     );
 }
 
-function EvaluationPage() {
+function EvaluationOverviewPage() {
     return (
         <div className='EvaluationPage'>
             <NavBar title={framework_data.framework_title} />
@@ -96,4 +96,4 @@ function EvaluationPage() {
     );
 }
 
-export default EvaluationPage;
+export default EvaluationOverviewPage;
