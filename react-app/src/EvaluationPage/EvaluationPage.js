@@ -8,7 +8,7 @@ Evaluation Page Layout
 |-- NavBar
 |-- Summary
 |-- SectionList
-        |-- QuestionList
+        |-- Section
                 |-- Question
 */
 
@@ -30,7 +30,7 @@ function Summary({data = ""}) {
             <div className='section_header'>
                 Summary
                 <button onClick={toggleActive} className='right'>
-                    edit
+                    {getActive ? "save" : "edit"}
                 </button>
             </div>
             <textarea
@@ -50,17 +50,24 @@ function Question({question_title, question_id, section_index, index}) {
 
 // data is a list of question objects each contains
 // Question_Title, Question_ID
-function QuestionList({section_title, section_id, questions, index}) {
+function Section({section_title, section_id, questions, index}) {
+    // track expand or not
+    const [getExpand, setExpand] = useState(false);
+    const toggleExpand = (event) => {
+        event.preventDefault();
+        setExpand(!getExpand);
+    }
+
     return (
         <>
             <div className="sub_header">
                 {`Section ${index + 1} ${section_title}`}
-                <button className="right">Expand</button>
+                <button className="right" onClick={toggleExpand}>{getExpand ? "collapse" : "expand"}</button>
             </div>
             <ul>
-                {questions.map((s, i) => (
+                {getExpand ? questions.map((s, i) => (
                     <Question {...s} key={i} index={i} section_index={index} />
-                ))}
+                )) : null}
             </ul>
         </>
     );
@@ -73,7 +80,7 @@ function SectionsList({sections}) {
         <>
             <div className='section_header'>Sections</div>
             {sections.map((s, i) => (
-                <QuestionList key={i} index={i} {...s} />
+                <Section key={i} index={i} {...s} />
             ))}
         </>
     );
