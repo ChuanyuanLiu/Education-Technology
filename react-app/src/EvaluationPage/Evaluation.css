@@ -1,0 +1,23 @@
+textarea {
+    width: 100%;
+    padding: 10px;
+}
+
+.section_header {
+    padding: 10px;
+    background-color: rgb(222 222 222);
+}
+
+ul li {
+    list-style: none;
+}
+
+.sub_header {
+    padding: 10px;
+    border: black 1px;
+    border-style: solid none solid none;
+}
+
+.right {
+    float: right;
+}
