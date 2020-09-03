@@ -8,5 +8,14 @@ router.get('/', function(req, res, next) {
         res.send(sqlRes);
     });
 });
+
+router.get('/', function(req, res, next) {
+    sqlConnector.sqlCall("SELECT * FROM framework", function(sqlRes) {
+        res.send(sqlRes);
+    });
+});
   
 module.exports = router;
+
+// localhost:3000/framework&fid=1/section
+

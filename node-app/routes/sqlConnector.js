@@ -6,8 +6,8 @@ Create an instance of MySQL.
 var connection = mysql.createConnection({      
     host: 'localhost',
     user: 'root',
-    password: 'edtech',
-    database: 'edtech_evaluation'
+    password: 'mayuyao19970827',
+    database: 'edtech'
 });
 
 connection.connect(function(err) {
