@@ -1,0 +1,25 @@
+.evaluationInfo  {
+    border:1px  solid  black;
+}
+
+.buttomButton {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 500px;
+}
+
+.sub_header {
+    padding: 5px 5px 5px 10px;
+    border: black 1px;
+    border-style: hidden hidden solid hidden;
+}
+
+.section_header {
+    padding: 10px;
+    background-color: rgb(222 222 222);
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+}

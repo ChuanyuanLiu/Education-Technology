@@ -1,20 +1,20 @@
-import { Form, Input, Button} from 'antd';
+import { Form, Input} from 'antd';
 import React from "react"
 import "./Login.css"
 import 'antd/dist/antd.css';
+import BigButtion from "./../Utils/BigButton"
 import { useHistory } from "react-router-dom";
 
 
-
 function Login(){
+    const history = useHistory();
     const onFinish = values => {
         console.log('Success:', values);
     };
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
-    const history = useHistory();
-    function onClickHandle(){
+    function handleClick(){
         history.push('/')
     }
     return (
@@ -58,12 +58,13 @@ function Login(){
                 </Form.Item>
             
                 <Form.Item>
-                    <Button onClick={onClickHandle}
+                    {/* <Button onClick={onClickHandle}
                             type="primary" size="large" htmlType="submit"
                             shape="round" block
                             >
                     Login
-                    </Button>
+                    </Button> */}
+                    <BigButtion name="Login" handleClick={handleClick}/>
                 </Form.Item>
                 </Form>
                 </div>

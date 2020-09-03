@@ -27,17 +27,19 @@ class SearchBar extends React.Component{
 
     render(){
         return (
-        <div className="SearchBar">
-            <Search 
-                type = "text"
-                name = "search"
-                placeholder = "search.."
-                onSearch = {this.handleSearch}
-                onChange = {this.handleChange}
-                value = {this.state.search}
-            />
+            <div className="SearchHeader">
+                <div className="SearchBar">
+                    <Search 
+                        type = "text"
+                        name = "search"
+                        placeholder = "search.."
+                        onSearch = {this.handleSearch}
+                        onChange = {this.handleChange}
+                        value = {this.state.search}
+                    />
+                </div>
+            </div>
 
-        </div>
         )
     }
 }

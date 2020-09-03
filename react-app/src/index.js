@@ -7,12 +7,13 @@ import Login from "./LoginPage/Login";
 import EvaluationOverviewPage from "./EvaluationPage/EvaluationOverviewPage";
 import Evaluation from "./EvaluationPage/EvaluationPage";
 import HomePage from "./HomePage/HomePage";
+import QuestionContainer from "./EvaluationPage/QuestionContainer"
 import * as serviceWorker from "./serviceWorker";
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Router>
+        <Router >
             <ul>
                 <li>
                     <Link to='/'>Home Page</Link>
@@ -26,12 +27,16 @@ ReactDOM.render(
                 <li>
                     <Link to='/evaluation_overview'>Evaluation Overview</Link>
                 </li>
+                <li>
+                    <Link to='/question'>Question</Link>
+                </li>
             </ul>
 
             <Route exact path='/' component={HomePage} />
             <Route path='/login' component={Login}/>
             <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
             <Route path='/evaluation_list' component={Evaluation}/>
+            <Route path='/question' component={QuestionContainer} />
         </Router>
     </React.StrictMode>,
     document.getElementById("root")
