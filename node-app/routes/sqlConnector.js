@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'edtech',
-    database: 'edtech_evaluation'
+    database: 'edtech'
 });
 
 connection.connect(function(err) {
@@ -17,7 +17,7 @@ connection.connect(function(err) {
 
 //Execute SQL statement in MySQL database
 function sqlCall(sql, callback) {
-    connection.query(sql, function (err, result, fields) {
+    connection.query(sql, function (err, result, fields) {  
         if (err) throw err;
         callback(result);
     });
