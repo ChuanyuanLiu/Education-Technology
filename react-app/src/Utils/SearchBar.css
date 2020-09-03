@@ -6,4 +6,11 @@
     padding-right: 30px;
     padding-left: 30px;
     padding-bottom: 40px;
+    margin: auto;
+    max-width:  800px;
+
+    
+}
+.SearchHeader{
+    background-color: #1a1f71;
 }
