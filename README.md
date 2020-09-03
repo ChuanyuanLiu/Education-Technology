@@ -47,8 +47,8 @@ $ npm start     # Start Node.js app on port 3001
 ### MySQL server
 Ensure server is running via the MySQL notifier in the taskbar
 ``` bash
-$ mysql -u root -p                              # Login to MySQL server, change password to 'edtech' if needed
-mysql> create database edtech_evaluation        # Create a new database
-mysql> use edtech_evaluation                    # Use the new database in the server
-mysql> source <EdtechEvaluation.sql directory>  # Preload database with test data
+$ mysql -u root -p                                                                      # Login to MySQL server
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'edtech'; # Set password to access database locally
+mysql> flush privileges;                                                                # Refresh
+mysql> source <EdtechEvaluation.sql directory>;                                         # Preload database with test data
 ```
