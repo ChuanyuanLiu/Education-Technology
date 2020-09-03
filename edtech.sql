@@ -18,6 +18,9 @@
 --
 -- Table structure for table `evaluation`
 --
+DROP DATABASE IF EXISTS edtech;
+CREATE DATABASE edtech;
+USE edtech;
 
 DROP TABLE IF EXISTS `evaluation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
