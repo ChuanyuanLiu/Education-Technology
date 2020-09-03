@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'edtech',
-    database: 'edtech_evaluation'
+    database: 'edtech'
 });
 
 connection.connect(function(err) {

@@ -11,7 +11,7 @@ app.use('/framework', frameworkRouter);
 app.use('/evaluation', evaluationRouter);
 app.use('/report', reportRouter);
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 app.listen(port, function() {

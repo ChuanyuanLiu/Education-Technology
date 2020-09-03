@@ -30,3 +30,25 @@ $ git merge feature/username/task_name #Updating ea1b82a..05e9557 (Summary of ch
 $ git branch -d feature/username/task_name #Deleted branch feature/username/task_name (was 05e9557).
 $ git push origin dev
 ```
+
+## Setup
+### Front-end
+``` bash
+$ cd react-app  # Switch to front-end directory
+$ npm install   # Install dependencies
+$ yarn start    # Start React app on port 3000
+```
+### Back-end
+``` bash
+$ cd node-app   # Switch to back-end directory
+$ npm install   # Install dependencies
+$ npm start     # Start Node.js app on port 3001
+```
+### MySQL server
+Ensure server is running via the MySQL notifier in the taskbar
+``` bash
+$ mysql -u root -p                                                                      # Login to MySQL server
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'edtech'; # Set password to access database locally
+mysql> flush privileges;                                                                # Refresh
+mysql> source <EdtechEvaluation.sql directory>;                                         # Preload database with test data
+```
