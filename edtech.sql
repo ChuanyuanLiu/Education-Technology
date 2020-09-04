@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -24,7 +24,7 @@ USE edtech;
 
 DROP TABLE IF EXISTS `evaluation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `evaluation` (
   `Evaluation_ID` int NOT NULL AUTO_INCREMENT,
   `Evaluation_Author` varchar(50) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `evaluation` (
   PRIMARY KEY (`Evaluation_ID`),
   KEY `Framework_ID_idx` (`Framework_ID`),
   CONSTRAINT `Framework_ID` FOREIGN KEY (`Framework_ID`) REFERENCES `framework` (`Framework_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,7 +55,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `evaluation_responses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `evaluation_responses` (
   `Response_ID` int NOT NULL AUTO_INCREMENT,
   `Rate_Chosen` int NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE `evaluation_responses` (
   PRIMARY KEY (`Response_ID`),
   KEY `Question_ID_idx` (`Question_ID`),
   CONSTRAINT `Question_ID` FOREIGN KEY (`Question_ID`) REFERENCES `framework_sections_questions` (`Question_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,7 +82,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `framework`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `framework` (
   `Framework_ID` int NOT NULL AUTO_INCREMENT,
   `Framework_Title` varchar(200) NOT NULL DEFAULT 'New Framework',
@@ -91,7 +91,7 @@ CREATE TABLE `framework` (
   `Framework_ActiveStatus` tinyint NOT NULL DEFAULT '1',
   `Previous_FrameworkID` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`Framework_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `framework_sections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `framework_sections` (
   `Section_ID` int NOT NULL AUTO_INCREMENT,
   `Section_Title` varchar(200) NOT NULL DEFAULT 'New Section',
@@ -118,7 +118,7 @@ CREATE TABLE `framework_sections` (
   PRIMARY KEY (`Section_ID`),
   KEY `Framework_id_idx` (`Framework_ID`),
   CONSTRAINT `FrameworkID` FOREIGN KEY (`Framework_ID`) REFERENCES `framework` (`Framework_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +137,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `framework_sections_questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `framework_sections_questions` (
   `Question_ID` int NOT NULL AUTO_INCREMENT,
   `Question_Title` varchar(200) NOT NULL DEFAULT 'New Question',
@@ -145,7 +145,7 @@ CREATE TABLE `framework_sections_questions` (
   PRIMARY KEY (`Question_ID`),
   KEY `FrameworkQuestionID_idx` (`Section_ID`),
   CONSTRAINT `FrameworkSectionID` FOREIGN KEY (`Section_ID`) REFERENCES `framework_sections` (`Section_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,7 +164,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `framework_sections_questions_rate`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `framework_sections_questions_rate` (
   `Rate_ID` int NOT NULL AUTO_INCREMENT,
   `Rate_Title` varchar(200) NOT NULL DEFAULT 'New Rate',
@@ -173,7 +173,7 @@ CREATE TABLE `framework_sections_questions_rate` (
   PRIMARY KEY (`Rate_ID`),
   KEY `FramewrokSectionQuestionID_idx` (`Question_ID`),
   CONSTRAINT `FramewrokSectionQuestionID` FOREIGN KEY (`Question_ID`) REFERENCES `framework_sections_questions` (`Question_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +192,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `report`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `report` (
   `Report_ID` int NOT NULL AUTO_INCREMENT,
   `Report_Author` varchar(50) NOT NULL,
@@ -205,7 +205,7 @@ CREATE TABLE `report` (
   PRIMARY KEY (`Report_ID`),
   KEY `EvaluationID_idx` (`Evaluation_ID`),
   CONSTRAINT `EvaluationID` FOREIGN KEY (`Evaluation_ID`) REFERENCES `evaluation` (`Evaluation_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
