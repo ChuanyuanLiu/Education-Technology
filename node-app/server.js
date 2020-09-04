@@ -25,9 +25,8 @@ var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 app.listen(port, function() {
-    console.log('Listening on ' + port);
+    console.log('Listening on ' + port); 
 });
-
 /**
  * Normalize a port into a number, string, or false.
  * Taken from express-generator boilerplate
