@@ -6,9 +6,9 @@ var sqlConnector = require('./sqlConnector');
 //Evaluation Home page
 router.get('/', function(req, res, next) 
 {
-    const sql = "SELECT e.Evaluation_ID, e.Evaluation_Author, e.Evaluation_Title, e.Evaluation_CreationTime, "
-    + "e.Evaluation_ModifiedTime, e.Evaluation_Summary, e.Evaluation_Completed, e.Framework_ID, f.Framework_Title "
-    + "FROM evaluation e, framework f WHERE e.Framework_ID = f.Framework_ID;"
+    const sql = "SELECT e.*, f.Framework_Title "
+    + "FROM evaluation e, framework f "
+    + "WHERE e.Framework_ID = f.Framework_ID;"
     sqlConnector.sqlCall(sql, function(sqlRes) 
     {
         res.send(sqlRes);
@@ -23,9 +23,9 @@ router.get('/new', function(req, res, next)
     if(req.query.framework_id != null && req.query.question_id != null)
     {
         // return all rates of the chosen question
-        const sql = "SELECT * "
-            + "FROM framework_sections_questions_rate "
-            + "WHERE Question_ID = " + req.query.question_id;
+        const sql = "select r.*, q.Question_Title "
+            + "FROM framework_sections_questions_rate r, framework_sections_questions q "
+            + "WHERE r.Question_ID = " + req.query.question_id + " and q.Question_ID = " + req.query.question_id;
         
         sqlConnector.sqlCall(sql, function(rateRes)
         {
@@ -34,6 +34,7 @@ router.get('/new', function(req, res, next)
             let index = 0;
             let cleanRes = {};
             cleanRes.Question_ID = req.query.question_id;
+            cleanRes.Question_Title = rateRes[0].Question_Title;
             cleanRes.Rates = [];
 
             for (let i =0; i <rateRes.length; i++)
