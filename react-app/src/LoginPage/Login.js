@@ -15,7 +15,7 @@ function Login(){
         console.log('Failed:', errorInfo);
     };
     function handleClick(){
-        history.push('/')
+        history.push('/home_page')
     }
     return (
             <div className="Login">

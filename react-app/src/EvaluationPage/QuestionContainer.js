@@ -67,7 +67,7 @@ class Question extends React.Component {
                               onChange={this.handleChange}/>
 
                     <div className="buttomButton">
-                        <BigButton name="Save" onClick={this.handleSubmit}/>
+                        <BigButton name="Save" handleClick={this.handleSubmit}/>
                     </div>
                 </form>
             </div>
