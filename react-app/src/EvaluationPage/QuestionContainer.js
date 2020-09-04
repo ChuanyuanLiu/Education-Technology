@@ -3,6 +3,8 @@ import NavBar from '../Utils/NavBar'
 import questionData from './questionData.json'
 import BigButton from '../Utils/BigButton'
 import QuestionContainer from "./QuestionComponent"
+import "./EvaluationPage.css"
+
 class Question extends React.Component {
 
     constructor(){
