@@ -6,7 +6,7 @@ Create an instance of MySQL.
 var connection = mysql.createConnection({      
     host: 'localhost',
     user: 'root',
-    password: 'edtech',
+    password: 'password',
     database: 'edtech'
 });
 
