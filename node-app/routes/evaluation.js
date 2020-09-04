@@ -6,9 +6,9 @@ var sqlConnector = require('./sqlConnector');
 //Evaluation Home page
 router.get('/', function(req, res, next) 
 {
-    const sql = "SELECT e.*, f.Framework_Title "
+    const sql = "SELECT e.*, f.framework_title "
     + "FROM evaluation e, framework f "
-    + "WHERE e.Framework_ID = f.Framework_ID;"
+    + "WHERE e.framework_id = f.framework_id;"
     sqlConnector.sqlCall(sql, function(sqlRes) 
     {
         res.send(sqlRes);
@@ -23,9 +23,9 @@ router.get('/new', function(req, res, next)
     if(req.query.framework_id != null && req.query.question_id != null)
     {
         // return all rates of the chosen question
-        const sql = "select r.*, q.Question_Title "
-            + "FROM framework_sections_questions_rate r, framework_sections_questions q "
-            + "WHERE r.Question_ID = " + req.query.question_id + " and q.Question_ID = " + req.query.question_id;
+        const sql = "select r.*, q.question_title "
+            + "FROM framework_section_question_rate r, framework_section_question q "
+            + "WHERE r.question_id = " + req.query.question_id + " and q.question_id = " + req.query.question_id;
         
         sqlConnector.sqlCall(sql, function(rateRes)
         {
@@ -33,14 +33,14 @@ router.get('/new', function(req, res, next)
             let ridToIndex = new Map();
             let index = 0;
             let cleanRes = {};
-            cleanRes.Question_ID = req.query.question_id;
-            cleanRes.Question_Title = rateRes[0].Question_Title;
-            cleanRes.Rates = [];
+            cleanRes.question_id = req.query.question_id;
+            cleanRes.question_title = rateRes[0].question_title;
+            cleanRes.rates = [];
 
             for (let i =0; i <rateRes.length; i++)
             {
                 let r = rateRes[i];
-                let rid = r.Rate_ID;
+                let rid = r.rate_id;
 
                 // Initialise new section
                 if (!ridToIndex.has(rid)) 
@@ -48,11 +48,11 @@ router.get('/new', function(req, res, next)
                     ridToIndex.set(rid, index);
                     let cleanRate = 
                     {
-                        'Rate_ID': rid,
-                        'Rate_Title': r.Rate_Title,
-                        'Rate_Criterion': r.Rate_Criterion
+                        'rate_id': rid,
+                        'rate_title': r.rate_title,
+                        'rate_criterion': r.rate_criterion
                     };
-                    cleanRes.Rates[index++] = cleanRate;
+                    cleanRes.rates[index++] = cleanRate;
                 }
             }
 
@@ -66,9 +66,9 @@ router.get('/new', function(req, res, next)
     {
         // Return all data of the chosen framework
         const sql = "SELECT * "
-            + "FROM framework_sections JOIN framework_sections_questions "
-            + "ON framework_sections.Section_ID = framework_sections_questions.Section_ID "
-            + "WHERE framework_sections.Framework_ID = " + req.query.framework_id + "AND Framework_ActiveStatus";
+            + "FROM framework_section JOIN framework_section_question "
+            + "ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE framework_section.framework_id = " + req.query.framework_id;
         sqlConnector.sqlCall(sql, function(questionRes) 
         {
             
@@ -76,14 +76,14 @@ router.get('/new', function(req, res, next)
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
-            cleanRes.Framework_ID = req.query.framework_id;
-            cleanRes.Sections = [];
+            cleanRes.framework_id = req.query.framework_id;
+            cleanRes.sections = [];
 
             for (let i = 0; i < questionRes.length; i++) 
             {
 
                 let q = questionRes[i];
-                let sid = q.Section_ID;
+                let sid = q.section_id;
 
                 // Initialise new section
                 if (!sidToIndex.has(sid)) 
@@ -91,20 +91,20 @@ router.get('/new', function(req, res, next)
                     sidToIndex.set(sid, index);
                     let cleanSection = 
                     {
-                        'Section_ID': sid,
-                        'Section_Title': q.Section_Title,
-                        'Questions': []
+                        'section_id': sid,
+                        'section_title': q.section_title,
+                        'questions': []
                     };
-                    cleanRes.Sections[index++] = cleanSection;
+                    cleanRes.sections[index++] = cleanSection;
                 }
 
                 // Insert formatted question into section
                 let cleanQuestion = 
                 {
-                    'Question_ID': q.Question_ID,
-                    'Question_Title': q.Question_Title
+                    'question_id': q.question_id,
+                    'question_title': q.question_title
                 };
-                cleanRes.Sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
+                cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
             }
 
             res.send(cleanRes);
@@ -114,7 +114,7 @@ router.get('/new', function(req, res, next)
     else 
     {
         // Default; return all active frameworks
-        const sql = "SELECT * FROM framework WHERE Framework_ActiveStatus = 1";
+        const sql = "SELECT * FROM framework WHERE framework_active_status = 1";
         sqlConnector.sqlCall(sql, function(frameworkRes) 
         {
             res.send(frameworkRes);
