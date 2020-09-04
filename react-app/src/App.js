@@ -15,7 +15,7 @@ function App(){
                 <Route exact path='/' component={Login} />
                 <Route path='/home_page' component={HomePage}/>
                 <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
-                <Route path='/evaluation_list' component={Evaluation}/>
+                <Route path='/evaluation' component={Evaluation}/>
                 <Route path='/question' component={QuestionContainer} />
             </Router>
          </React.StrictMode>

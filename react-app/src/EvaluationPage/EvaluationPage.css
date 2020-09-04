@@ -1,7 +1,7 @@
 .evaluationInfo  {
     border:1px  solid  black;
+    position: relative;
 }
-
 .buttomButton {
     margin: 0 auto;
     width: 80%;
@@ -22,4 +22,42 @@
 textarea {
     width: 100%;
     padding: 10px;
+    height: 300px;
+}
+
+.evaluationStatus{
+    /* float:right; */
+    top:0px;
+    right:0px;
+    position:absolute;
+}
+.framework{
+    position: relative;
+    float:right;
+}
+
+.author{
+    margin: 10px;
+}
+
+.date{
+    margin-left: 5px;
+}
+
+.evaluationTitle{
+    margin-left: 5px;
+}
+
+.question{
+    margin-left: 10px;
+    font-size: 18px; 
+    font-weight: bold; 
+}
+
+.rateCriteria{
+    margin-top: 5px;
+    margin-left: 16px;
+    font-style: normal;
+    font-size: 15px;
+    font-weight: normal;
 }

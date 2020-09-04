@@ -1,8 +1,9 @@
 import React from "react"
 import "./EvaluationPage.css"
+
 function QuestionContainer(props){
     return (
-        <div>
+        <div className="question">
             <label>
                 <input 
                     type="radio"
@@ -11,7 +12,7 @@ function QuestionContainer(props){
                     checked={props.choice === "notApplicable"}
                     onChange={props.handleChange}
                 /> Not Applicable
-                <div>
+                <div className="rateCriteria">
                     {props.data.notApplicable}
                 </div> 
             </label>
@@ -24,7 +25,7 @@ function QuestionContainer(props){
                     checked={props.choice === "belowBasic"}
                     onChange={props.handleChange}
                 /> Below Basic
-                <div>
+                <div className="rateCriteria">
                     {props.data.belowBasic}
                 </div> 
             </label>
@@ -37,7 +38,7 @@ function QuestionContainer(props){
                     checked={props.choice === "basic"}
                     onChange={props.handleChange}
                 /> Basic
-                <div>
+                <div className="rateCriteria"> 
                     {props.data.basic}
                 </div> 
             </label>
@@ -50,7 +51,7 @@ function QuestionContainer(props){
                     checked={props.choice === "adequate"}
                     onChange={props.handleChange}
                 /> Adequate
-                <div>
+                <div className="rateCriteria">
                     {props.data.adequate}
                 </div> 
             </label>
@@ -63,7 +64,7 @@ function QuestionContainer(props){
                     checked={props.choice === "exceptional"}
                     onChange={props.handleChange}
                 /> Exceptional
-                <div>
+                <div className="rateCriteria">
                     {props.data.exceptional}
                 </div > 
             </label>

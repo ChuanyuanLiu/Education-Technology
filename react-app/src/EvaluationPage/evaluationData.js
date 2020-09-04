@@ -4,7 +4,8 @@ const evaluationData = [
     author: "Gerald",
     framework: "Primary EdTect Framework",
     date: "11/5/2020",
-    status: "active"
+    status: "active",
+    title:"Test Evaluation"
 }
 ,
 {
@@ -12,7 +13,8 @@ const evaluationData = [
     author: "Gale",
     framework: "VR EdTech Framework",
     date: "11/5/2020",
-    status: "completed"
+    status: "completed",
+    title:"Mr Gale's Evaluation"
 }
 
 ]

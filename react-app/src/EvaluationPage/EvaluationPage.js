@@ -25,7 +25,6 @@ class EvaluationPage extends React.Component{
             <div className="buttomButton"  >            
                 <BigButton name="New Evaluation"
                            type="direct"
-                           linkto="/evaluation_overview"
                 />
             </div>
 
