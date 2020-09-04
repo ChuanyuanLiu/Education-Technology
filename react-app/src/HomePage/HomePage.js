@@ -13,7 +13,6 @@ function PageOptionList() {
         "Settings",
     ];
 
-
     return (
         <div className='center'>
         <div className='PageOptionList'>
@@ -29,12 +28,12 @@ function PageOptionList() {
     );
 }
 
-function HomePage() {
+function HomePage(props) {
     return (
         <div className='HomePage'>
             <Layout>
                 <NavBar title='Header'/>
-                <Content>
+                <Content  onClick={()=>{props.history.push('./evaluation')}}>
                     <PageOptionList />
                 </Content>
             </Layout>

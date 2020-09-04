@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import NavBar from "../Utils/NavBar";
 import "./EvaluationOverview.css";
 import framework_data from "./framework.json";
-
+import { useHistory } from "react-router-dom";
 /*
 Evaluation Page Layout
 |-- NavBar
@@ -45,12 +45,16 @@ function Summary({data = ""}) {
 // data is a question object that contains
 // Question_Title, Question_ID
 function Question({question_title, question_id, section_index, index}) {
-    return <li>{`${section_index+1}.${index+1} ${question_title}`}</li>;
+    const history = useHistory();
+    function handleClick(){
+        history.push('./question')
+    }
+    return <li onClick={handleClick}>{`${section_index+1}.${index+1} ${question_title}`}</li>;
 }
 
 // data is a list of question objects each contains
 // Question_Title, Question_ID
-function Section({section_title, section_id, questions, index}) {
+function Section( {section_title, section_id, questions, index}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -66,7 +70,7 @@ function Section({section_title, section_id, questions, index}) {
             </div>
             <ul>
                 {getExpand ? questions.map((s, i) => (
-                    <Question {...s} key={i} index={i} section_index={index} />
+                    <Question  {...s} key={i} index={i} section_index={index} />
                 )) : null}
             </ul>
         </>
@@ -86,12 +90,12 @@ function SectionsList({sections}) {
     );
 }
 
-function EvaluationOverviewPage() {
+function EvaluationOverviewPage(props) {
     return (
         <div className='EvaluationPage'>
             <NavBar title={framework_data.framework_title} />
             <Summary />
-            <SectionsList {...framework_data} />
+            <SectionsList {...framework_data}  />
         </div>
     );
 }
