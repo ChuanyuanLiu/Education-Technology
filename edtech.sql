@@ -45,6 +45,7 @@ CREATE TABLE `evaluation` (
 --
 
 LOCK TABLES `evaluation` WRITE;
+INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',1,1);
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -100,7 +101,7 @@ CREATE TABLE `framework` (
 
 LOCK TABLES `framework` WRITE;
 /*!40000 ALTER TABLE `framework` DISABLE KEYS */;
-INSERT INTO `framework` VALUES (1,'Primary EdTech Evaluation','William','2020-08-28 10:00:45',1,0),(2,'Secondary EdTech Evaluation','George','2020-08-28 10:02:02',1,0);
+INSERT INTO `framework` VALUES (1,'Primary EdTech Framework','Gerald','2020-08-28 10:00:45',1,0),(2,'Secondary EdTech Framework','Gerald','2020-08-28 10:02:02',1,0);
 /*!40000 ALTER TABLE `framework` ENABLE KEYS */;
 UNLOCK TABLES;
 
