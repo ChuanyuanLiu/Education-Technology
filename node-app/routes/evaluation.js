@@ -6,7 +6,10 @@ var sqlConnector = require('./sqlConnector');
 //Evaluation Home page
 router.get('/', function(req, res, next) 
 {
-    sqlConnector.sqlCall("SELECT * FROM evaluation", function(sqlRes) 
+    const sql = "SELECT e.Evaluation_ID, e.Evaluation_Author, e.Evaluation_Title, e.Evaluation_CreationTime, "
+    + "e.Evaluation_ModifiedTime, e.Evaluation_Summary, e.Evaluation_Completed, e.Framework_ID, f.Framework_Title "
+    + "FROM evaluation e, framework f WHERE e.Framework_ID = f.Framework_ID;"
+    sqlConnector.sqlCall(sql, function(sqlRes) 
     {
         res.send(sqlRes);
     });
