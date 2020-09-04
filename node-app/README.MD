@@ -17,7 +17,7 @@ Having downloaded the sql scripts (EdtechEvaluation.sql) save them under MySql s
 2. Redirect to MySql server\bin directory
 3. Run the following commands
 - `mysql -u root -p` followed by MySql password (for MySql connection)
-- `source Edtech.sql`
+- `source edtech.sql`
 
 Mysql configuration: 
 - user: 'root',

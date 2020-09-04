@@ -48,5 +48,5 @@ $ npm start     # Start Node.js app on port 3001
 Ensure server is running via the MySQL notifier in the taskbar
 ``` bash
 $ mysql -u root -p                              # Login to MySQL server, change password to 'edtech' if needed
-mysql> source <Edtech.sql directory>  # Preload database with test data
+mysql> source <edtech.sql directory>  # Preload database with test data
 ```
