@@ -17,6 +17,4 @@ Having downloaded the sql scripts (EdtechEvaluation.sql) save them under MySql s
 2. Redirect to MySql server\bin directory
 3. Run the following commands
 - `mysql -u root -p` followed by MySql password (for MySql connection)
-- `create database edtech_evaluation`
-- `use edtech_evaluation`
-- `source EdtechEvaluation.sql`
+- `source Edtech.sql`
