@@ -16,6 +16,7 @@ function Login(){
     };
     function handleClick(){
         history.push('/home_page')
+
     }
     return (
             <div className="Login">

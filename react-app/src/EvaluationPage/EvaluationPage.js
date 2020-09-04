@@ -10,12 +10,22 @@ class EvaluationPage extends React.Component{
     constructor(){
         super()
         this.state = {
-            evaluationInfos: evaluationData
+            evaluationInfos: []
         }
+    }
+
+    componentWillMount(){
+        fetch("http://localhost:3001/evaluation")
+            .then(response => response.json())
+            .then(data => {
+                this.setState(
+                    {evaluationInfos: data}
+                )
+            })
     }
     render (){
         const evaluationlist = this.state.evaluationInfos.map(data =>
-            <EvaluationInfo key={data.id} item={data} />)
+            <EvaluationInfo key={data.evaluation_id} item={data} />)
         return (
         <div>
             <NavBar title = 'Evaluation' />
