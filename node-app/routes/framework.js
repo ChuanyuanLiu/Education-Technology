@@ -9,30 +9,29 @@ router.get('/', function(req, res, next) {
         // Detailed; Returns single framework with sections and questions
         // sql = "SELECT * FROM framework WHERE framework_id = " + req.query.framework_id;
         const sql = "SELECT * "
-            + "FROM framework_sections JOIN framework_sections_questions "
-            + "ON framework_sections.Section_ID = framework_sections_questions.Section_ID "
-            + "WHERE framework_sections.Framework_ID = " + req.query.framework_id;
+            + "FROM framework_section JOIN framework_section_question "
+            + "ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE framework_section.framework_id = " + req.query.framework_id;
         sqlConnector.sqlCall(sql, function(questionRes) {
             
             // Format output into hierarchies
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
-            cleanRes.Framework_ID = req.query.framework_id;
+            cleanRes.framework_id = req.query.framework_id;
             cleanRes.sections = [];
-            console.log(questionRes);
 
             for (let i = 0; i < questionRes.length; i++) {
 
                 let q = questionRes[i];
-                let sid = q.Section_ID;
+                let sid = q.section_id;
 
                 // Initialise new section
                 if (!sidToIndex.has(sid)) {
                     sidToIndex.set(sid, index);
                     cleanSection = {
-                        'Section_ID': sid,
-                        'Section_Title': q.Section_Title,
+                        'section_id': sid,
+                        'section_title': q.section_title,
                         'questions': []
                     };
                     cleanRes.sections[index++] = cleanSection;
@@ -40,8 +39,8 @@ router.get('/', function(req, res, next) {
 
                 // Insert formatted question into section
                 let cleanQuestion = {
-                    'Question_ID': q.Question_ID,
-                    'Question_Title': q.Question_Title
+                    'question_id': q.question_id,
+                    'question_title': q.question_title
                 };
                 cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
 
