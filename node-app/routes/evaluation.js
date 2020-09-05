@@ -64,7 +64,7 @@ router.get('/new', function(req, res, next)
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     else if (req.query.framework_id != null) 
     {
-        // Return all data of the chosen framework
+        // Return all data of the chosen framework and also the 
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             + "SELECT * "
