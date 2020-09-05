@@ -123,7 +123,23 @@ router.get('/new', function(req, res, next)
 });
 
 router.post('/update/title', function(req, res, next) {
+    let id = req.query.evaluation_id;
+    let title = req.body.evaluation_title;
+    let summary = req.body.evaluation_summary;
 
+    let date = new Date();
+    console.log(date);
+    date.format("yyyy-mm-dd hh:mm:ss");
+
+    const sql = "UPDATE evaluation "
+            + "SET evaluation_title = '" + title
+            + "', evaluation_summary = '" + summary
+            + "', evaluation_modified_time = '" + date + "' "
+            + "WHERE evaluation_id = " + id;
+    
+    sqlConnector.sqlCall(sql, function(updateRes) {
+        console.log(updateRes);
+    });
 });
 
 router.post('/update/response', function(req, res, next) {

@@ -17,14 +17,14 @@ app.all('*', function(req, res, next) {
     next();
 });
 
+// Setup middleware for parsing POST requests
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // Delegate routers for request data types
 app.use('/framework', frameworkRouter);
 app.use('/evaluation', evaluationRouter);
 app.use('/report', reportRouter);
-
-// Setup middleware for parsing POST requests
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
