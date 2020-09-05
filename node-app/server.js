@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var frameworkRouter = require('./routes/framework');
 var evaluationRouter = require('./routes/evaluation');
@@ -15,6 +16,10 @@ app.all('*', function(req, res, next) {
     res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
+
+// Setup middleware for parsing POST requests
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Delegate routers for request data types
 app.use('/framework', frameworkRouter);
