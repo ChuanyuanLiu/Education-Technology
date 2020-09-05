@@ -11,6 +11,7 @@ class EvaluationPage extends React.Component{
         this.state = {
             evaluationInfos: []
         }
+        this.handleClick = this.handleClick.bind(this)
     }
 
     componentWillMount(){
@@ -22,6 +23,11 @@ class EvaluationPage extends React.Component{
                 )
             })
     }
+
+    handleClick(){
+        alert('hello')
+        this.props.history.push('/new_evaluation')
+    }
     render (){
         const evaluationlist = this.state.evaluationInfos.map(data =>
             <EvaluationInfo key={data.evaluation_id} item={data} />)
@@ -31,9 +37,11 @@ class EvaluationPage extends React.Component{
             <SearchBar />
             <div>{evaluationlist}</div>
             <br /><br /><br /><br /><br /><br />
-            <div className="buttomButton"  >            
+            <div className="buttomButton" 
+                onClick={this.handleClick} >            
                 <BigButton name="New Evaluation"
                            type="direct"
+                           
                 />
             </div>
 
