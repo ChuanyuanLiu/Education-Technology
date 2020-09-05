@@ -2,7 +2,6 @@ import React from "react";
 import "./EvaluationPage.css"
 import NavBar from "../Utils/NavBar"
 import SearchBar from "../Utils/SearchBar"
-import evaluationData from "./evaluationData"
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton"
 
