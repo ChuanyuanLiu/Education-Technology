@@ -65,24 +65,28 @@ router.get('/new', function(req, res, next)
     else if (req.query.framework_id != null) 
     {
         // Return all data of the chosen framework
-        const sql = "SELECT * "
+        const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
+            + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+            + "SELECT * "
             + "FROM framework_section JOIN framework_section_question "
             + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = " + req.query.framework_id;
+            + "WHERE framework_section.framework_id = " + req.query.framework_id+";";
         sqlConnector.sqlCall(sql, function(questionRes) 
         {
-            
             // Format output into hierarchies
+            let evaluation_id = questionRes[1][0].LAST_INSERT_ID;
+            console.log(evaluation_id);
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
+            cleanRes.evaluation_id = evaluation_id;
             cleanRes.framework_id = req.query.framework_id;
             cleanRes.sections = [];
 
-            for (let i = 0; i < questionRes.length; i++) 
+            for (let i = 0; i < questionRes[2].length; i++) 
             {
 
-                let q = questionRes[i];
+                let q = questionRes[2][i];
                 let sid = q.section_id;
 
                 // Initialise new section
