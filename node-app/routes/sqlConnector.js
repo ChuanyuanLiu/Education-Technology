@@ -7,7 +7,8 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'edtech',
-    database: 'edtech'
+    database: 'edtech',
+    multipleStatements: true
 });
 
 connection.connect(function(err) {

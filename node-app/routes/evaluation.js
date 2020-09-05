@@ -65,25 +65,29 @@ router.get('/new', function(req, res, next)
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     else if (req.query.framework_id != null) 
     {
-        // Return all data of the chosen framework
-        const sql = "SELECT * "
+        // Return all data of the chosen framework and also the 
+        const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
+            + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+            + "SELECT * "
             + "FROM framework_section JOIN framework_section_question "
             + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = " + req.query.framework_id;
+            + "WHERE framework_section.framework_id = " + req.query.framework_id+";";
         sqlConnector.sqlCall(sql, function(questionRes) 
         {
-            
             // Format output into hierarchies
+            let evaluation_id = questionRes[1][0].LAST_INSERT_ID;
+            console.log(evaluation_id);
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
+            cleanRes.evaluation_id = evaluation_id;
             cleanRes.framework_id = req.query.framework_id;
             cleanRes.sections = [];
 
-            for (let i = 0; i < questionRes.length; i++) 
+            for (let i = 0; i < questionRes[2].length; i++) 
             {
 
-                let q = questionRes[i];
+                let q = questionRes[2][i];
                 let sid = q.section_id;
 
                 // Initialise new section
@@ -124,7 +128,23 @@ router.get('/new', function(req, res, next)
 });
 
 router.post('/update/title', function(req, res, next) {
+    let id = req.query.evaluation_id;
+    let title = req.body.evaluation_title;
+    let summary = req.body.evaluation_summary;
 
+    let date = new Date();
+    console.log(date);
+    date.format("yyyy-mm-dd hh:mm:ss");
+
+    const sql = "UPDATE evaluation "
+            + "SET evaluation_title = '" + title
+            + "', evaluation_summary = '" + summary
+            + "', evaluation_modified_time = '" + date + "' "
+            + "WHERE evaluation_id = " + id;
+    
+    sqlConnector.sqlCall(sql, function(updateRes) {
+        console.log(updateRes);
+    });
 });
 
 router.post('/update/response', function(req, res, next) {

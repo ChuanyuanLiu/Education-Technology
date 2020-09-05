@@ -17,7 +17,7 @@ app.all('*', function(req, res, next) {
 });
 
 // Setup middleware for parsing POST requests
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Delegate routers for request data types
