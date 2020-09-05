@@ -122,4 +122,12 @@ router.get('/new', function(req, res, next)
     }
 });
 
+router.post('/update/title', function(req, res, next) {
+
+});
+
+router.post('/update/response', function(req, res, next) {
+
+});
+
 module.exports = router;
