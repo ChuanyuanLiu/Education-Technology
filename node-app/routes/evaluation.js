@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 var sqlConnector = require('./sqlConnector');
 
 //Evaluation Home page
@@ -120,6 +121,34 @@ router.get('/new', function(req, res, next)
             res.send(frameworkRes);
         });
     }
+});
+
+router.post('/update/title', function(req, res, next) {
+
+});
+
+router.post('/update/response', function(req, res, next) {
+
+    // Example: http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12
+    if(req.query.evaluation_id != null && req.query.question_id != null)
+    {
+        console.log(req.body);
+        var rate_chosen = req.body.rate_chosen;
+        var response_comment = req.body.response_comment;
+        var evaluation_id = req.query.evaluation_id;
+        var question_id = req.query.question_id;
+        const sql =  "INSERT INTO evaluation_response (rate_chosen, response_comment, evaluation_id, question_id) "
+        +"VALUES(" + rate_chosen + ",\"" + response_comment + "\","  + evaluation_id + "," + question_id + ")" ; 
+      
+        sqlConnector.sqlCall(sql, function(updateResponse) 
+        {
+
+        console.log(updateResponse)
+        
+
+                });       
+
+    } 
 });
 
 module.exports = router;
