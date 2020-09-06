@@ -6,21 +6,152 @@ var sqlConnector = require('./sqlConnector');
 const unsuccessful = "The call to the SQL database was unsuccessful.";
 const successful = "The call to the SQL database was successful."
 
-//Evaluation Home page
+//Evaluation Home page & edit previous evaluation
 router.get('/', function(req, res, next) 
 {
-    const sql = "SELECT e.*, f.framework_title "
-    + "FROM evaluation e, framework f "
-    + "WHERE e.framework_id = f.framework_id;"
-    sqlConnector.sqlCall(sql, function(sqlRes) 
+    // Question_rate page, display all rates with answer and comment.
+    // Example: http://localhost:3001/evaluation?evaluation_id=1&question_id=1
+    if(req.query.evaluation_id != null  && req.query.question_id != null)
     {
-        if (sqlRes == null) {
-            res.send(unsuccessful);
-            return;
-        }
+        // return all rates of the chosen question
+        const sql = "SELECT r.*, q.question_title "
+        + "FROM framework_section_question_rate r, framework_section_question q "
+        + "WHERE r.question_id = " + req.query.question_id + " AND q.question_id = " + req.query.question_id + ";"
+        + "SELECT *"
+        + "FROM evaluation_response "
+        + "WHERE question_id = " + req.query.question_id + " AND evaluation_id = " + req.query.evaluation_id + ";";
+        sqlConnector.sqlCall(sql, function(rateRes)
+        {
+            if (rateRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
 
-        res.send(sqlRes);
-    });
+            // Format output into hierarchies
+            let questionRes = rateRes[0];
+            let responseRes = rateRes[1];
+            let ridToIndex = new Map();
+            let index = 0;
+            let cleanRes = {};
+            cleanRes.question_id = req.query.question_id;
+            cleanRes.question_title = questionRes[0].question_title;
+            // If the question has not been rated
+            if(responseRes[0]==null)
+            {
+                cleanRes.rate_chosen = "";
+                cleanRes.response_comment = "";
+            }
+            else
+            {
+                cleanRes.rate_chosen = responseRes[0].rate_chosen;
+                cleanRes.response_comment = responseRes[0].response_comment;
+            }
+            cleanRes.rates = [];
+            for (let i =0; i <questionRes.length; i++)
+            {
+                let r = questionRes[i];
+                let rid = r.rate_id;
+                
+                // Initialise new section
+                if (!ridToIndex.has(rid)) 
+                {
+                    ridToIndex.set(rid, index);
+                    let cleanRate = 
+                    {
+                        'rate_id': rid,
+                        'rate_title': r.rate_title,
+                        'rate_criterion': r.rate_criterion
+                    };
+                    cleanRes.rates[index++] = cleanRate;
+                }
+            }
+        res.send(cleanRes);
+     });       
+    }
+
+    // Choose one evaluation
+    // Example: http://localhost:3001/evaluation?evaluation_id=1&framework_id=1
+    else if(req.query.evaluation_id != null && req.query.framework_id != null)
+    {
+        // return all rates of the chosen question
+        const sql = "SELECT * "
+            + "FROM evaluation "
+            + "WHERE evaluation_id= " + req.query.evaluation_id + ";"
+            + "SELECT * "
+            + "FROM framework_section JOIN framework_section_question "
+            + "ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE framework_section.framework_id = " + req.query.framework_id+";";
+        
+        sqlConnector.sqlCall(sql, function(sqlRes) 
+        {
+            if (sqlRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            // console.log(sqlRes);
+            // Format output into hierarchies
+            let evaluationRes = sqlRes[0][0];
+            let frameworkRes = sqlRes[1];
+            let sidToIndex = new Map();
+            let index = 0;
+            let cleanRes = {};
+            cleanRes.evaluation_id = evaluationRes.evaluation_id;
+            cleanRes.evaluation_title = evaluationRes.evaluation_title;
+            cleanRes.evaluation_summary = evaluationRes.evaluation_summary;
+            cleanRes.framework_id = evaluationRes.framework_id;
+            cleanRes.sections = [];
+
+            for (let i = 0; i < frameworkRes.length; i++) 
+            {
+
+                let q = frameworkRes[i];
+                let sid = q.section_id;
+
+                // Initialise new section
+                if (!sidToIndex.has(sid)) 
+                {
+                    sidToIndex.set(sid, index);
+                    let cleanSection = 
+                    {
+                        'section_id': sid,
+                        'section_title': q.section_title,
+                        'questions': []
+                    };
+                    cleanRes.sections[index++] = cleanSection;
+                }
+
+                // Insert formatted question into section
+                let cleanQuestion = 
+                {
+                    'question_id': q.question_id,
+                    'question_title': q.question_title
+                };
+                cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
+            }
+
+            res.send(cleanRes);
+
+        });
+
+    }
+    //Evaluation Home page
+    else
+    {
+        const sql = "SELECT e.*, f.framework_title "
+        + "FROM evaluation e, framework f "
+        + "WHERE e.framework_id = f.framework_id;"
+        sqlConnector.sqlCall(sql, function(sqlRes) 
+        {
+            if (sqlRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+            
+            res.send(sqlRes);
+        });
+    }
+
 });
 
 //New evaluation page
