@@ -90,7 +90,7 @@ function SectionsList({evaluation_id, sections}) {
         <>
             <div className='section_header'>Sections</div>
             {sections.map((section, i) => (
-                <Section key={i} section_index={i} {...section} />
+                <Section key={i} evaluation_id={evaluation_id} section_index={i} {...section} />
             ))}
         </>
     );
