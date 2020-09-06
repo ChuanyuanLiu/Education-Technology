@@ -7,9 +7,64 @@ var sqlConnector = require('./sqlConnector');
 //Evaluation Home page & edit previous evaluation
 router.get('/', function(req, res, next) 
 {
-    //Choose one evaluation
+    // Question_rate page, display all rates with answer and comment.
+    // Example: http://localhost:3001/evaluation?evaluation_id=1&question_id=1
+    if(req.query.evaluation_id != null  && req.query.question_id != null)
+    {
+        // return all rates of the chosen question
+        const sql = "SELECT r.*, q.question_title "
+        + "FROM framework_section_question_rate r, framework_section_question q "
+        + "WHERE r.question_id = " + req.query.question_id + " AND q.question_id = " + req.query.question_id + ";"
+        + "SELECT *"
+        + "FROM evaluation_response "
+        + "WHERE question_id = " + req.query.question_id + " AND evaluation_id = " + req.query.evaluation_id + ";";
+        sqlConnector.sqlCall(sql, function(rateRes)
+        {
+            // Format output into hierarchies
+            let questionRes = rateRes[0];
+            let responseRes = rateRes[1];
+            let ridToIndex = new Map();
+            let index = 0;
+            let cleanRes = {};
+            cleanRes.question_id = req.query.question_id;
+            cleanRes.question_title = questionRes[0].question_title;
+            // If the question has not been rated
+            if(responseRes[0]==null)
+            {
+                cleanRes.rate_chosen = "";
+                cleanRes.response_comment = "";
+            }
+            else
+            {
+                cleanRes.rate_chosen = responseRes[0].rate_chosen;
+                cleanRes.response_comment = responseRes[0].response_comment;
+            }
+            cleanRes.rates = [];
+            for (let i =0; i <questionRes.length; i++)
+            {
+                let r = questionRes[i];
+                let rid = r.rate_id;
+                
+                // Initialise new section
+                if (!ridToIndex.has(rid)) 
+                {
+                    ridToIndex.set(rid, index);
+                    let cleanRate = 
+                    {
+                        'rate_id': rid,
+                        'rate_title': r.rate_title,
+                        'rate_criterion': r.rate_criterion
+                    };
+                    cleanRes.rates[index++] = cleanRate;
+                }
+            }
+        res.send(cleanRes);
+     });       
+    }
+
+    // Choose one evaluation
     // Example: http://localhost:3001/evaluation?evaluation_id=1&framework_id=1
-    if(req.query.evaluation_id != null && req.query.framework_id != null)
+    else if(req.query.evaluation_id != null && req.query.framework_id != null)
     {
         // return all rates of the chosen question
         const sql = "SELECT * "
@@ -230,7 +285,6 @@ router.post('/update/response', function(req, res, next) {
         {
             console.log(updateResponse)
         });       
-
     } 
 });
 
