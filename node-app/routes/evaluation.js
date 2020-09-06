@@ -162,11 +162,8 @@ router.post('/update/response', function(req, res, next) {
       
         sqlConnector.sqlCall(sql, function(updateResponse) 
         {
-
-        console.log(updateResponse)
-        
-
-                });       
+            console.log(updateResponse)
+        });       
 
     } 
 });
