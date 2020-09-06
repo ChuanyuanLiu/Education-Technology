@@ -13,17 +13,19 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("Connected!");
+    // console.log("Connected!");
 });
 
 //Execute SQL statement in MySQL database
 function sqlCall(sql, callback) {
     connection.query(sql, function (err, result, fields) {  
-        if (err) console.error(err);
+        if (err); //console.error(err);
         callback(result);
     });
 };
 
-// connection.end();
+function closeConnection() {
+    connection.end();
+}
 
-module.exports = {sqlCall};
+module.exports = {sqlCall, closeConnection};
