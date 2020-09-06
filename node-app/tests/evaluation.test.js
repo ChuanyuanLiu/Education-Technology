@@ -99,7 +99,7 @@ describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
     
     const inputCheck = "SELECT * FROM evaluation_response WHERE evaluation_id = " + evaluation_id
         + " AND question_id = " + question_id;
-    
+
     const resetTable = "TRUNCATE TABLE evaluation_response";
 
     afterEach(done => {
@@ -133,70 +133,59 @@ describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
     });
 });
 
-describe("POST /update/title", () => {
+describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
-    test("Should update evaluation title and summary for evaluation_id=1", done => {
-    
-        var title = "St. Arthur Evalutaion";
-        var summary = "Requires a second audit";
-        var id = 1; 
-        
+    const evaluation_title = "St.Arthur Evaluation";
+    const evaluation_summary = "Requires a second audit";
+    const evaluation_id = 1;
+   
+    // const input = "INSERT INTO evaluation (evaluation_title, evaluation_summary) "
+    //     + "VALUES(" + evaluation_title + ",\""
+    //     + evaluation_summary + ")"; 
     const input = "UPDATE evaluation "
-        + "SET evaluation_title = '" + title
-        + "', evaluation_summary = '" + summary
-        + "' WHERE evaluation_id = " + id;
+        + "SET evaluation_title = \"" + evaluation_title
+        + "\", evaluation_summary = \"" + evaluation_summary + "\" "
+        + "WHERE evaluation_id = " + evaluation_id;
+        
+    const inputCheck = "SELECT * FROM evaluation WHERE evaluation_id = " + evaluation_id ;
+    
+    const resetTable = "TRUNCATE TABLE evaluation";
 
-         sqlConnector.sqlCall(input, function(res) 
-        {
-            expect(res).toEqual(expect.anything());
+    afterEach(done => {
+        sqlConnector.sqlCall(resetTable, function(res) {
             done();
-        });
+        })
     });
-});
-
-describe('the evaluation_id', () => {
-    test('is 1', () => {
     
-        var title = "St. Arthur Evalutaion";
-        var summary = "Requires a second audit";
-        var id = 1; 
-        
-    const input = "UPDATE evaluation "
-        + "SET evaluation_title = '" + title
-        + "', evaluation_summary = '" + summary
-        + "' WHERE evaluation_id = " + id;
-
-         sqlConnector.sqlCall(input, function(res) 
-        {
-                expect(res.id).toBe(1);
-                expect(res.title).toBe('"St. Arthur Evalutaion"');
-                expect(res.summary).toBe('"Requires a second audit"');
-                done();    
+    test("Should store the new title and summary in the database", done => {
+        sqlConnector.sqlCall(input, function(inputRes) {
+            sqlConnector.sqlCall(inputCheck, function(checkRes) {
+                expect(checkRes[0].evaluation_title).toEqual(evaluation_title);
+                expect(checkRes[0].evaluation_summary).toEqual(evaluation_summary);
+                done();
             });
         });
-    });
+    })
 
- afterAll(() => {
-    sqlConnector.closeConnection();
 });
 
 const evaluation1 = {
     evaluation_title: '"St. Arthur Evalutaion"',
     evaluation_id: 1,
-  };
-  const evaluation2 = {
+};
+const evaluation2 = {
     evaluation_title: '"St. Arthur Evalutaion"',
     evaluation_id: 1,
-  };
+};
   
-  describe('the evaluation with id 1 and 2', () => {
+describe('the evaluation with id 1 and 2', () => {
     test('have all the same values', () => {
-      expect(evaluation1).toEqual(evaluation2);
+        expect(evaluation1).toEqual(evaluation2);
     });
     test('are not the exact same can', () => {
-      expect(evaluation1).not.toBe(evaluation2);
+        expect(evaluation1).not.toBe(evaluation2);
     });
-  });
+});
 
 //1. Get /evaluation -- Yao
 
