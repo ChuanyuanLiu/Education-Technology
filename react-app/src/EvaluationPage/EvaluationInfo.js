@@ -5,8 +5,16 @@ import {CheckOutlined, UserOutlined} from '@ant-design/icons'
 
 function EvaluationInfo (props){
     const history = useHistory();
-    function handleClick(){
-        history.push('/evaluation_overview')
+    // This function takes in evaluation_id and returns  a function
+    // that can point to a specific evaluation
+    const handleClick=({evaluation_id, framework_id})=>()=>{
+        history.push({
+            pathname: '/evaluation_overview',
+            state : {
+                evaluation_id,
+                framework_id
+            }
+        })
     }
     function resolveTime(time){
         var splittedTime = time.split("-")
@@ -17,7 +25,7 @@ function EvaluationInfo (props){
     }
     return (
         <div className="evaluationInfo" 
-            onClick = {handleClick}>          
+            onClick = {handleClick(props.item)}>          
             <div className="evaluationTitle">{props.item.evaluation_title}</div>
             <div className="evaluationStatus">
                 {props.item.evaluation_completed? <CheckOutlined /> : null}
