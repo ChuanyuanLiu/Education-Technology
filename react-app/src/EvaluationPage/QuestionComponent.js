@@ -1,7 +1,7 @@
 import React from "react"
 import "./EvaluationPage.css"
 
-function QuestionContainer(props){
+function QuestionComponent(props){
     return (
         <div className="question">
             <label>
@@ -72,4 +72,4 @@ function QuestionContainer(props){
         )
 }
 
-export default QuestionContainer
+export default QuestionComponent
