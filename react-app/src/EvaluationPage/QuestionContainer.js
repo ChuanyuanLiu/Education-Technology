@@ -1,6 +1,5 @@
 import React from 'react'
 import NavBar from '../Utils/NavBar'
-import questionData from './questionData.json'
 import BigButton from '../Utils/BigButton'
 import QuestionComponent from "./QuestionComponent"
 import "./EvaluationPage.css"
@@ -13,12 +12,14 @@ class Question extends React.Component {
             title:"",
             comment:"",
             options:[],
-            choice: "0"
+            choice: "0",
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleClick = this.handleClick.bind(this)
+
     }
 
+    // TODO bug where options does not store all of data.rates
     componentWillMount(){
         fetch("http://localhost:3001/evaluation?evaluation_id="+ this.props.location.state.evaluation_id
         + "&question_id=" + this.props.location.state.question_id)
@@ -41,24 +42,11 @@ class Question extends React.Component {
     }
 
     handleClick = ()=> {
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ title: 'Question' + this.state.id })
-        // };
-        // fetch('/evaluation/update/response?evaluation_id=1&question_id=1', requestOptions)
-        //     .then(response => response.json())
-        //     .then(data => this.setState({ postId: data.id }));
-        //alert(this.state.options.rates[2].rate_criterion)
-        // this.props.history.push("/evaluation_overview")
-        this.props.history.push({
-            pathname: '/evaluation_overview',
-            state : {
-                evaluation_id:1,
-                framework_id:1
-            }
-        })
+        console.log("Button pressed");
+        console.log(this.props.history);
+        this.props.history.go(4);
     }
+
     render(){
         return (
             <div>
@@ -76,11 +64,11 @@ class Question extends React.Component {
                               value={this.state.comment}
                               onChange={this.handleChange}/>
 
-                    <div className="buttomButton"
+                    {/* <div className="buttomButton"
                             onClick = {this.handleClick}>
                          <BigButton 
                             name="Save"/>
-                    </div>
+                    </div> */}
                 </form>
             </div>
         )}
