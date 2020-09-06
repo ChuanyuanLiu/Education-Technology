@@ -3,7 +3,7 @@ var mysql = require('mysql');      //Import mysql module
 /*
 Create an instance of MySQL.
 */
-var connection = mysql.createConnection({      
+var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'edtech',
@@ -11,19 +11,21 @@ var connection = mysql.createConnection({
     multipleStatements: true
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
-    console.log("Connected!");
+    // console.log("Connected!");
 });
 
 //Execute SQL statement in MySQL database
 function sqlCall(sql, callback) {
-    connection.query(sql, function (err, result, fields) {  
+    connection.query(sql, function (err, result, fields) {
         if (err) console.error(err);
         callback(result);
     });
 };
 
 // connection.end();
-
-module.exports = {sqlCall};
+function closeConnection() {
+    connection.end();
+}
+module.exports = { sqlCall, closeConnection };
