@@ -12,7 +12,6 @@ describe("Get /evaluation", () => {
             let max_evaluation_id = evaluationRes[evaluationRes.length - 1].evaluation_id;
             expect(evaluationRes.length).toEqual(max_evaluation_id);
             done();
-            // sqlConnector.closeConnection();
         });
     });
 
@@ -28,7 +27,6 @@ describe("Get /evaluation", () => {
             }
             expect(isTrue).toEqual(true);
             done();
-            // sqlConnector.closeConnection();
         });
     });
 
@@ -49,7 +47,6 @@ describe("Get /evaluation", () => {
             }
             expect(isTrue).toEqual(true);
             done();
-            // sqlConnector.closeConnection();
         });
     });
 });
@@ -70,7 +67,6 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
             let questionRes = rateRes[0];
             expect(questionRes.length).toEqual(5);
             done();
-            // sqlConnector.closeConnection();
         });
     });
 
@@ -85,7 +81,6 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
             }
             expect(isTrue).toEqual(true);
             done();
-            // sqlConnector.closeConnection();
         });
     });
 });
