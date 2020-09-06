@@ -159,7 +159,7 @@ router.get('/new', function(req, res, next)
 {
     // Select an active framwork to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
-    else if (req.query.framework_id != null) 
+    if (req.query.framework_id != null) 
     {
         // Return all data of the chosen framework and also the 
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
