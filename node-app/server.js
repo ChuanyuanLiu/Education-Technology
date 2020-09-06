@@ -7,11 +7,11 @@ var reportRouter = require('./routes/report');
 var app = express();
 
 //Set up cross-domain access 
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1')
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By", ' 3.2.1')
     res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
@@ -30,8 +30,8 @@ app.use('/report', reportRouter);
 var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
-app.listen(port, function() {
-    console.log('Listening on ' + port); 
+app.listen(port, function () {
+    console.log('Listening on ' + port);
 });
 /**
  * Normalize a port into a number, string, or false.
@@ -39,16 +39,16 @@ app.listen(port, function() {
  */
 function normalizePort(val) {
     var port = parseInt(val, 10);
-  
+
     if (isNaN(port)) {
         // named pipe
         return val;
     }
-  
+
     if (port >= 0) {
         // port number
         return port;
     }
-  
+
     return false;
 }
