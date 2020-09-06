@@ -1,10 +1,10 @@
 var sqlConnector = require('../routes/sqlConnector');
 
-describe("GET /evaluation/new", () => {
+afterAll(() => {
+    sqlConnector.closeConnection();
+});
 
-    afterAll(() => {
-        sqlConnector.closeConnection();
-    })
+describe("GET /evaluation/new", () => {
 
     const input = "SELECT * FROM framework WHERE framework_active_status = 1";
 
@@ -44,6 +44,65 @@ describe("GET /evaluation/new", () => {
                 }
                 expect(elems.length).toEqual([...new Set(elems)].length);
             }
+            done();
+        });
+    });
+
+});
+
+describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}", () => {
+
+    // Evaluation and question ID assumed to be valid
+    const rate_chosen_upper = 5;
+    const rate_chosen_lower = 1;
+    const response_comment = "Test comment.";
+    const evaluation_id = 1;
+    const question_id = 1;
+
+    // Upper bound on-point of rate range
+    const inputUpper = "INSERT INTO evaluation_response (rate_chosen, response_comment, evaluation_id, question_id) "
+        + "VALUES(" + rate_chosen_upper + ",\""
+        + response_comment + "\"," 
+        + evaluation_id + ","
+        + question_id + ")";
+    // Lower bound on-point of rate range
+    const inputLower = "INSERT INTO evaluation_response (rate_chosen, response_comment, evaluation_id, question_id) "
+        + "VALUES(" + rate_chosen_lower + ",\""
+        + response_comment + "\"," 
+        + evaluation_id + ","
+        + question_id + ")";
+    
+    const inputCheck = "SELECT * FROM evaluation_response WHERE evaluation_id = " + evaluation_id
+        + " AND question_id = " + question_id;
+    
+    const resetTable = "TRUNCATE TABLE evaluation_response";
+
+    afterEach(done => {
+        sqlConnector.sqlCall(resetTable, function(res) {
+            done();
+        })
+    });
+    
+    test("Should corrently store the new response in the database", done => {
+        sqlConnector.sqlCall(inputUpper, function(inputRes) {
+            sqlConnector.sqlCall(inputCheck, function(checkRes) {
+                expect(checkRes[0].rate_chosen).toEqual(rate_chosen_upper);
+                expect(checkRes[0].response_comment).toEqual(response_comment);
+                done();
+            });
+        });
+    })
+
+    test("Should be successful for the lowest possible rate (lower bound on point)", done => {
+        sqlConnector.sqlCall(inputUpper, function(inputRes) {
+            expect(inputRes).not.toBeUndefined();
+            done();
+        });
+    });
+
+    test("Should be successful for the highest possible rate (upper bound on point)", done => {
+        sqlConnector.sqlCall(inputLower, function(inputRes) {
+            expect(inputRes).not.toBeUndefined();
             done();
         });
     });
