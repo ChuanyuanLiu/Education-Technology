@@ -26,7 +26,7 @@ class FrameworkSelection extends React.Component{
         const requestURL = 'http://localhost:3001/evaluation/new?framework_id=' + framework_id
         fetch(requestURL)
             .then(response => response.json())
-            .then(data => alert(data.evaluation_id))
+            .then(data => this.props.history.goBack())
     }
 
     render (){

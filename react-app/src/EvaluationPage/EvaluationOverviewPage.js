@@ -18,6 +18,8 @@ function EvaluationOverviewPage({history}) {
     const {evaluation_id, framework_id} = history.location.state;
     const [evaluation_data, setEvaluation] = useState(null);
 
+    console.log(history);
+
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
         fetch(
@@ -90,7 +92,7 @@ function SectionsList({evaluation_id, sections}) {
         <>
             <div className='section_header'>Sections</div>
             {sections.map((section, i) => (
-                <Section key={i} section_index={i} {...section} />
+                <Section key={i} evaluation_id={evaluation_id} section_index={i} {...section} />
             ))}
         </>
     );
