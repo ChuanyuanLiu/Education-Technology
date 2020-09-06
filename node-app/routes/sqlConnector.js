@@ -24,8 +24,16 @@ function sqlCall(sql, callback) {
     });
 };
 
+<<<<<<< HEAD
 function closeConnection() {
     connection.end();
 }
 
 module.exports = {sqlCall, closeConnection};
+=======
+// connection.end();
+function closeConnection() {
+    connection.end();
+}
+module.exports = {sqlCall, closeConnection};
+>>>>>>> origin/evaluationresponse/anu/responsetest
