@@ -3,7 +3,7 @@ var mysql = require('mysql');      //Import mysql module
 /*
 Create an instance of MySQL.
 */
-var connection = mysql.createConnection({      
+var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'edtech',
@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     multipleStatements: true
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
     // console.log("Connected!");
 });
@@ -24,16 +24,8 @@ function sqlCall(sql, callback) {
     });
 };
 
-<<<<<<< HEAD
 function closeConnection() {
     connection.end();
 }
 
-module.exports = {sqlCall, closeConnection};
-=======
-// connection.end();
-function closeConnection() {
-    connection.end();
-}
-module.exports = {sqlCall, closeConnection};
->>>>>>> origin/evaluationresponse/anu/responsetest
+module.exports = { sqlCall, closeConnection };
