@@ -1,19 +1,19 @@
 import React from "react"
 import "./EvaluationPage.css"
 
-function QuestionContainer(props){
+function QuestionComponent(props){
     return (
         <div className="question">
             <label>
                 <input 
                     type="radio"
                     name="choice"
-                    value="notApplicable"
-                    checked={props.choice === "notApplicable"}
+                    value= {1}
+                    checked={props.choice === 1}
                     onChange={props.handleChange}
                 /> Not Applicable
                 <div className="rateCriteria">
-                    {props.data.notApplicable}
+                    {props.data[0]}
                 </div> 
             </label>
             <br />
@@ -21,12 +21,12 @@ function QuestionContainer(props){
                 <input 
                     type="radio"
                     name="choice"
-                    value="belowBasic"
-                    checked={props.choice === "belowBasic"}
+                    value={2}
+                    checked={props.choice === 2}
                     onChange={props.handleChange}
                 /> Below Basic
                 <div className="rateCriteria">
-                    {props.data.belowBasic}
+                    {props.data[1]}
                 </div> 
             </label>
             <br />
@@ -34,12 +34,12 @@ function QuestionContainer(props){
                 <input 
                     type="radio"
                     name="choice"
-                    value="basic"
-                    checked={props.choice === "basic"}
+                    value={3}
+                    checked={props.choice === 3}
                     onChange={props.handleChange}
                 /> Basic
                 <div className="rateCriteria"> 
-                    {props.data.basic}
+                    {props.data[2]}
                 </div> 
             </label>
             <br />
@@ -47,12 +47,12 @@ function QuestionContainer(props){
                 <input 
                     type="radio"
                     name="choice"
-                    value="adequate"
-                    checked={props.choice === "adequate"}
+                    value={4}
+                    checked={props.choice === 4}
                     onChange={props.handleChange}
                 /> Adequate
                 <div className="rateCriteria">
-                    {props.data.adequate}
+                    {props.data[3]}
                 </div> 
             </label>
             <br />
@@ -60,16 +60,16 @@ function QuestionContainer(props){
                 <input 
                     type="radio"
                     name="choice"
-                    value="exceptional"
-                    checked={props.choice === "exceptional"}
+                    value={5}
+                    checked={props.choice === 5 }
                     onChange={props.handleChange}
                 /> Exceptional
                 <div className="rateCriteria">
-                    {props.data.exceptional}
+                    {props.data[4]}
                 </div > 
             </label>
         </div>
         )
 }
 
-export default QuestionContainer
+export default QuestionComponent

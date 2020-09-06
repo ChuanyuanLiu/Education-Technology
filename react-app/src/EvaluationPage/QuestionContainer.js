@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '../Utils/NavBar'
 import questionData from './questionData.json'
 import BigButton from '../Utils/BigButton'
-import QuestionContainer from "./QuestionComponent"
+import QuestionComponent from "./QuestionComponent"
 import "./EvaluationPage.css"
 
 class Question extends React.Component {
@@ -13,33 +13,22 @@ class Question extends React.Component {
             id:"",
             title:"",
             comment:"",
-            evaluation_id: "",
-            options: {
-                notApplicable: "",
-                belowBasic: "",
-                basic:"",
-                adequate:"",
-                exceptional:"" 
-            },
-            choice: ""
+            options: [],
+            choice: 0
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
-    //Once the page is loaded fetch data from API. Fake data for now
+
     componentDidMount(){
         this.setState({
-            id:questionData.id,
-            title:questionData.title,
-            comment:questionData.comment,
-            options: {
-                notApplicable: questionData.options.notApplicable,
-                belowBasic: questionData.options.belowBasic,
-                basic: questionData.options.basic,
-                adequate: questionData.options.adequate,
-                exceptional: questionData.options.exceptional
-            }
-        })
+            id:questionData.question_id,
+            title:questionData.question_title,
+            comment:questionData.response_comment,
+            options: JSON.parse(JSON.stringify(questionData.rates)),
+            choice: questionData.rate_chosen
+        });
+        console.log("completed");
     }
 
     handleChange(event){
@@ -48,14 +37,13 @@ class Question extends React.Component {
     }
 
     handleSubmit = ()=> {
-        alert("submitted")
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: 'Question' + this.state.id })
         };
         alert(requestOptions.body)
-        // fetch('https://jsonplaceholder.typicode.com/posts', requestOptions)
+        // fetch('/evaluation/update/response?evaluation_id=1&question_id=1', requestOptions)
         //     .then(response => response.json())
         //     .then(data => this.setState({ postId: data.id }));
 
@@ -65,11 +53,11 @@ class Question extends React.Component {
     render(){
         return (
             <div>
-                <NavBar title={this.state.title}/>
+                {/* <NavBar title={this.state.title}/>
                 <form onSubmit={this.handleSubmit}>
                     <div className='section_header'>Rating</div>
 
-                    <QuestionContainer data={this.state.options} 
+                    <QuestionComponent data={this.state.options} 
                                        choice={this.state.choice} 
                                        handleChange={this.handleChange}/>
 
@@ -79,10 +67,11 @@ class Question extends React.Component {
                               value={this.state.comment}
                               onChange={this.handleChange}/>
 
-                    <div className="buttomButton">
-                        <BigButton name="Save" handleClick={this.handleSubmit}/>
-                    </div>
-                </form>
+                    // <div className="buttomButton">
+                    //     <BigButton name="Save"/>
+                    // </div>
+        </form> */}
+            <h1>{this.state.options[0]}</h1>
             </div>
         )}
 }

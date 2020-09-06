@@ -1,13 +1,33 @@
 {
-    "id":"1",
-    "title":"1.1 Content Model",
-    "comment":"",
-    "options": {
-        "notApplicable": "Not Applicable",
-        "belowBasic": "There is no evidence of the content model used.",
-        "basic":"States the main topics of the domain area covered. Lacks detail.",
-        "adequate":"States the main topics and sub-topics of the domain area covered. Shows links to existing curricula",
-        "exceptional":"Detailed statement of topics and subtopics covered. Shows links to existing curricula. Shows pre-requisite content required."
-    },
-    "choice": ""
+    "question_id": "1",
+    "question_title": "Content Model",
+    "rate_chosen": 1,
+    "response_comment": "good",
+    "rates": [
+        {
+            "rate_id": 1,
+            "rate_title": "Not Applicable",
+            "rate_criterion": "Not Applicable"
+        },
+        {
+            "rate_id": 2,
+            "rate_title": "Below Basic",
+            "rate_criterion": "There is no evidence of content model used"
+        },
+        {
+            "rate_id": 3,
+            "rate_title": "Basic",
+            "rate_criterion": "States the main topics of the domain area covered. Lacks details"
+        },
+        {
+            "rate_id": 4,
+            "rate_title": "Adequate",
+            "rate_criterion": "States the main topics and sub-topics of the domain area covered.Show links to existing curricula"
+        },
+        {
+            "rate_id": 5,
+            "rate_title": "Exceptional",
+            "rate_criterion": "Detailed statement of topics and subtopics covered. Shows links to existing curricula. Shows pre-requisite content required."
+        }
+    ]
 }
