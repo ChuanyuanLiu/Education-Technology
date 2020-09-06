@@ -10,8 +10,10 @@ function EvaluationInfo (props){
     const handleClick=({evaluation_id, framework_id})=>()=>{
         history.push({
             pathname: '/evaluation_overview',
-            evaluation_id,
-            framework_id
+            state : {
+                evaluation_id,
+                framework_id
+            }
         })
     }
     function resolveTime(time){
