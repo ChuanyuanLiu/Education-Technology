@@ -10,6 +10,7 @@ class FrameworkSelection extends React.Component{
         this.state = {
             frameworks: []
         }
+        this.handleClick = this.handleClick.bind(this)
     }
 
     componentWillMount(){
@@ -21,8 +22,19 @@ class FrameworkSelection extends React.Component{
                 )
             })
     }
+    handleClick(framework_id){
+        const requestURL = 'http://localhost:3001/evaluation/new?framework_id=' + framework_id
+        fetch(requestURL)
+            .then(response => response.json())
+            .then(data => alert(data.evaluation_id))
+    }
+
     render (){
-        const frameworkList = this.state.frameworks.map(framework => <FrameworkComponent key={framework.id} item={framework}/>)
+        const frameworkList = this.state.frameworks.map(framework => 
+                                                            <FrameworkComponent 
+                                                                key={framework.id}  
+                                                                item={framework} 
+                                                                handleClick={this.handleClick}/>)
         return (       
             <div>
                 <NavBar title = 'Choose Framework' />

@@ -25,7 +25,6 @@ class EvaluationPage extends React.Component{
     }
 
     handleClick(){
-        alert('hello')
         this.props.history.push('/new_evaluation')
     }
     render (){

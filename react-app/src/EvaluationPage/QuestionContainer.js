@@ -13,6 +13,7 @@ class Question extends React.Component {
             id:"",
             title:"",
             comment:"",
+            evaluation_id: "",
             options: {
                 notApplicable: "",
                 belowBasic: "",
@@ -48,7 +49,17 @@ class Question extends React.Component {
 
     handleSubmit = ()=> {
         alert("submitted")
-        this.props.history.push("/evaluation_overview")
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: 'Question' + this.state.id })
+        };
+        alert(requestOptions.body)
+        // fetch('https://jsonplaceholder.typicode.com/posts', requestOptions)
+        //     .then(response => response.json())
+        //     .then(data => this.setState({ postId: data.id }));
+
+        // this.props.history.push("/evaluation_overview")
 
     }
     render(){
