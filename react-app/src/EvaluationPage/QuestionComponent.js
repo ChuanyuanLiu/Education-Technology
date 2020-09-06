@@ -13,7 +13,7 @@ function QuestionContainer(props){
                     onChange={props.handleChange}
                 /> Not Applicable
                 <div className="rateCriteria">
-                    {props.data.notApplicable}
+                    {props.data[0]}
                 </div> 
             </label>
             <br />
@@ -26,7 +26,7 @@ function QuestionContainer(props){
                     onChange={props.handleChange}
                 /> Below Basic
                 <div className="rateCriteria">
-                    {props.data.belowBasic}
+                    {props.data[1]}
                 </div> 
             </label>
             <br />
@@ -39,7 +39,7 @@ function QuestionContainer(props){
                     onChange={props.handleChange}
                 /> Basic
                 <div className="rateCriteria"> 
-                    {props.data.basic}
+                    {props.data[2]}
                 </div> 
             </label>
             <br />
@@ -52,7 +52,7 @@ function QuestionContainer(props){
                     onChange={props.handleChange}
                 /> Adequate
                 <div className="rateCriteria">
-                    {props.data.adequate}
+                    {props.data[3]}
                 </div> 
             </label>
             <br />
@@ -65,7 +65,7 @@ function QuestionContainer(props){
                     onChange={props.handleChange}
                 /> Exceptional
                 <div className="rateCriteria">
-                    {props.data.exceptional}
+                    {props.data[4]}
                 </div > 
             </label>
         </div>
