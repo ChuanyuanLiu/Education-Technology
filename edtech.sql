@@ -131,7 +131,7 @@ CREATE TABLE `framework_section` (
 
 LOCK TABLES `framework_section` WRITE;
 /*!40000 ALTER TABLE `framework_section` DISABLE KEYS */;
-INSERT INTO `framework_section` VALUES (1,'Educational Theory',1),(2,'Implementation Approach',1),(3,'Evidence',1),(4,'Usability',1),(5,'Teacher Role',1),(6,'F.A.T.E',1),(7,'Infomartion Security',1);
+INSERT INTO `framework_section` VALUES (1,'Educational Theory',1),(2,'Implementation Approach',1),(3,'Evidence',1),(4,'Usability',1),(5,'Teacher Role',1),(6,'F.A.T.E',1),(7,'Infomartion Security',1),(8,'Educational Theory',2),(9,'Implementation Approach',2),(10,'Evidence',2),(11,'Usability',2),(12,'Teacher Role',2),(13,'F.A.T.E',2),(14,'Infomartion Security',2);
 /*!40000 ALTER TABLE `framework_section` ENABLE KEYS */;
 UNLOCK TABLES;
 
