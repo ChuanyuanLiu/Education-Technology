@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-
 var sqlConnector = require('./sqlConnector');
+
+const unsuccessful = "The call to the SQL database was unsuccessful.";
+const successful = "The call to the SQL database was successful."
 
 //Evaluation Home page
 router.get('/', function(req, res, next) 
@@ -12,6 +14,11 @@ router.get('/', function(req, res, next)
     + "WHERE e.framework_id = f.framework_id;"
     sqlConnector.sqlCall(sql, function(sqlRes) 
     {
+        if (sqlRes == null) {
+            res.send(unsuccessful);
+            return;
+        }
+
         res.send(sqlRes);
     });
 });
@@ -30,6 +37,11 @@ router.get('/new', function(req, res, next)
         
         sqlConnector.sqlCall(sql, function(rateRes)
         {
+            if (rateRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
             // Format output into hierarchies
             let ridToIndex = new Map();
             let index = 0;
@@ -74,6 +86,11 @@ router.get('/new', function(req, res, next)
             + "WHERE framework_section.framework_id = " + req.query.framework_id+";";
         sqlConnector.sqlCall(sql, function(questionRes) 
         {
+            if (questionRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
             // Format output into hierarchies
             let evaluation_id = questionRes[1][0].LAST_INSERT_ID;
             console.log(evaluation_id);
@@ -122,6 +139,11 @@ router.get('/new', function(req, res, next)
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1";
         sqlConnector.sqlCall(sql, function(frameworkRes) 
         {
+            if (frameworkRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
             res.send(frameworkRes);
         });
     }
@@ -132,18 +154,19 @@ router.post('/update/title', function(req, res, next) {
     let title = req.body.evaluation_title;
     let summary = req.body.evaluation_summary;
 
-    let date = new Date();
-    console.log(date);
-    date.format("yyyy-mm-dd hh:mm:ss");
-
     const sql = "UPDATE evaluation "
             + "SET evaluation_title = '" + title
             + "', evaluation_summary = '" + summary
-            + "', evaluation_modified_time = '" + date + "' "
-            + "WHERE evaluation_id = " + id;
+            + "' WHERE evaluation_id = " + id;
     
     sqlConnector.sqlCall(sql, function(updateRes) {
+        if (updateRes == null) {
+            res.send(unsuccessful);
+            return;
+        }
+
         console.log(updateRes);
+        res.send(successful);
     });
 });
 
@@ -160,13 +183,15 @@ router.post('/update/response', function(req, res, next) {
         const sql =  "INSERT INTO evaluation_response (rate_chosen, response_comment, evaluation_id, question_id) "
         +"VALUES(" + rate_chosen + ",\"" + response_comment + "\","  + evaluation_id + "," + question_id + ")" ; 
       
-        sqlConnector.sqlCall(sql, function(updateResponse) 
-        {
-
-        console.log(updateResponse)
-        
-
-                });       
+        sqlConnector.sqlCall(sql, function(updateResponse) {
+            if (updateResponse == null) {
+                res.send(unsuccessful);
+                return;
+            }
+            
+            console.log(updateResponse);
+            res.send(successful);
+        });       
 
     } 
 });

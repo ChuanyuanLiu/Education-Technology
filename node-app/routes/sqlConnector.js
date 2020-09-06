@@ -19,7 +19,7 @@ connection.connect(function(err) {
 //Execute SQL statement in MySQL database
 function sqlCall(sql, callback) {
     connection.query(sql, function (err, result, fields) {  
-        if (err) throw err;
+        if (err) console.error(err);
         callback(result);
     });
 };

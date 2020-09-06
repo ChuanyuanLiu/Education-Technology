@@ -3,6 +3,9 @@ var router = express.Router();
 
 var sqlConnector = require('./sqlConnector');
 
+const unsuccessful = "The call to the SQL database was unsuccessful.";
+const successful = "The call to the SQL database was successful."
+
 router.get('/', function(req, res, next) {
     if (req.query.framework_id != null) {
 
@@ -13,6 +16,10 @@ router.get('/', function(req, res, next) {
             + "ON framework_section.section_id = framework_section_question.section_id "
             + "WHERE framework_section.framework_id = " + req.query.framework_id;
         sqlConnector.sqlCall(sql, function(questionRes) {
+            if (questionRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
             
             // Format output into hierarchies
             let sidToIndex = new Map();
@@ -55,6 +62,11 @@ router.get('/', function(req, res, next) {
         // Default; return all frameworks
         const sql = "SELECT * FROM framework";
         sqlConnector.sqlCall(sql, function(frameworkRes) {
+            if (sqlRes == null) {
+                res.send(unsuccessful);
+                return;
+            }
+            
             res.send(frameworkRes);
         });
 
