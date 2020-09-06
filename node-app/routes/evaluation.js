@@ -4,16 +4,82 @@ var router = express.Router();
 
 var sqlConnector = require('./sqlConnector');
 
-//Evaluation Home page
+//Evaluation Home page & edit previous evaluation
 router.get('/', function(req, res, next) 
 {
-    const sql = "SELECT e.*, f.framework_title "
-    + "FROM evaluation e, framework f "
-    + "WHERE e.framework_id = f.framework_id;"
-    sqlConnector.sqlCall(sql, function(sqlRes) 
+    //Choose one evaluation
+    // Example: http://localhost:3001/evaluation?evaluation_id=1&framework_id=1
+    if(req.query.evaluation_id != null && req.query.framework_id != null)
     {
-        res.send(sqlRes);
-    });
+        // return all rates of the chosen question
+        const sql = "SELECT * "
+            + "FROM evaluation "
+            + "WHERE evaluation_id= " + req.query.evaluation_id + ";"
+            + "SELECT * "
+            + "FROM framework_section JOIN framework_section_question "
+            + "ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE framework_section.framework_id = " + req.query.framework_id+";";
+        
+        sqlConnector.sqlCall(sql, function(sqlRes) 
+        {
+            // console.log(sqlRes);
+            // Format output into hierarchies
+            let evaluationRes = sqlRes[0][0];
+            let frameworkRes = sqlRes[1];
+            let sidToIndex = new Map();
+            let index = 0;
+            let cleanRes = {};
+            cleanRes.evaluation_id = evaluationRes.evaluation_id;
+            cleanRes.evaluation_title = evaluationRes.evaluation_title;
+            cleanRes.evaluation_summary = evaluationRes.evaluation_summary;
+            cleanRes.framework_id = evaluationRes.framework_id;
+            cleanRes.sections = [];
+
+            for (let i = 0; i < frameworkRes.length; i++) 
+            {
+
+                let q = frameworkRes[i];
+                let sid = q.section_id;
+
+                // Initialise new section
+                if (!sidToIndex.has(sid)) 
+                {
+                    sidToIndex.set(sid, index);
+                    let cleanSection = 
+                    {
+                        'section_id': sid,
+                        'section_title': q.section_title,
+                        'questions': []
+                    };
+                    cleanRes.sections[index++] = cleanSection;
+                }
+
+                // Insert formatted question into section
+                let cleanQuestion = 
+                {
+                    'question_id': q.question_id,
+                    'question_title': q.question_title
+                };
+                cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
+            }
+
+            res.send(cleanRes);
+
+        });
+
+    }
+    //Evaluation Home page
+    else
+    {
+        const sql = "SELECT e.*, f.framework_title "
+        + "FROM evaluation e, framework f "
+        + "WHERE e.framework_id = f.framework_id;"
+        sqlConnector.sqlCall(sql, function(sqlRes) 
+        {
+            res.send(sqlRes);
+        });
+    }
+
 });
 
 //New evaluation page
