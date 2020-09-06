@@ -1,20 +1,62 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import "./EvaluationOverview.css";
-import framework_data from "./framework.json";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 /*
-Evaluation Page Layout
-|-- NavBar
-|-- Summary
-|-- SectionList
-        |-- Section
-                |-- Question
+(Rout from EvaluationInfo)
+Evaluation Overview Page
+    |-- NavBar
+    |-- Summary
+    |-- SectionList
+            |-- Section
+                    |-- Question (rout to questionContainer)
 */
 
-function Summary({data = ""}) {
+// Entry point for the Evaluation Overview Page
+function EvaluationOverviewPage({history}) {
+
+    const {evaluation_id, framework_id} = history.location.state;
+    const [evaluation_data, setEvaluation] = useState(null);
+
+    // fetch data every time evaluation or framework ID changes
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}&framework_id=${framework_id}`
+        )
+            .then(response => response.json())
+            .then(setEvaluation)
+            .catch(console.error);
+    }, [evaluation_id, framework_id]);
+
+    if (evaluation_id == null || framework_id == null) {
+        return (
+            <div className='EvaluationPage'>
+                <NavBar title={"Invalid Evaluation"} />
+                <h1>
+                    This page does not exist, please try accessing another
+                    evaluation
+                </h1>
+            </div>
+        );
+    }
+
+    if (evaluation_data == null) {
+        return <h1>Loading...</h1>;
+    }
+
+    return (
+        <div className='EvaluationPage'>
+            <NavBar title={evaluation_data.evaluation_title} />
+            <Summary summary={evaluation_data.evaluation_summary}/>
+            <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
+        </div>
+    );
+}
+
+// Display and edit summary
+function Summary({summary = ""}) {
     // track changes to summary
-    const [getSummary, setSummary] = useState(data);
+    const [getSummary, setSummary] = useState(summary);
     const appendSummary = (event) => {
         setSummary(event.target.value);
     };
@@ -42,61 +84,67 @@ function Summary({data = ""}) {
     );
 }
 
-// data is a question object that contains
-// Question_Title, Question_ID
-function Question({question_title, question_id, section_index, index}) {
-    const history = useHistory();
-    function handleClick(){
-        history.push('./question')
-    }
-    return <li onClick={handleClick}>{`${section_index+1}.${index+1} ${question_title}`}</li>;
-}
-
-// data is a list of question objects each contains
-// Question_Title, Question_ID
-function Section( {section_title, section_id, questions, index}) {
-    // track expand or not
-    const [getExpand, setExpand] = useState(false);
-    const toggleExpand = (event) => {
-        event.preventDefault();
-        setExpand(!getExpand);
-    }
-
-    return (
-        <>
-            <div className="sub_header">
-                {`Section ${index + 1} ${section_title}`}
-                <button className="right" onClick={toggleExpand}>{getExpand ? "collapse" : "expand"}</button>
-            </div>
-            <ul>
-                {getExpand ? questions.map((s, i) => (
-                    <Question  {...s} key={i} index={i} section_index={index} />
-                )) : null}
-            </ul>
-        </>
-    );
-}
-
-// Sections is a list of sections object each contains
-// Section_Title, Section_ID, Questions
-function SectionsList({sections}) {
+// Display a list of sections
+function SectionsList({evaluation_id, sections}) {
     return (
         <>
             <div className='section_header'>Sections</div>
-            {sections.map((s, i) => (
-                <Section key={i} index={i} {...s} />
+            {sections.map((section, i) => (
+                <Section key={i} section_index={i} {...section} />
             ))}
         </>
     );
 }
 
-function EvaluationOverviewPage(props) {
+// Display a list of questions
+function Section({evaluation_id, section_title, section_index, questions}) {
+    // track expand or not
+    const [getExpand, setExpand] = useState(false);
+    const toggleExpand = (event) => {
+        event.preventDefault();
+        setExpand(!getExpand);
+    };
+
     return (
-        <div className='EvaluationPage'>
-            <NavBar title={framework_data.framework_title} />
-            <Summary />
-            <SectionsList {...framework_data}  />
-        </div>
+        <>
+            <div className='sub_header'>
+                {`Section ${section_index+1} ${section_title}`}
+                <button className='right' onClick={toggleExpand}>
+                    {getExpand ? "collapse" : "expand"}
+                </button>
+            </div>
+            <ul>
+                {getExpand
+                    ? questions.map((question, i) => (
+                          <Question
+                              {...question}
+                              evaluation_id = {evaluation_id}
+                              section_index = {section_index}
+                              question_index = {i}
+                              key={i}
+                          />
+                      ))
+                    : null}
+            </ul>
+        </>
+    );
+}
+
+// Show a question and rout to the question page upon click
+function Question({evaluation_id, question_id, section_index, question_index, question_title}) {
+    const history = useHistory();
+    function handleClick() {
+        history.push({
+            pathname : "./question",
+            state : {
+                evaluation_id,
+                question_id,
+            }
+        });
+    }
+    return (
+        <li onClick={handleClick}>
+        {`${section_index+1}.${question_index+1} ${question_title}`}</li>
     );
 }
 
