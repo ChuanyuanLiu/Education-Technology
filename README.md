@@ -26,8 +26,8 @@ $ git checkout -b feature/username/task_name #Switched to a new branch "feature/
 Finished features may be merged into the develop branch to definitely add them to the upcoming release:
 ``` bash
 $ git add * #Add all changed files on your branch
-$ git commit -m "comment" * #Commit all changed files on your branch
-$ git push # Push all changed files on your branch
+$ git commit -m "comment" #Commit all changed files on your branch
+$ git push #Push all changed files on your branch
 $ git checkout dev #Switched to branch 'dev'
 $ git merge feature/username/task_name #Updating ea1b82a..05e9557 (Summary of changes)
 $ git branch -d feature/username/task_name #Deleted branch feature/username/task_name (was 05e9557).
