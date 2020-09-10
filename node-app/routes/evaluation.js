@@ -144,6 +144,9 @@ router.get('/new', function (req, res, next) {
     // Select an active and framwork to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     // Excute 3 SQL statements:
+    // 1. Create a new evaluation, Insert a new evaluation_id
+    // 2. Return the evaluation_id of new created evaluation
+    // 3. Return all stuff of the new created evaluation
     if (req.query.framework_id != null) {
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
