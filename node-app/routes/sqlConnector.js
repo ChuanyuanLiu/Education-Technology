@@ -8,7 +8,8 @@ var connection = mysql.createConnection({
     user: 'root',
     password: 'edtech',
     database: 'edtech',
-    multipleStatements: true
+    multipleStatements: true, //Enable mutiple SQL statements
+    timezone: "10:00" //Set Time Zone as +10:00
 });
 
 connection.connect(function (err) {

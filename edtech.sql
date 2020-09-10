@@ -58,12 +58,11 @@ DROP TABLE IF EXISTS `evaluation_response`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `evaluation_response` (
-  `response_id` int NOT NULL AUTO_INCREMENT,
+  `question_id` int NOT NULL,
   `rate_chosen` int NOT NULL,
   `response_comment` varchar(2000) DEFAULT '',
-  `question_id` int NOT NULL,
   `evaluation_id` int NOT NULL,
-  PRIMARY KEY (`response_id`),
+  PRIMARY KEY (`question_id`),
   KEY `question_id_idx` (`question_id`),
   CONSTRAINT `question_id` FOREIGN KEY (`question_id`) REFERENCES `framework_section_question` (`question_id`),
   KEY `evaluation_id_in_evaluation_response_idx` (`question_id`),
