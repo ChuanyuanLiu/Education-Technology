@@ -62,7 +62,7 @@ router.get('/', function (req, res, next) {
         // Default; return all frameworks
         const sql = "SELECT * FROM framework";
         sqlConnector.sqlCall(sql, function (frameworkRes) {
-            if (sqlRes == null) {
+            if (frameworkRes == null) {
                 res.send(unsuccessful);
                 return;
             }
