@@ -3,19 +3,19 @@ import React from "react";
 function Button3D ({on, onClick, on_text, off_text, className=''}) {
     if (on) {
         return (
-            <Button3D className={className}>
+            <div className={className}>
             <button onClick={onClick} className='on'>
                 {on_text}
             </button>
-            </Button3D>
+            </div>
         );
     }
     return (
-        <Button3D className={className}>
+        <div className={className}>
         <button onClick={onClick} className='off'>
             {off_text}
         </button>
-        </Button3D>
+        </div>
     );
 };
 
