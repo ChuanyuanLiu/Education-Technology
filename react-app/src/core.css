@@ -8,20 +8,25 @@ variables must begin with -- and is case sensitive
  --focus_color: #dddfff;
 }
 
-body {
-}
-
 .section_header {
     padding: 10px;
     background-color: var(--header_color);
 }
 
-textarea {
-    width: 100%;
-    padding: 10px;
+#radio_button {
+    margin-left: 10px;
+    display: block;
 }
 
+#rate_title {
+    margin-left: 10px;
+    font-size: 18px; 
+}
 
+#rate_criteria{
+    margin-top: 5px;
+    margin-left: 25px;
+}
 
 ul {
     padding: 0;
@@ -53,7 +58,7 @@ ul li {
 }
 
 .clickable:hover{
-   font-weight: 600; 
+   font-weight: bold; 
 }
 
 .on {
@@ -107,4 +112,25 @@ button:focus {
     float: right;
 }
 
-/* Specific classes */
+#footer {
+    margin-top: 50px;
+    position: absolute;
+    bottom: 10px;
+}
+
+#big_button {
+    padding: 5px 50px 5px 50px;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+    color: white;
+    background-color: var(--primary_color);
+    font-size: medium;
+    box-shadow: 2px 8px black, -2px 8px black;
+}
+
+#big_button:hover {
+    box-shadow: 0px 2px black;
+    position: relative;
+    top: 6px;
+}
