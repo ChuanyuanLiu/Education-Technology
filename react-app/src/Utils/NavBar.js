@@ -1,32 +1,17 @@
-import React from 'react'
+import React from "react";
 import "./NavBar.css";
-import { useHistory } from "react-router-dom";
-import { Button } from 'antd';
-import { LeftSquareOutlined } from '@ant-design/icons';
-
-
-
-
+import {useHistory} from "react-router-dom";
 
 function NavBar({title}) {
     const history = useHistory();
-    function handleClick(){
-        history.goBack()
-    }
     return (
-        <div className="NavBar">
-            <header className="barHeader">
-                <div className="backIcon">
-                    <Button onClick={handleClick}
-                        type="primary" 
-                        icon={<LeftSquareOutlined 
-                                style={{fontSize:'30px'}}
-                    />}>
-                    </Button>
-                </div>
-                {title}</header>
+        <div className='header'>
+            <div className="left clickable back_button" onClick={()=>history.goBack()}>
+            {"<"}
+            </div>
+            {title}
         </div>
-    )
+    );
 }
 
 export default NavBar;

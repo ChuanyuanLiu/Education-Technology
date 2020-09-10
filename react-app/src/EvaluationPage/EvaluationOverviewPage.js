@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
-import "./EvaluationOverview.css";
 import {useHistory} from "react-router-dom";
 /*
-(Rout from EvaluationInfo)
+(Route from EvaluationInfo)
 Evaluation Overview Page
     |-- NavBar
     |-- Summary
@@ -14,18 +13,15 @@ Evaluation Overview Page
 
 // Entry point for the Evaluation Overview Page
 function EvaluationOverviewPage({history}) {
-
     const {evaluation_id, framework_id} = history.location.state;
     const [evaluation_data, setEvaluation] = useState(null);
-
-    console.log(history);
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
         fetch(
             `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}&framework_id=${framework_id}`
         )
-            .then(response => response.json())
+            .then((response) => response.json())
             .then(setEvaluation)
             .catch(console.error);
     }, [evaluation_id, framework_id]);
@@ -49,22 +45,40 @@ function EvaluationOverviewPage({history}) {
     return (
         <div className='EvaluationPage'>
             <NavBar title={evaluation_data.evaluation_title} />
-            <Summary summary={evaluation_data.evaluation_summary}/>
+            <TextAreaForm
+                Title='Summary'
+                summary={evaluation_data.evaluation_summary}
+            />
             <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
         </div>
     );
 }
 
+const Button3D = ({on, callBack, on_text, off_text}) => {
+    if (on) {
+        return (
+            <button onClick={callBack} className='on'>
+                {on_text}
+            </button>
+        );
+    }
+    return (
+        <button onClick={callBack} className='off'>
+            {off_text}
+        </button>
+    );
+};
+
 // Display and edit summary
-function Summary({summary = ""}) {
-    // track changes to summary
-    const [getSummary, setSummary] = useState(summary);
-    const appendSummary = (event) => {
-        setSummary(event.target.value);
+function TextAreaForm({Title = "TextArea", Text = ""}) {
+    // track changes to text
+    const [getText, setText] = useState(Text);
+    const appendText = event => {
+        setText(event.target.value);
     };
     // tracks if the interface is active for editing
     const [getActive, setActive] = useState(false);
-    const toggleActive = (event) => {
+    const toggleActive = event => {
         event.preventDefault();
         setActive(!getActive);
     };
@@ -72,15 +86,20 @@ function Summary({summary = ""}) {
     return (
         <form>
             <div className='section_header'>
-                Summary
-                <button onClick={toggleActive} className='right'>
-                    {getActive ? "save" : "edit"}
-                </button>
+                {Title}
+                <div className='right'>
+                <Button3D
+                    on={getActive}
+                    callBack={toggleActive}
+                    on_text='save'
+                    off_text='edit'
+                />
+                </div>
             </div>
             <textarea
                 disabled={!getActive}
-                onChange={appendSummary}
-                value={getSummary}
+                onChange={appendText}
+                value={getText}
             />
         </form>
     );
@@ -92,7 +111,12 @@ function SectionsList({evaluation_id, sections}) {
         <>
             <div className='section_header'>Sections</div>
             {sections.map((section, i) => (
-                <Section key={i} evaluation_id={evaluation_id} section_index={i} {...section} />
+                <Section
+                    key={i}
+                    evaluation_id={evaluation_id}
+                    section_index={i}
+                    {...section}
+                />
             ))}
         </>
     );
@@ -109,20 +133,24 @@ function Section({evaluation_id, section_title, section_index, questions}) {
 
     return (
         <>
-            <div className='sub_header'>
-                {`Section ${section_index+1} ${section_title}`}
-                <button className='right' onClick={toggleExpand}>
-                    {getExpand ? "collapse" : "expand"}
-                </button>
+            <div onClick={toggleExpand} className={"sub_header clickable " + (getExpand ? "on" : "")}>
+                {`Section ${section_index + 1} ${section_title}`}
+                <div className="right">
+                <Button3D
+                    on={getExpand}
+                    callBack={toggleExpand}
+                    on_text="collapse"
+                    off_text="expand"
+                /></div>
             </div>
             <ul>
                 {getExpand
                     ? questions.map((question, i) => (
                           <Question
                               {...question}
-                              evaluation_id = {evaluation_id}
-                              section_index = {section_index}
-                              question_index = {i}
+                              evaluation_id={evaluation_id}
+                              section_index={section_index}
+                              question_index={i}
                               key={i}
                           />
                       ))
@@ -133,20 +161,27 @@ function Section({evaluation_id, section_title, section_index, questions}) {
 }
 
 // Show a question and rout to the question page upon click
-function Question({evaluation_id, question_id, section_index, question_index, question_title}) {
+function Question({
+    evaluation_id,
+    question_id,
+    section_index,
+    question_index,
+    question_title,
+}) {
     const history = useHistory();
     function handleClick() {
         history.push({
-            pathname : "./question",
-            state : {
+            pathname: "./question",
+            state: {
                 evaluation_id,
                 question_id,
-            }
+            },
         });
     }
     return (
-        <li onClick={handleClick}>
-        {`${section_index+1}.${question_index+1} ${question_title}`}</li>
+        <li onClick={handleClick} className="clickable">
+            {`${section_index + 1}.${question_index + 1} ${question_title}`}
+        </li>
     );
 }
 
