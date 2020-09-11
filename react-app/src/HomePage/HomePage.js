@@ -32,7 +32,7 @@ function HomePage(props) {
     return (
         <div className='HomePage'>
             <Layout>
-                <NavBar title='Header'/>
+                <NavBar> Home </NavBar>
                 <Content  onClick={()=>{props.history.push('./evaluation')}}>
                     <PageOptionList />
                 </Content>

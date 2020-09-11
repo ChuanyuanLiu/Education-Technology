@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
+import TextArea from "../Utils/TextArea"
+import Button3D from "../Utils/Button3D"
 import {useHistory} from "react-router-dom";
 /*
 (Route from EvaluationInfo)
@@ -16,6 +18,8 @@ function EvaluationOverviewPage({history}) {
     const {evaluation_id, framework_id} = history.location.state;
     const [evaluation_data, setEvaluation] = useState(null);
 
+    console.log(evaluation_id, framework_id);
+
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
         fetch(
@@ -25,6 +29,7 @@ function EvaluationOverviewPage({history}) {
             .then(setEvaluation)
             .catch(console.error);
     }, [evaluation_id, framework_id]);
+
 
     if (evaluation_id == null || framework_id == null) {
         return (
@@ -44,64 +49,16 @@ function EvaluationOverviewPage({history}) {
 
     return (
         <div className='EvaluationPage'>
-            <NavBar title={evaluation_data.evaluation_title} />
-            <TextAreaForm
-                Title='Summary'
-                summary={evaluation_data.evaluation_summary}
+            <NavBar>
+                {evaluation_data.evaluation_title} 
+                <Button3D className="right" on="true" onClick={()=>{}} on_text="save" off_text="edit"/>
+            </NavBar>
+            <TextArea
+                title='Summary'
+                text={evaluation_data.evaluation_summary}
             />
             <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
         </div>
-    );
-}
-
-const Button3D = ({on, callBack, on_text, off_text}) => {
-    if (on) {
-        return (
-            <button onClick={callBack} className='on'>
-                {on_text}
-            </button>
-        );
-    }
-    return (
-        <button onClick={callBack} className='off'>
-            {off_text}
-        </button>
-    );
-};
-
-// Display and edit summary
-function TextAreaForm({Title = "TextArea", Text = ""}) {
-    // track changes to text
-    const [getText, setText] = useState(Text);
-    const appendText = event => {
-        setText(event.target.value);
-    };
-    // tracks if the interface is active for editing
-    const [getActive, setActive] = useState(false);
-    const toggleActive = event => {
-        event.preventDefault();
-        setActive(!getActive);
-    };
-
-    return (
-        <form>
-            <div className='section_header'>
-                {Title}
-                <div className='right'>
-                <Button3D
-                    on={getActive}
-                    callBack={toggleActive}
-                    on_text='save'
-                    off_text='edit'
-                />
-                </div>
-            </div>
-            <textarea
-                disabled={!getActive}
-                onChange={appendText}
-                value={getText}
-            />
-        </form>
     );
 }
 
@@ -133,15 +90,19 @@ function Section({evaluation_id, section_title, section_index, questions}) {
 
     return (
         <>
-            <div onClick={toggleExpand} className={"sub_header clickable " + (getExpand ? "on" : "")}>
+            <div
+                onClick={toggleExpand}
+                className={"sub_header clickable " + (getExpand ? "on" : "")}
+            >
                 {`Section ${section_index + 1} ${section_title}`}
-                <div className="right">
-                <Button3D
-                    on={getExpand}
-                    callBack={toggleExpand}
-                    on_text="collapse"
-                    off_text="expand"
-                /></div>
+                <div className='right'>
+                    <Button3D
+                        on={getExpand}
+                        onClick={toggleExpand}
+                        on_text='collapse'
+                        off_text='expand'
+                    />
+                </div>
             </div>
             <ul>
                 {getExpand
@@ -179,7 +140,7 @@ function Question({
         });
     }
     return (
-        <li onClick={handleClick} className="clickable">
+        <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
         </li>
     );

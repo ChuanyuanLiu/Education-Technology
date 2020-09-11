@@ -2,7 +2,7 @@ import { Form, Input} from 'antd';
 import React from "react"
 import "./Login.css"
 import 'antd/dist/antd.css';
-import BigButtion from "./../Utils/BigButton"
+import BigButton from "./../Utils/BigButton"
 import { useHistory } from "react-router-dom";
 
 
@@ -65,7 +65,9 @@ function Login(){
                             >
                     Login
                     </Button> */}
-                    <BigButtion name="Login" handleClick={handleClick}/>
+                    <BigButton onClick={handleClick}>
+                    Login
+                    </BigButton>
                 </Form.Item>
                 </Form>
                 </div>

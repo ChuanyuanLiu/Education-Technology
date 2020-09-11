@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "antd"
+    ],
+    "emmet.excludeLanguages": [
+        "markdown"
     ]
 }

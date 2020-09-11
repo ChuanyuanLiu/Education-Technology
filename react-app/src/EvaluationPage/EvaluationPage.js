@@ -14,7 +14,7 @@ class EvaluationPage extends React.Component{
         this.handleClick = this.handleClick.bind(this)
     }
 
-    componentWillMount(){
+    componentDidMount(){
         fetch("http://localhost:3001/evaluation")
             .then(response => response.json())
             .then(data => {
@@ -32,17 +32,16 @@ class EvaluationPage extends React.Component{
             <EvaluationInfo key={data.evaluation_id} item={data} />)
         return (
         <div>
-            <NavBar title = 'Evaluation' />
+            <NavBar>
+            Evaluations
+            </NavBar>
             <SearchBar />
             <div>{evaluationlist}</div>
             <br /><br /><br /><br /><br /><br />
-            <div className="buttomButton" 
+            <BigButton
                 onClick={this.handleClick} >            
-                <BigButton name="New Evaluation"
-                           type="direct"
-                           
-                />
-            </div>
+            New Evaluation
+            </BigButton>
 
         </div>
     )}

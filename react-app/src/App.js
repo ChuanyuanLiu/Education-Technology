@@ -3,7 +3,7 @@ import Login from "./LoginPage/Login";
 import EvaluationOverviewPage from "./EvaluationPage/EvaluationOverviewPage";
 import Evaluation from "./EvaluationPage/EvaluationPage";
 import HomePage from "./HomePage/HomePage";
-import QuestionContainer from "./EvaluationPage/QuestionContainer"
+import QuestionPage from "./EvaluationPage/QuestionPage"
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import "antd/dist/antd.css";
 import "./core.css";
@@ -17,10 +17,13 @@ function App(){
                 <Route path='/home_page' component={HomePage}/>
                 <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
                 <Route path='/evaluation' component={Evaluation}/>
-                <Route path='/question' component={QuestionContainer} />
+                <Route path='/question' component={QuestionPage} />
                 <Route path='/new_evaluation' component={FrameworkSelection} />
 
             </Router>
+         <div id="footer">
+            @2020 budgerigar
+         </div>
          </React.StrictMode>
     )
 }
