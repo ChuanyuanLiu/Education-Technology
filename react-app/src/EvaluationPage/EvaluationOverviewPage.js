@@ -2,6 +2,9 @@ import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
 import Button3D from "../Utils/Button3D";
+import BigButton from "../Utils/BigButton";
+import TextInput from "../Utils/TextInput";
+import Footer from "../Utils/Footer";
 import {useHistory} from "react-router-dom";
 /*
 (Route from EvaluationInfo)
@@ -11,6 +14,7 @@ Evaluation Overview Page
     |-- SectionList
             |-- Section
                     |-- Question (rout to questionContainer)
+    |-- Footer
 */
 
 // Entry point for the Evaluation Overview Page
@@ -23,7 +27,7 @@ function EvaluationOverviewPage({history}) {
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
         fetch(
-            `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}&framework_id=${framework_id}`
+            `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}`
         )
             .then((response) => response.json())
             .then(setEvaluation)
@@ -56,40 +60,14 @@ function EvaluationOverviewPage({history}) {
                 text={evaluation_data.evaluation_summary}
             />
             <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
+            <Footer>
+                <BigButton onClick={()=>{history.goBack()}}> Save </BigButton>
+            </Footer>
         </div>
     );
 }
 
-/**
- * Input field for 1 line of text, with a button
- * @ignore children
- * @param text: placeholder
- */
-function TextInput({text}) {
-    const [getText, setText] = useState(text);
-    const [getActive, setActive] = useState(false);
 
-    return (
-        <div className='TextInput'>
-            <input
-                type='text'
-                value={getText}
-                onChange={(event) => {
-                    setText(event.target.value);
-                }}
-                disabled={!getActive}
-            />
-            <div className="right">
-            <Button3D
-                on={getActive}
-                onClick={() => setActive(!getActive)}
-                on_text='save'
-                off_text='edit'
-            />
-            </div>
-        </div>
-    );
-}
 
 // Display a list of sections
 function SectionsList({evaluation_id, sections}) {

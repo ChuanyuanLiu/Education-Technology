@@ -106,9 +106,16 @@ button:focus {
 }
 
 #footer {
-    margin-top: 50px;
-    position: absolute;
-    bottom: 10px;
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    bottom: 0px;
+}
+
+#webpage_info {
+    display: block;
+    background-color: var(--header_color);
+    margin-top: 20px;
 }
 
 .TextInput input {
@@ -118,12 +125,12 @@ button:focus {
 }
 
 #big_button {
-    padding: 5px 50px 5px 50px;
+    margin: 15px auto auto auto;
+    padding: 5px 100px 5px 100px;
     border-radius: 10px;
     display: block;
-    margin: auto;
     color: white;
-    background-color: var(--primary_color);
+    background-color: var(--tint_color);
     font-size: medium;
     box-shadow: 2px 8px black, -2px 8px black;
 }
@@ -131,5 +138,6 @@ button:focus {
 #big_button:hover {
     box-shadow: 0px 2px black;
     position: relative;
+    font-weight: bold;
     top: 6px;
 }

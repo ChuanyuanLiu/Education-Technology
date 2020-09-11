@@ -21,9 +21,6 @@ function App(){
                 <Route path='/new_evaluation' component={FrameworkSelection} />
 
             </Router>
-         <div id="footer">
-            @2020 budgerigar
-         </div>
          </React.StrictMode>
     )
 }
