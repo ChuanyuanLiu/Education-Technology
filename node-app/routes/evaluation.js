@@ -63,39 +63,36 @@ router.get('/', function (req, res, next) {
     }
 
     // Choose one evaluation
-    // Example: http://localhost:3001/evaluation?evaluation_id=1&framework_id=1
-    else if (req.query.evaluation_id != null && req.query.framework_id != null) {
-        // return all rates of the chosen question
+    // Example: http://localhost:3001/evaluation?evaluation_id=1
+    else if (req.query.evaluation_id != null) {
         const sql = "SELECT * "
-            + "FROM evaluation "
-            + "WHERE evaluation_id= " + req.query.evaluation_id + ";"
-            + "SELECT * "
-            + "FROM framework_section JOIN framework_section_question "
-            + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = " + req.query.framework_id + ";";
+            + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
+            + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE evaluation.evaluation_id = " + req.query.evaluation_id;
 
         sqlConnector.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
             }
-
-            // console.log(sqlRes);
             // Format output into hierarchies
-            let evaluationRes = sqlRes[0][0];
-            let frameworkRes = sqlRes[1];
+            
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
-            cleanRes.evaluation_id = evaluationRes.evaluation_id;
-            cleanRes.evaluation_title = evaluationRes.evaluation_title;
-            cleanRes.evaluation_summary = evaluationRes.evaluation_summary;
-            cleanRes.framework_id = evaluationRes.framework_id;
+            cleanRes.evaluation_id = sqlRes[0].evaluation_id;
+            cleanRes.author = sqlRes[0].evaluation_author;
+            cleanRes.evaluation_title = sqlRes[0].evaluation_title;
+            cleanRes.evaluation_creation_time = sqlRes[0].evaluation_creation_time;
+            cleanRes. evaluation_modified_time = sqlRes[0]. evaluation_modified_time;
+            cleanRes.evaluation_summary = sqlRes[0].evaluation_summary;
+            cleanRes.evaluation_completed = sqlRes[0].evaluation_completed;
+            cleanRes.framwork_id = sqlRes[0].framework_id;
             cleanRes.sections = [];
 
-            for (let i = 0; i < frameworkRes.length; i++) {
+            for (let i = 0; i < sqlRes.length; i++) {
 
-                let q = frameworkRes[i];
+                let q = sqlRes[i];
                 let sid = q.section_id;
 
                 // Initialise new section
@@ -125,7 +122,8 @@ router.get('/', function (req, res, next) {
 
     }
     //Evaluation Home page
-    else {
+    else 
+    {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
@@ -143,35 +141,44 @@ router.get('/', function (req, res, next) {
 
 //New evaluation page
 router.get('/new', function (req, res, next) {
-    // Select an active framwork to generate evaluation
+    // Select an active and framwork to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
+    // Excute 3 SQL statements:
+    // 1. Create a new evaluation, Insert a new evaluation_id
+    // 2. Return the evaluation_id of new created evaluation
+    // 3. Return all stuff of the new created evaluation
     if (req.query.framework_id != null) {
-        // Return all data of the chosen framework and also the 
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             + "SELECT * "
-            + "FROM framework_section JOIN framework_section_question "
-            + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = " + req.query.framework_id + ";";
-        sqlConnector.sqlCall(sql, function (questionRes) {
-            if (questionRes == null) {
+            + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
+            + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
+            + "WHERE evaluation.evaluation_id = (SELECT LAST_INSERT_ID())";
+        sqlConnector.sqlCall(sql, function (sqlRes) {
+            if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
             }
 
             // Format output into hierarchies
-            let evaluation_id = questionRes[1][0].LAST_INSERT_ID;
-            console.log(evaluation_id);
+            let evaluation_id = sqlRes[1][0].LAST_INSERT_ID;
+            // console.log(evaluation_id);
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
             cleanRes.evaluation_id = evaluation_id;
-            cleanRes.framework_id = req.query.framework_id;
+            cleanRes.author = sqlRes[2][0].evaluation_author;
+            cleanRes.evaluation_title = sqlRes[2][0].evaluation_title;
+            cleanRes.evaluation_creation_time = sqlRes[2][0].evaluation_creation_time;
+            cleanRes. evaluation_modified_time = sqlRes[2][0]. evaluation_modified_time;
+            cleanRes.evaluation_summary = sqlRes[2][0].evaluation_summary;
+            cleanRes.evaluation_completed = sqlRes[2][0].evaluation_completed;
+            cleanRes.framwork_id = sqlRes[2][0].framework_id;
             cleanRes.sections = [];
 
-            for (let i = 0; i < questionRes[2].length; i++) {
+            for (let i = 0; i < sqlRes[2].length; i++) {
 
-                let q = questionRes[2][i];
+                let q = sqlRes[2][i];
                 let sid = q.section_id;
 
                 // Initialise new section
@@ -243,8 +250,9 @@ router.post('/update/response', function (req, res, next) {
         var response_comment = req.body.response_comment;
         var evaluation_id = req.query.evaluation_id;
         var question_id = req.query.question_id;
-        const sql = "INSERT INTO evaluation_response (rate_chosen, response_comment, evaluation_id, question_id) "
-            + "VALUES(" + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + "," + question_id + ")";
+        const sql = "INSERT INTO evaluation_response (question_id, rate_chosen, response_comment, evaluation_id) "
+            + "VALUES(" + question_id + "," + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + " "
+            + "ON DUPLICATE KEY UPDATE rate_chosen = " + rate_chosen + ", response_comment = \"" + response_comment + "\";";
 
         sqlConnector.sqlCall(sql, function (updateResponse) {
             if (updateResponse == null) {
