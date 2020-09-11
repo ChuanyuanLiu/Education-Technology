@@ -169,28 +169,7 @@ describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
 });
 
-const evaluation1 = {
-    evaluation_title: '"St. Arthur Evalutaion"',
-    evaluation_id: 1,
-};
-const evaluation2 = {
-    evaluation_title: '"St. Arthur Evalutaion"',
-    evaluation_id: 1,
-};
-  
-describe('the evaluation with id 1 and 2', () => {
-    test('have all the same values', () => {
-        expect(evaluation1).toEqual(evaluation2);
-    });
-    test('are not the exact same can', () => {
-        expect(evaluation1).not.toBe(evaluation2);
-    });
-});
-
 //1. Get /evaluation -- Yao
-
-var sqlConnector = require('../routes/sqlConnector');
-
 describe("Get /evaluation", () => {
     test("it should return all the evaluations. so count(sqlresult) should be equal to max(evaluation_id)", done => {
 
