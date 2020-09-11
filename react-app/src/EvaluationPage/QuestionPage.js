@@ -30,7 +30,7 @@ function QuestionPage({history}) {
 
     return (
         <div className='QuestionPage'>
-            <NavBar title={question_data.question_title} />
+            <NavBar> {question_data.question_title} </NavBar>
             <RateList {...question_data} />
             <TextArea title='Comment' text={question_data.response_comment} />
             <BigButton onClick={()=>{history.goBack()}}>

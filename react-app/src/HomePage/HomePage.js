@@ -17,7 +17,7 @@ function PageOptionList() {
         <div className='center'>
         <div className='PageOptionList'>
             {list_names.map((name,i) => (
-                    <div className="Option" key={i}>
+                    <div className="Option clickable" key={i}>
                         <div className="Button">
                     {name}
                     </div>

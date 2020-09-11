@@ -5,6 +5,7 @@ import Button3D from "./Button3D";
  * Display and edit a large text area
  * @param title  
  * @param text: the placeholder text 
+ * @ignore children: Will not show child elements
  * */ 
 function TextArea({title = "TextArea", text = ""}) {
     // track changes to text
@@ -26,7 +27,7 @@ function TextArea({title = "TextArea", text = ""}) {
                 <div className='right'>
                     <Button3D
                         on={getActive}
-                        callBack={toggleActive}
+                        onClick={toggleActive}
                         on_text='save'
                         off_text='edit'
                     />

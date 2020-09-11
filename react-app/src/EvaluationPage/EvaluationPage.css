@@ -49,3 +49,16 @@ textarea {
 }
 
 
+.rateCriteria{
+    margin-top: 5px;
+    margin-left: 16px;
+    font-style: normal;
+    font-size: 15px;
+    font-weight: normal;
+}
+.frameworkStatus{
+    /* float:right; */
+    top:0px;
+    right:0px;
+    position:absolute;
+}

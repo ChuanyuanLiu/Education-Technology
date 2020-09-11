@@ -12,6 +12,9 @@ function FrameworkComponent(props){
     return (
         <div className="evaluationInfo" onClick = {() => props.handleClick(props.item.framework_id)}>          
             <div className="frameTitle">{props.item.framework_title}</div>
+            <div className='frameworkStatus'>
+                {props.item.framework_activeStatus ? "Inactive" : "Active"}
+            </div>
             <div className="author"><UserOutlined style={{fontSize: "20px"}}/>  {props.item.framework_author}</div>
             <div>
                 <div className="framework">
