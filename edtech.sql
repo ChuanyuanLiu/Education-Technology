@@ -62,7 +62,7 @@ CREATE TABLE `evaluation_response` (
   `rate_chosen` int NOT NULL,
   `response_comment` varchar(2000) DEFAULT '',
   `evaluation_id` int NOT NULL,
-  PRIMARY KEY (`question_id`),
+  PRIMARY KEY (`question_id`, `evaluation_id`),
   KEY `question_id_idx` (`question_id`),
   CONSTRAINT `question_id` FOREIGN KEY (`question_id`) REFERENCES `framework_section_question` (`question_id`),
   KEY `evaluation_id_in_evaluation_response_idx` (`question_id`),

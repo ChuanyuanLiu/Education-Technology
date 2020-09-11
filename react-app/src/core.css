@@ -141,3 +141,40 @@ button:focus {
     font-weight: bold;
     top: 6px;
 }
+/* present element in a list, element includes evaluation/framework/report */
+.elementInfo  {
+    border:1px  solid  black;
+    position: relative;
+}
+/* The status of an element(Evaluation/Framework/Report */
+.elementStatus{
+    top:0px;
+    right:10px;
+    position:absolute;
+}
+/* The origin of an element. ie: the origin of an evaluation is framework */
+.elementOrigin{
+    bottom: 0px;
+    right:10px;
+    position:absolute;
+}
+/* The anthor of an element */
+.elementAuthor{
+    margin: 10px;
+}
+
+.elementDate{
+    margin-left: 5px;
+}
+
+.elementTitle{
+    margin-left: 5px;
+}
+
+.rateCriteria{
+    margin-top: 5px;
+    margin-left: 16px;
+    font-style: normal;
+    font-size: 15px;
+    font-weight: normal;
+}
