@@ -2,11 +2,12 @@
 @media screen and (max-width: 600px) {
     .Option {
         text-align: center;
+        padding: 10px;
+        border: 1px black;
+        border-style: hidden hidden solid hidden;
     }
     .Button {
         text-align: center;
-        border: 1px black;
-        border-style: hidden hidden solid hidden;
     }
 }
 

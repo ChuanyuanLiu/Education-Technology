@@ -48,7 +48,7 @@ class FrameworkSelection extends React.Component {
         ));
         return (
             <div>
-                <NavBar title='Choose Framework' />
+                <NavBar> Choose Framework </NavBar>
                 <SearchBar />
                 {frameworkList}
             </div>

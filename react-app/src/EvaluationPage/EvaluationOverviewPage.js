@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
-import TextArea from "../Utils/TextArea"
-import Button3D from "../Utils/Button3D"
+import TextArea from "../Utils/TextArea";
+import Button3D from "../Utils/Button3D";
 import {useHistory} from "react-router-dom";
 /*
 (Route from EvaluationInfo)
@@ -30,7 +30,6 @@ function EvaluationOverviewPage({history}) {
             .catch(console.error);
     }, [evaluation_id, framework_id]);
 
-
     if (evaluation_id == null || framework_id == null) {
         return (
             <div className='EvaluationPage'>
@@ -50,14 +49,44 @@ function EvaluationOverviewPage({history}) {
     return (
         <div className='EvaluationPage'>
             <NavBar>
-                {evaluation_data.evaluation_title} 
-                <Button3D className="right" on="true" onClick={()=>{}} on_text="save" off_text="edit"/>
+                <TextInput text={evaluation_data.evaluation_title} />
             </NavBar>
             <TextArea
                 title='Summary'
                 text={evaluation_data.evaluation_summary}
             />
             <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
+        </div>
+    );
+}
+
+/**
+ * Input field for 1 line of text, with a button
+ * @ignore children
+ * @param text: placeholder
+ */
+function TextInput({text}) {
+    const [getText, setText] = useState(text);
+    const [getActive, setActive] = useState(false);
+
+    return (
+        <div className='TextInput'>
+            <input
+                type='text'
+                value={getText}
+                onChange={(event) => {
+                    setText(event.target.value);
+                }}
+                disabled={!getActive}
+            />
+            <div className="right">
+            <Button3D
+                on={getActive}
+                onClick={() => setActive(!getActive)}
+                on_text='save'
+                off_text='edit'
+            />
+            </div>
         </div>
     );
 }

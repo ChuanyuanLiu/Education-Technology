@@ -2,14 +2,14 @@ import React from "react";
 import {useHistory} from "react-router-dom";
 
 /**
- * A navigation bar 
+ * A navigation bar with a go back button 
  * @param children: child elements
  */
 function NavBar({children}) {
     const history = useHistory();
     return (
-        <div className='header'>
-            <span className="left clickable back_button" onClick={()=>history.goBack()}>
+        <div className='NavBar'>
+            <span className="left clickable" onClick={()=>history.goBack()}>
             {"<"}
             </span>
             {children}
