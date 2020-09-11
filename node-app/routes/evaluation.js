@@ -65,10 +65,16 @@ router.get('/', function (req, res, next) {
     // Choose one evaluation
     // Example: http://localhost:3001/evaluation?evaluation_id=1
     else if (req.query.evaluation_id != null) {
+        // Excute 2 sql statements:
+        // 1. Return all data about this evaluation.
+        // 2. Return if the question and section completed.
         const sql = "SELECT * "
             + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
             + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE evaluation.evaluation_id = " + req.query.evaluation_id;
+            + "WHERE evaluation.evaluation_id = " + req.query.evaluation_id + ";"
+            + "SELECT * "
+            + "FROM evaluation_response "
+            + "WHERE evaluation_id = " + req.query.evaluation_id + ";";
 
         sqlConnector.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null) {
@@ -80,20 +86,36 @@ router.get('/', function (req, res, next) {
             let sidToIndex = new Map();
             let index = 0;
             let cleanRes = {};
-            cleanRes.evaluation_id = sqlRes[0].evaluation_id;
-            cleanRes.author = sqlRes[0].evaluation_author;
-            cleanRes.evaluation_title = sqlRes[0].evaluation_title;
-            cleanRes.evaluation_creation_time = sqlRes[0].evaluation_creation_time;
-            cleanRes. evaluation_modified_time = sqlRes[0]. evaluation_modified_time;
-            cleanRes.evaluation_summary = sqlRes[0].evaluation_summary;
-            cleanRes.evaluation_completed = sqlRes[0].evaluation_completed;
-            cleanRes.framwork_id = sqlRes[0].framework_id;
+            let question_completed = [];
+            let evluationRes = sqlRes[0];
+            let responseRes = sqlRes[1];
+            cleanRes.evaluation_id = evluationRes[0].evaluation_id;
+            cleanRes.author = evluationRes[0].evaluation_author;
+            cleanRes.evaluation_title = evluationRes[0].evaluation_title;
+            cleanRes.evaluation_creation_time = evluationRes[0].evaluation_creation_time;
+            cleanRes. evaluation_modified_time = evluationRes[0]. evaluation_modified_time;
+            cleanRes.evaluation_summary = evluationRes[0].evaluation_summary;
+            cleanRes.evaluation_completed = evluationRes[0].evaluation_completed;
+            cleanRes.framwork_id = evluationRes[0].framework_id;
             cleanRes.sections = [];
 
-            for (let i = 0; i < sqlRes.length; i++) {
+            for (let i = 0; i < responseRes.length; i++)
+            {
+                question_completed.push(responseRes[i].question_id);
+            }
 
-                let q = sqlRes[i];
+            for (let i = 0; i < evluationRes.length; i++) {
+
+                let q = evluationRes[i];
                 let sid = q.section_id;
+                let question_completed_flag = 0;
+                
+                // Check whether the question is completed.
+                // If it is completed, 'question_completed' should be 1. If not, it should 0.
+                if(question_completed.indexOf(q.question_id) != -1)
+                {
+                    question_completed_flag = 1;
+                }
 
                 // Initialise new section
                 if (!sidToIndex.has(sid)) {
@@ -111,9 +133,26 @@ router.get('/', function (req, res, next) {
                 let cleanQuestion =
                 {
                     'question_id': q.question_id,
-                    'question_title': q.question_title
+                    'question_title': q.question_title,
+                    'question_completed': question_completed_flag
                 };
                 cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
+            }
+
+            // Add 'section_completed' field in section part.
+            // If the section is completed, 'section_completed' should be 1. If not, it should be 0.
+            for (let i = 0; i < cleanRes.sections.length; i++) 
+            {
+                let section_completed = 1;
+                let questions = cleanRes.sections[i].questions;
+                for (let j = 0; j < questions.length; j++)
+                {
+                    if (questions[j].question_completed == 0)
+                    {
+                        section_completed = 0;
+                    }
+                }
+                cleanRes.sections[i].section_completed = section_completed;
             }
 
             res.send(cleanRes);
@@ -188,7 +227,8 @@ router.get('/new', function (req, res, next) {
                     {
                         'section_id': sid,
                         'section_title': q.section_title,
-                        'questions': []
+                        'questions': [],
+                        'section_completed': 0
                     };
                     cleanRes.sections[index++] = cleanSection;
                 }
@@ -197,7 +237,8 @@ router.get('/new', function (req, res, next) {
                 let cleanQuestion =
                 {
                     'question_id': q.question_id,
-                    'question_title': q.question_title
+                    'question_title': q.question_title,
+                    'question_completed': 0
                 };
                 cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
             }

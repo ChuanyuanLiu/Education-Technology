@@ -9,6 +9,8 @@ import "antd/dist/antd.css";
 import "./core.css";
 import "./googleFont.css"
 import FrameworkSelection from "./EvaluationPage/FrameworkSelection";
+import FrameworkPage from "./FrameworkPage/FrameworkPage"
+import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview"
 function App(){
     return (
         <React.StrictMode>
@@ -19,6 +21,8 @@ function App(){
                 <Route path='/evaluation' component={Evaluation}/>
                 <Route path='/question' component={QuestionPage} />
                 <Route path='/new_evaluation' component={FrameworkSelection} />
+                <Route path='/framework' component={FrameworkPage} />
+                <Route path='/framework_overview' component={FrameworkOverviewPage} />
 
             </Router>
          <div id="footer">

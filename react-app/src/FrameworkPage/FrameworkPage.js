@@ -1,10 +1,10 @@
-import React from "react";
-import "./EvaluationPage.css";
+import React, { Component } from "react"
+import "./FrameworkPage.css"
+import { UserOutlined} from '@ant-design/icons'
+import FrameworkComponent from './FrameworkComponent'
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
-import FrameworkComponent from "../FrameworkPage/FrameworkComponent";
-
-class FrameworkSelection extends React.Component {
+class FrameworkPage extends Component{
     constructor() {
         super();
         this.state = {
@@ -14,7 +14,7 @@ class FrameworkSelection extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:3001/evaluation/new")
+        fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 this.setState({frameworks: data});
@@ -22,20 +22,16 @@ class FrameworkSelection extends React.Component {
     }
 
 
-    // go directly to the new evaluation
+    // go directly to the frameworkß
     handleClick(framework_id) {
-        const requestURL =
-            "http://localhost:3001/evaluation/new?framework_id=" + framework_id;
-        fetch(requestURL)
-            .then((response) => response.json())
-            .then(({evaluation_id}) => this.props.history.replace({
-                pathname: '/evaluation_overview',
-                state : {
-                    evaluation_id,
-                    framework_id
-                }            
-            }
-            ));
+        alert(framework_id)
+        this.props.history.replace({
+            pathname: '/framework_overview',
+            state : {
+                framework_id
+            }            
+        }
+        )
     }
 
     render() {
@@ -54,6 +50,7 @@ class FrameworkSelection extends React.Component {
             </div>
         );
     }
+
 }
 
-export default FrameworkSelection;
+export default FrameworkPage
