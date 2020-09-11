@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '../Utils/NavBar'
-import BigButton from '../Utils/BigButton'
+import {Button} from 'antd'
 import QuestionComponent from "./QuestionComponent"
 import "./EvaluationPage.css"
 
@@ -13,6 +13,7 @@ class Question extends React.Component {
             comment:"",
             options:[],
             choice: "0",
+            postId: ""
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleClick = this.handleClick.bind(this)
@@ -30,7 +31,7 @@ class Question extends React.Component {
                     title:data.question_title,
                     comment:data.response_comment,
                     choice: data.rate_chosen.toString(),
-                    options: data.rates.map(element =>element.rate_criterion)
+                    options: data.rates.map(element =>element.rate_criterion),
             }))
         })
 
@@ -42,9 +43,23 @@ class Question extends React.Component {
     }
 
     handleClick = ()=> {
-        console.log("Button pressed");
-        console.log(this.props.history);
-        this.props.history.go(4);
+        // console.log("Button pressed");
+        // console.log(this.props.history);
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                                    rate_chosen: this.choice,
+                                    response_comment: this.comment})
+        };
+
+        fetch('http://localhost:3001/evaluation/evaluation/update/response?evaluation_id'
+                + this.props.location.state.evaluation_id
+                + "&question_id=" + this.props.location.state.question_id, 
+                requestOptions)
+            .then(response => response.json())
+            .then(data => this.setState({ postId: data.id }, alert(data)));
+        this.props.history.goBack();
     }
 
     render(){
@@ -63,12 +78,26 @@ class Question extends React.Component {
                     <textarea name="comment"
                               value={this.state.comment}
                               onChange={this.handleChange}/>
-
-                    {/* <div className="buttomButton"
-                            onClick = {this.handleClick}>
-                         <BigButton 
-                            name="Save"/>
-                    </div> */}
+                    <div className = "saveButton">
+                        <Button
+                            type="primary" 
+                            size="large" 
+                            shape="round"
+                            style={
+                                {
+                                    backgroundColor: "#1A1F71",
+                                    border:"#1A1F71",
+                                    hover:{
+                                        backgroundColor: "#1A1F71",
+                                        border:"#1A1F71"
+                                    }
+                                }
+                            }
+                            htmlType="button" 
+                            onClick={this.handleClick}
+                            block>
+                        Save</Button>
+                        </div>
                 </form>
             </div>
         )}

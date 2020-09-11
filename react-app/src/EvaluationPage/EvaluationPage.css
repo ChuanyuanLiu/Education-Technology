@@ -61,3 +61,9 @@ textarea {
     font-size: 15px;
     font-weight: normal;
 }
+
+.saveButton{
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+}
