@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var sqlAdapter = require('../utils/sqlAdapter');
+var jsonUtils = require('../utils/jsonUtils');
 
 const unsuccessful = "The call to the SQL database was unsuccessful.";
 const successful = "The call to the SQL database was successful."
@@ -19,6 +20,7 @@ router.get('/', function (req, res, next) {
             + "FROM evaluation_response "
             + "WHERE question_id = " + req.query.question_id + " AND evaluation_id = " + req.query.evaluation_id + ";";
         sqlAdapter.sqlCall(sql, function (rateRes) {
+
             if (rateRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -75,98 +77,42 @@ router.get('/', function (req, res, next) {
     // Choose one evaluation
     // Example: http://localhost:3001/evaluation?evaluation_id=1
     else if (req.query.evaluation_id != null) {
-        // Excute 2 sql statements:
-        // 1. Return all data about this evaluation.
-        // 2. Return if the question and section completed.
-        const sql = "SELECT * "
-            + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
-            + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE evaluation.evaluation_id = " + req.query.evaluation_id + ";"
-            + "SELECT * "
-            + "FROM evaluation_response "
-            + "WHERE evaluation_id = " + req.query.evaluation_id + ";";
 
-        sqlAdapter.sqlCall(sql, function (sqlRes) {
-            if (sqlRes == null) {
+        // Excute 2 SQL statements:
+
+        // 1. Return general data about this evaluation.
+        const evalSql = "SELECT * FROM evaluation e WHERE e.evaluation_id = " + req.query.evaluation_id;
+
+        sqlAdapter.sqlCall(evalSql, function (evalRes) {
+
+            if (evalRes == null) {
                 res.send(unsuccessful);
                 return;
             }
-            // Format output into hierarchies
-            
-            let sidToIndex = new Map();
-            let index = 0;
-            let cleanRes = {};
-            let question_completed = [];
-            let evluationRes = sqlRes[0];
-            let responseRes = sqlRes[1];
-            cleanRes.evaluation_id = evluationRes[0].evaluation_id;
-            cleanRes.author = evluationRes[0].evaluation_author;
-            cleanRes.evaluation_title = evluationRes[0].evaluation_title;
-            cleanRes.evaluation_creation_time = evluationRes[0].evaluation_creation_time;
-            cleanRes. evaluation_modified_time = evluationRes[0]. evaluation_modified_time;
-            cleanRes.evaluation_summary = evluationRes[0].evaluation_summary;
-            cleanRes.evaluation_completed = evluationRes[0].evaluation_completed;
-            cleanRes.framwork_id = evluationRes[0].framework_id;
-            cleanRes.sections = [];
 
-            for (let i = 0; i < responseRes.length; i++)
-            {
-                question_completed.push(responseRes[i].question_id);
-            }
+            const fid = evalRes[0].framework_id;
+            // 2. Return detailed information about evaluation's responses.
+            const respSql = "SELECT * "
+                + "FROM (framework_section s JOIN framework_section_question q "
+                    + "ON s.section_id = q.section_id "
+                    + "AND s.framework_id = " + fid + ") "
+                + "LEFT JOIN evaluation_response r "
+                + "ON q.question_id = r.question_id "
+                + "AND r.evaluation_id = " + req.query.evaluation_id;
 
-            for (let i = 0; i < evluationRes.length; i++) {
+            sqlAdapter.sqlCall(respSql, function (respRes) {
 
-                let q = evluationRes[i];
-                let sid = q.section_id;
-                let question_completed_flag = 0;
-                
-                // Check whether the question is completed.
-                // If it is completed, 'question_completed' should be 1. If not, it should 0.
-                if(question_completed.indexOf(q.question_id) != -1)
-                {
-                    question_completed_flag = 1;
+                if (respRes == null) {
+                    res.send(unsuccessful);
+                    return;
                 }
 
-                // Initialise new section
-                if (!sidToIndex.has(sid)) {
-                    sidToIndex.set(sid, index);
-                    let cleanSection =
-                    {
-                        'section_id': sid,
-                        'section_title': q.section_title,
-                        'questions': []
-                    };
-                    cleanRes.sections[index++] = cleanSection;
-                }
+                let cleanRes = evalRes[0];
+                cleanRes.sections = jsonUtils.formatSectionHierarchy(respRes, true);
 
-                // Insert formatted question into section
-                let cleanQuestion =
-                {
-                    'question_id': q.question_id,
-                    'question_title': q.question_title,
-                    'question_completed': question_completed_flag
-                };
-                cleanRes.sections[sidToIndex.get(sid)].questions.push(cleanQuestion);
-            }
+                res.send(cleanRes);
 
-            // Add 'section_completed' field in section part.
-            // If the section is completed, 'section_completed' should be 1. If not, it should be 0.
-            for (let i = 0; i < cleanRes.sections.length; i++) 
-            {
-                let section_completed = 1;
-                let questions = cleanRes.sections[i].questions;
-                for (let j = 0; j < questions.length; j++)
-                {
-                    if (questions[j].question_completed == 0)
-                    {
-                        section_completed = 0;
-                    }
-                }
-                cleanRes.sections[i].section_completed = section_completed;
-            }
-
-            res.send(cleanRes);
-
+            });
         });
 
     }
@@ -190,6 +136,7 @@ router.get('/', function (req, res, next) {
 
 //New evaluation page
 router.get('/new', function (req, res, next) {
+
     // Select an active and framwork to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     // Excute 3 SQL statements:
@@ -197,13 +144,16 @@ router.get('/new', function (req, res, next) {
     // 2. Return the evaluation_id of new created evaluation
     // 3. Return all stuff of the new created evaluation
     if (req.query.framework_id != null) {
+
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             + "SELECT * "
-            + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
-            + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE evaluation.evaluation_id = (SELECT LAST_INSERT_ID())";
+            + "FROM (evaluation e LEFT JOIN framework_section s ON e.framework_id = s.framework_id) " 
+            + "LEFT JOIN framework_section_question q ON s.section_id = q.section_id "
+            + "WHERE e.evaluation_id = (SELECT LAST_INSERT_ID())";
+
         sqlAdapter.sqlCall(sql, function (sqlRes) {
+            
             if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -258,6 +208,7 @@ router.get('/new', function (req, res, next) {
         });
     }
     else {
+
         // Default; return all active frameworks
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
@@ -268,9 +219,11 @@ router.get('/new', function (req, res, next) {
 
             res.send(frameworkRes);
         });
+
     }
 });
 
+// Update the title or summary of an evaluation
 router.post('/update/title', function (req, res, next) {
     let id = req.query.evaluation_id;
     let title = req.body.evaluation_title;
@@ -292,6 +245,7 @@ router.post('/update/title', function (req, res, next) {
     });
 });
 
+// Create a new response to a question as part of an evaluation
 router.post('/update/response', function (req, res, next) {
 
     // Example: http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12

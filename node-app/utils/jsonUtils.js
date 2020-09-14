@@ -1,5 +1,5 @@
 // Format joined tables of section and questions into nested hierarchy
-function formatSectionHierarchy(joined) {
+function formatSectionHierarchy(joined, checkCompleteness = false) {
 
     // Setup map for section indices to formatted index
     let sidToIndex = new Map();
@@ -17,7 +17,11 @@ function formatSectionHierarchy(joined) {
             let newS = {
                 'section_id': sid,
                 'section_title': row.section_title,
-                'questions': []
+                'questions': [],
+                'section_completed': 1
+            };
+            if (checkCompleteness) {
+                newS.section_completed = 1;
             };
             formatted[index++] = newS;
         }
@@ -27,6 +31,17 @@ function formatSectionHierarchy(joined) {
             'question_id': row.question_id,
             'question_title': row.question_title
         };
+        
+        // Update question/section completeness
+        if (checkCompleteness) {
+            if (row.evaluation_id != null) {
+                q.question_completed = 1;
+            } else {
+                q.question_completed = 0;
+                formatted[sidToIndex.get(sid)].section_completed = 0;
+            }
+        }
+
         formatted[sidToIndex.get(sid)].questions.push(q);
 
     }
