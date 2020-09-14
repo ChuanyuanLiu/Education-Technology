@@ -115,6 +115,7 @@ button:focus {
     background-color: transparent;
     border: none;
     width: auto;
+    text-align: center;
 }
 
 #big_button {

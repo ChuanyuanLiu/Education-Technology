@@ -24,7 +24,6 @@ class FrameworkPage extends Component{
 
     // go directly to the frameworkß
     handleClick(framework_id) {
-        alert(framework_id)
         this.props.history.replace({
             pathname: '/framework_overview',
             state : {
@@ -44,7 +43,7 @@ class FrameworkPage extends Component{
         ));
         return (
             <div>
-                <NavBar> Choose Framework </NavBar>
+                <NavBar> <div>Frameworks</div> </NavBar>
                 <SearchBar />
                 {frameworkList}
             </div>
