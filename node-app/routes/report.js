@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var sqlConnector = require('./sqlConnector');
+var sqlAdapter = require('../utils/sqlAdapter');
 
 router.get('/', function (req, res, next) {
-    sqlConnector.sqlCall("SELECT * FROM report", function (sqlRes) {
+    sqlAdapter.sqlCall("SELECT * FROM report", function (sqlRes) {
         res.send(sqlRes);
     });
 });

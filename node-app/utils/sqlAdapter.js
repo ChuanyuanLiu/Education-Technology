@@ -28,5 +28,5 @@ function sqlCall(sql, callback) {
 function closeConnection() {
     connection.end();
 }
-
+ 
 module.exports = { sqlCall, closeConnection };

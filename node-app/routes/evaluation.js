@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var sqlConnector = require('./sqlConnector');
+var sqlAdapter = require('../utils/sqlAdapter');
 
 const unsuccessful = "The call to the SQL database was unsuccessful.";
 const successful = "The call to the SQL database was successful."
@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
             + "SELECT *"
             + "FROM evaluation_response "
             + "WHERE question_id = " + req.query.question_id + " AND evaluation_id = " + req.query.evaluation_id + ";";
-        sqlConnector.sqlCall(sql, function (rateRes) {
+        sqlAdapter.sqlCall(sql, function (rateRes) {
             if (rateRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -86,7 +86,7 @@ router.get('/', function (req, res, next) {
             + "FROM evaluation_response "
             + "WHERE evaluation_id = " + req.query.evaluation_id + ";";
 
-        sqlConnector.sqlCall(sql, function (sqlRes) {
+        sqlAdapter.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -176,7 +176,7 @@ router.get('/', function (req, res, next) {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
-        sqlConnector.sqlCall(sql, function (sqlRes) {
+        sqlAdapter.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -203,7 +203,7 @@ router.get('/new', function (req, res, next) {
             + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
             + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
             + "WHERE evaluation.evaluation_id = (SELECT LAST_INSERT_ID())";
-        sqlConnector.sqlCall(sql, function (sqlRes) {
+        sqlAdapter.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -260,7 +260,7 @@ router.get('/new', function (req, res, next) {
     else {
         // Default; return all active frameworks
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1";
-        sqlConnector.sqlCall(sql, function (frameworkRes) {
+        sqlAdapter.sqlCall(sql, function (frameworkRes) {
             if (frameworkRes == null) {
                 res.send(unsuccessful);
                 return;
@@ -281,7 +281,7 @@ router.post('/update/title', function (req, res, next) {
         + "', evaluation_summary = '" + summary
         + "' WHERE evaluation_id = " + id;
 
-    sqlConnector.sqlCall(sql, function (updateRes) {
+    sqlAdapter.sqlCall(sql, function (updateRes) {
         if (updateRes == null) {
             res.send(unsuccessful);
             return;
@@ -305,7 +305,7 @@ router.post('/update/response', function (req, res, next) {
             + "VALUES(" + question_id + "," + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + " "
             + "ON DUPLICATE KEY UPDATE rate_chosen = " + rate_chosen + ", response_comment = \"" + response_comment + "\";";
 
-        sqlConnector.sqlCall(sql, function (updateResponse) {
+        sqlAdapter.sqlCall(sql, function (updateResponse) {
             if (updateResponse == null) {
                 res.send(unsuccessful);
                 return;
