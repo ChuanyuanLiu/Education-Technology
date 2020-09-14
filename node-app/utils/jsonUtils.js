@@ -6,6 +6,8 @@ function formatSectionHierarchy(joined, checkCompleteness = false) {
     let index = 0;
     let formatted = [];
 
+    console.log(joined);
+
     for (let i = 0; i < joined.length; i++) {
 
         let row = joined[i];
@@ -27,8 +29,13 @@ function formatSectionHierarchy(joined, checkCompleteness = false) {
         }
 
         // Insert formatted question into section
+        let qid = row.question_id;
+        // Check for resolved duplicate question_id during LEFT JOIN
+        if (row.defined_question_id != null) {
+            qid = row.defined_question_id;
+        }
         let q = {
-            'question_id': row.question_id,
+            'question_id': qid,
             'question_title': row.question_title
         };
         
