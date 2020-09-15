@@ -32,17 +32,17 @@ class EvaluationPage extends React.Component{
             <EvaluationInfo key={data.evaluation_id} item={data} />)
         return (
         <div>
-            <NavBar>
-            Evaluations
-            </NavBar>
+            <NavBar> Evaluations 
             <SearchBar />
-            <div>{evaluationlist}</div>
-            <br /><br /><br /><br /><br /><br />
-            <BigButton
-                onClick={this.handleClick} >            
-            New Evaluation
-            </BigButton>
-
+            </NavBar>
+            <div className="content">
+                {evaluationlist}
+            </div>
+            <div className="footer">
+                <BigButton onClick={this.handleClick} >            
+                    New Evaluation
+                </BigButton>
+            </div>
         </div>
     )}
 }

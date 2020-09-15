@@ -23,7 +23,6 @@ function App(){
                 <Route path='/new_evaluation' component={FrameworkSelection} />
                 <Route path='/framework' component={FrameworkPage} />
                 <Route path='/framework_overview' component={FrameworkOverviewPage} />
-
             </Router>
          </React.StrictMode>
     )
