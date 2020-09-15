@@ -44,8 +44,9 @@ class FrameworkPage extends Component{
         ));
         return (
             <div>
-                <NavBar> Choose Framework </NavBar>
+                <NavBar> Choose Framework 
                 <SearchBar />
+                </NavBar>
                 {frameworkList}
             </div>
         );

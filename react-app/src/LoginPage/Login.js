@@ -58,13 +58,7 @@ function Login(){
                                     size="large"/>
                 </Form.Item>
             
-                <Form.Item>
-                    {/* <Button onClick={onClickHandle}
-                            type="primary" size="large" htmlType="submit"
-                            shape="round" block
-                            >
-                    Login
-                    </Button> */}
+                <Form.Item className="center">
                     <BigButton onClick={handleClick}>
                     Login
                     </BigButton>
