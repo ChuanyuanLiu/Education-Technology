@@ -1,5 +1,4 @@
 import React from "react"
-import "./SearchBar.css"
 import {Input} from  'antd'
 const { Search } = Input;
 class SearchBar extends React.Component{
@@ -27,7 +26,6 @@ class SearchBar extends React.Component{
 
     render(){
         return (
-            <div className="SearchHeader">
                 <div className="SearchBar">
                     <Search 
                         type = "text"
@@ -38,7 +36,6 @@ class SearchBar extends React.Component{
                         value = {this.state.search}
                     />
                 </div>
-            </div>
 
         )
     }

@@ -1,10 +1,12 @@
-import React, { Component } from "react"
-import "./FrameworkPage.css"
-import { UserOutlined} from '@ant-design/icons'
-import FrameworkComponent from './FrameworkComponent'
+import React, {Component} from "react";
+import "./FrameworkPage.css";
+import {UserOutlined} from "@ant-design/icons";
+import FrameworkComponent from "./FrameworkComponent";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
-class FrameworkPage extends Component{
+import BigButton from "../Utils/BigButton";
+
+class FrameworkPage extends Component {
     constructor() {
         super();
         this.state = {
@@ -21,16 +23,14 @@ class FrameworkPage extends Component{
             });
     }
 
-
     // go directly to the frameworkß
     handleClick(framework_id) {
         this.props.history.replace({
-            pathname: '/framework_overview',
-            state : {
-                framework_id
-            }            
-        }
-        )
+            pathname: "/framework_overview",
+            state: {
+                framework_id,
+            },
+        });
     }
 
     render() {
@@ -42,14 +42,22 @@ class FrameworkPage extends Component{
             />
         ));
         return (
-            <div>
-                <NavBar> <div>Frameworks</div> </NavBar>
-                <SearchBar />
-                {frameworkList}
+            <div className='flex_container'>
+                <div className='header'>
+                    <NavBar>
+                        Frameworks
+                        <SearchBar />
+                    </NavBar>
+                </div>
+                <div className='content'>{frameworkList}</div>
+                <div className='footer'>
+                    <BigButton onClick={() => this.handleClick(-1)}>
+                        New Framework
+                    </BigButton>
+                </div>
             </div>
         );
     }
-
 }
 
-export default FrameworkPage
+export default FrameworkPage;

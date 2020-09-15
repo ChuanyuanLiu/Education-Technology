@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
 import Button3D from "../Utils/Button3D";
+import BigButton from "../Utils/BigButton";
+import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
 /*
 (Route from EvaluationInfo)
@@ -11,20 +13,18 @@ Evaluation Overview Page
     |-- SectionList
             |-- Section
                     |-- Question (rout to questionContainer)
+    |-- Footer
 */
 
 // Entry point for the Evaluation Overview Page
 function EvaluationOverviewPage({history}) {
-    const {evaluation_id, framework_id} = history.location.state;
+    //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
-
-    console.log(evaluation_id, framework_id);
+    const {evaluation_id, framework_id} = history.location.state;
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
-        fetch(
-            `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}&framework_id=${framework_id}`
-        )
+        fetch(`http://localhost:3001/evaluation?evaluation_id=${evaluation_id}`)
             .then((response) => response.json())
             .then(setEvaluation)
             .catch(console.error);
@@ -46,46 +46,64 @@ function EvaluationOverviewPage({history}) {
         return <h1>Loading...</h1>;
     }
 
-    return (
-        <div className='EvaluationPage'>
-            <NavBar>
-                <TextInput text={evaluation_data.evaluation_title} />
-            </NavBar>
-            <TextArea
-                title='Summary'
-                text={evaluation_data.evaluation_summary}
-            />
-            <SectionsList evaluation_id={evaluation_id} {...evaluation_data} />
-        </div>
-    );
-}
+    const post_url = `http://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
+    const post_request = (url, title, summary) => {
+        const param = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                evaluation_title: title,
+                evaluation_summary: summary,
+            }),
+            method: "POST",
+        };
+        fetch(url, param)
+            .then(data=>console.log(data))
+            .catch((error) => console.log(error));
+    };
+    const post_title_request = (url, summary) => (text) => {
+        post_request(url, text, summary);
+    };
+    const post_summary_request = (url, title) => (text) => {
+        post_request(url, title, text);
+    };
 
-/**
- * Input field for 1 line of text, with a button
- * @ignore children
- * @param text: placeholder
- */
-function TextInput({text}) {
-    const [getText, setText] = useState(text);
-    const [getActive, setActive] = useState(false);
-
     return (
-        <div className='TextInput'>
-            <input
-                type='text'
-                value={getText}
-                onChange={(event) => {
-                    setText(event.target.value);
-                }}
-                disabled={!getActive}
-            />
-            <div className="right">
-            <Button3D
-                on={getActive}
-                onClick={() => setActive(!getActive)}
-                on_text='save'
-                off_text='edit'
-            />
+        <div className='EvaluationPage flex_container'>
+            <div className='header'>
+                <NavBar>
+                    <TextInput
+                        text={evaluation_data.evaluation_title}
+                        onSave={post_title_request(
+                            post_url,
+                            evaluation_data.evaluation_summary
+                        )}
+                    />
+                </NavBar>
+            </div>
+            <div className='content'>
+                <TextArea
+                    title='Summary'
+                    text={evaluation_data.evaluation_summary}
+                    onSave={post_summary_request(
+                        post_url,
+                        evaluation_data.evaluation_title
+                    )}
+                />
+                <SectionsList
+                    evaluation_id={evaluation_id}
+                    {...evaluation_data}
+                />
+            </div>
+            <div className='footer'>
+                <BigButton
+                    onClick={() => {
+                        history.goBack();
+                    }}
+                >
+                    Back
+                </BigButton>
             </div>
         </div>
     );

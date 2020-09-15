@@ -17,7 +17,7 @@ function EvaluationInfo(props) {
         });
     };
     return (
-        <div className='elementInfo' onClick={handleClick(props.item)}>
+        <div className='elementInfo clickable' onClick={handleClick(props.item)}>
             <div className='elementTitle'>{props.item.evaluation_title}</div>
             <div className='elementStatus'>
                 {props.item.evaluation_completed ? <CheckOutlined /> : null}
