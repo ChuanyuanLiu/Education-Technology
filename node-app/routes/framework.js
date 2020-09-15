@@ -10,23 +10,37 @@ const successful = "The call to the SQL database was successful."
 
 router.get('/', function (req, res, next) {
     if (req.query.framework_id != null) {
-
+        // Example: http://localhost:3001/framework?framework_id=1
         // Detailed; Returns single framework with sections and questions
+        // Execute 2 sql statements.
+        // 1. Return framework details from framework table
         const sql = "SELECT * "
+            + "FROM framework "
+            + "WHERE framework_id = " + req.query.framework_id + ";"
+        // 2. Return sections and questions.
+            + "SELECT * "
             + "FROM framework_section JOIN framework_section_question "
             + "ON framework_section.section_id = framework_section_question.section_id "
             + "WHERE framework_section.framework_id = " + req.query.framework_id;
 
-        sqlAdapter.sqlCall(sql, function (questionRes) {
+        sqlAdapter.sqlCall(sql, function (frameworkhomepageRes) {
 
-            if (questionRes == null) {
+            if (frameworkhomepageRes == null) {
                 res.send(unsuccessful);
                 return;
             }
 
             // Store hierarchy inside JSON object with framework_id
             let cleanRes = {};
-            cleanRes.framework_id = req.query.framework_id;
+            let frameworkRes = frameworkhomepageRes[0][0];
+            console.log(frameworkRes);
+            let questionRes = frameworkhomepageRes[1];
+            cleanRes.framework_id = frameworkRes.framework_id;
+            cleanRes.framework_title = frameworkRes.framework_title;
+            cleanRes.framework_author = frameworkRes.framework_author;
+            cleanRes.framework_creation_time = frameworkRes.framework_creation_time;
+            cleanRes.framework_active_status = frameworkRes.framework_active_status;
+            cleanRes.framework_published = frameworkRes.framework_published;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
 

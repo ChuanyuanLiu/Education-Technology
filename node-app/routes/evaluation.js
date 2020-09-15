@@ -100,8 +100,6 @@ router.get('/', function (req, res, next) {
                 + "ON q.question_id = r.question_id "
                 + "AND r.evaluation_id = " + req.query.evaluation_id;
 
-            console.log(respSql);
-
             sqlAdapter.sqlCall(respSql, function (respRes) {
 
                 if (respRes == null) {
@@ -139,7 +137,7 @@ router.get('/', function (req, res, next) {
 //New evaluation page
 router.get('/new', function (req, res, next) {
 
-    // Select an active framework to generate evaluation
+    // Select an active and published framework to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     // Excute 4 SQL statements:
     if (req.query.framework_id != null) {
@@ -175,8 +173,8 @@ router.get('/new', function (req, res, next) {
 
     } else {
 
-        // Default; return all active frameworks
-        const sql = "SELECT * FROM framework WHERE framework_active_status = 1";
+        // Default; return all active and published frameworks.
+        const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_published = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
             if (frameworkRes == null) {
                 res.send(unsuccessful);
@@ -206,7 +204,6 @@ router.post('/update/title', function (req, res, next) {
             return;
         }
 
-        console.log(updateRes);
         res.send(successful);
     });
 });
@@ -216,7 +213,6 @@ router.post('/update/response', function (req, res, next) {
 
     // Example: http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12
     if (req.query.evaluation_id != null && req.query.question_id != null) {
-        console.log(req.body);
         var rate_chosen = req.body.rate_chosen;
         var response_comment = req.body.response_comment;
         var evaluation_id = req.query.evaluation_id;
@@ -231,7 +227,6 @@ router.post('/update/response', function (req, res, next) {
                 return;
             }
 
-            console.log(updateResponse);
             res.send(successful);
         });
 
