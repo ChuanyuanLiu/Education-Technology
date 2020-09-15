@@ -21,21 +21,21 @@ class FrameworkSelection extends React.Component {
             });
     }
 
-
     // go directly to the new evaluation
     handleClick(framework_id) {
         const requestURL =
             "http://localhost:3001/evaluation/new?framework_id=" + framework_id;
         fetch(requestURL)
             .then((response) => response.json())
-            .then(({evaluation_id}) => this.props.history.replace({
-                pathname: '/evaluation_overview',
-                state : {
-                    evaluation_id,
-                    framework_id
-                }            
-            }
-            ));
+            .then(({evaluation_id}) =>
+                this.props.history.replace({
+                    pathname: "/evaluation_overview",
+                    state: {
+                        evaluation_id,
+                        framework_id,
+                    },
+                })
+            );
     }
 
     render() {
@@ -47,10 +47,14 @@ class FrameworkSelection extends React.Component {
             />
         ));
         return (
-            <div>
-                <NavBar> Choose Framework </NavBar>
-                <SearchBar />
-                {frameworkList}
+            <div className='flex_container'>
+                <div className='header'>
+                    <NavBar>
+                        Choose Framework
+                        <SearchBar />
+                    </NavBar>
+                </div>
+                <div className='content'>{frameworkList}</div>
             </div>
         );
     }
