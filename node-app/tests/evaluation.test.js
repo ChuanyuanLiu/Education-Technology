@@ -169,28 +169,7 @@ describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
 });
 
-const evaluation1 = {
-    evaluation_title: '"St. Arthur Evalutaion"',
-    evaluation_id: 1,
-};
-const evaluation2 = {
-    evaluation_title: '"St. Arthur Evalutaion"',
-    evaluation_id: 1,
-};
-  
-describe('the evaluation with id 1 and 2', () => {
-    test('have all the same values', () => {
-        expect(evaluation1).toEqual(evaluation2);
-    });
-    test('are not the exact same can', () => {
-        expect(evaluation1).not.toBe(evaluation2);
-    });
-});
-
 //1. Get /evaluation -- Yao
-
-var sqlConnector = require('../routes/sqlConnector');
-
 describe("Get /evaluation", () => {
     test("it should return all the evaluations. so count(sqlresult) should be equal to max(evaluation_id)", done => {
 
@@ -225,16 +204,27 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
 
         const evaluation_id = 1;
         const question_id = 1;
-        const sql = "SELECT r.*, q.question_title "
-            + "FROM framework_section_question_rate r, framework_section_question q "
-            + "WHERE r.question_id = " + question_id + " AND q.question_id = " + question_id + ";"
-            + "SELECT *"
-            + "FROM evaluation_response "
-            + "WHERE question_id = " + question_id + " AND evaluation_id = " + evaluation_id + "; ";
+        const sql = "SELECT * "
+        + "FROM framework_section_question "
+        + "WHERE question_id = " + question_id + ";"
+        + "SELECT *"
+        + "FROM evaluation_response "
+        + "WHERE question_id = " + question_id + " AND evaluation_id = " + evaluation_id + ";";
 
         sqlConnector.sqlCall(sql, function (rateRes) {
-            let questionRes = rateRes[0];
-            expect(questionRes.length).toEqual(5);
+            let count = 0;
+            let questionRes = rateRes[0][0];
+            if (questionRes.rate_1_criteria != null)
+                count++;
+            if (questionRes.rate_2_criteria != null)
+                count++;
+            if (questionRes.rate_3_criteria != null)
+                count++;
+            if (questionRes.rate_4_criteria != null)
+                count++;
+            if (questionRes.rate_5_criteria != null)
+                count++;
+            expect(count).toEqual(5);
             done();
         });
     });
@@ -254,19 +244,20 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
     });
 });
 
-describe("GET /evaluation?evaluation_id={eid}&framework_id={fid}", () => {
+describe("GET /evaluation?evaluation_id={eid}", () => {
     test("It should return all sections with questions namely,count(questions) should be equal to max(question_id)", done => {
 
+        let evaluation_id = 1;
         const sql = "SELECT * "
-            + "FROM evaluation "
-            + "WHERE evaluation_id= 1;"
-            + "SELECT * "
-            + "FROM framework_section JOIN framework_section_question "
-            + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = 1;";
+        + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
+        + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
+        + "WHERE evaluation.evaluation_id = " + evaluation_id + ";"
+        + "SELECT * "
+        + "FROM evaluation_response "
+        + "WHERE evaluation_id = " + evaluation_id + ";";
 
         sqlConnector.sqlCall(sql, function (Res) {
-            let sectionRes = Res[1];
+            let sectionRes = Res[0];
             let max_question_id = sectionRes[sectionRes.length - 1].question_id;
             expect(sectionRes.length).toEqual(max_question_id);
             done();
@@ -275,17 +266,18 @@ describe("GET /evaluation?evaluation_id={eid}&framework_id={fid}", () => {
 
     test("question_id should be unique", done => {
 
+        let evaluation_id = 1;
         const sql = "SELECT * "
-            + "FROM evaluation "
-            + "WHERE evaluation_id= 1;"
-            + "SELECT * "
-            + "FROM framework_section JOIN framework_section_question "
-            + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = 1;";
+        + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
+        + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
+        + "WHERE evaluation.evaluation_id = " + evaluation_id + ";"
+        + "SELECT * "
+        + "FROM evaluation_response "
+        + "WHERE evaluation_id = " + evaluation_id + ";";
 
         let isTrue = true;
         sqlConnector.sqlCall(sql, function (Res) {
-            let sectionRes = Res[1];
+            let sectionRes = Res[0];
             let question_id_array = new Map();
             let index = 0;
             for (let i = 0; i < sectionRes.length; i++) {
