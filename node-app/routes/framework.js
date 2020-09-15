@@ -9,6 +9,7 @@ const unsuccessful = "The call to the SQL database was unsuccessful.";
 const successful = "The call to the SQL database was successful."
 
 router.get('/', function (req, res, next) {
+
     if (req.query.framework_id != null) {
         // Example: http://localhost:3001/framework?framework_id=1
         // Detailed; Returns single framework with sections and questions
@@ -45,8 +46,14 @@ router.get('/', function (req, res, next) {
             res.send(cleanRes);
 
         });
-
-    } else {
+    } 
+    else if (req.query.question_id != null) 
+    {
+        // Example: http://localhost:3001/framework?question_id=1
+        // Returns question details included rate and criterion
+        
+    }
+    else {
 
         // Default; return all frameworks
         const sql = "SELECT * FROM framework";

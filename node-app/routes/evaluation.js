@@ -51,19 +51,19 @@ router.get('/', function (req, res, next) {
             for (let i = 0; i < questionRes.length; i++) {
                 let r = questionRes[i];
                 let rate_titles = ["Not Applicable", "Below Basic", "Basic", "Adequate", "Exceptional"];
-                let rate_criterias = [];
-                rate_criterias.push(r.rate_1_criteria);
-                rate_criterias.push(r.rate_2_criteria);
-                rate_criterias.push(r.rate_3_criteria);
-                rate_criterias.push(r.rate_4_criteria);
-                rate_criterias.push(r.rate_5_criteria);
+                let rate_criteria = [];
+                rate_criteria.push(r.rate_1_criterion);
+                rate_criteria.push(r.rate_2_criterion);
+                rate_criteria.push(r.rate_3_criterion);
+                rate_criteria.push(r.rate_4_criterion);
+                rate_criteria.push(r.rate_5_criterion);
 
                 // Initialise new section
                 for (let i = 0; i < 5; i++) {
                     let cleanRate = {
                         'rate_number': i + 1,
                         'rate_title': rate_titles[i],
-                        'rate_criterion': rate_criterias[i]
+                        'rate_criterion': rate_criteria[i]
                     };
                     cleanRes.rates[index++] = cleanRate;
                 }
