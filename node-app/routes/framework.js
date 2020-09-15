@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 
     if (req.query.framework_id != null) {
         // Example: http://localhost:3001/framework?framework_id=1
-        // Detailed; Returns single framework with sections and questions
+        // Returns single framework with sections and questions
         // Execute 2 sql statements.
         // 1. Return framework details from framework table
         const sql = "SELECT * "
@@ -46,13 +46,29 @@ router.get('/', function (req, res, next) {
             res.send(cleanRes);
 
         });
+
     } 
+
     else if (req.query.question_id != null) 
     {
         // Example: http://localhost:3001/framework?question_id=1
-        // Returns question details included rate and criterion
-        
+        // Returns all details about a question
+        const sql = "SELECT * "
+            + "FROM framework_section_question "
+            + "WHERE question_id = " + req.query.question_id;
+        sqlAdapter.sqlCall(sql, function (rateRes) 
+        {
+
+            if (rateRes == null) 
+            {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(rateRes);
+        });
     }
+
     else {
 
         // Default; return all frameworks
