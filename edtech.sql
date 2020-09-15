@@ -92,7 +92,7 @@ CREATE TABLE `framework` (
   `framework_author` varchar(50) NOT NULL DEFAULT 'Author',
   `framework_creation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `framework_active_status` tinyint NOT NULL DEFAULT 1,
-  `previous_framework_id` int NOT NULL DEFAULT 0,
+  `framework_published` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`framework_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
