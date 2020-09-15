@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
-import BigButton from "../Utils/BigButton"
+import BigButton from "../Utils/BigButton";
 
 /* 
 (Route from EvaluationOverviewPage)
@@ -28,40 +28,82 @@ function QuestionPage({history}) {
 
     if (question_data == null) return <h1>Loading...</h1>;
 
+    //TODO dynamic url allocation
+    const url = `http://localhost:3001/evaluation/update/response?evaluation_id=${evaluation_id}&question_id=${question_id}`
+    const post_request = (url, rate_chosen, comment) => {
+        const param = {
+            headers : {'Content-Type': "application/json"},
+            body : JSON.stringify({
+                rate_chosen,
+                response_comment: comment
+            }),
+            method: "POST"
+        };
+        console.log(param);
+        fetch(url, param)
+            .then(data=>data.text())
+            .then(data=>console.log(data))
+            .catch(error=>console.log(error));
+    }
+    const post_comment_request = (url, rate_chosen) => (text) => {
+        post_request(url, rate_chosen, text);
+    }
+    const post_rate_request = (url, comment) => (number) => {
+        post_request(url, number, comment);
+    }
+
+
     return (
-        <div className='QuestionPage'>
-            <NavBar> {question_data.question_title} </NavBar>
-            <RateList {...question_data} />
-            <TextArea title='Comment' text={question_data.response_comment} />
-            <BigButton onClick={()=>{history.goBack()}}>
-                Save
-            </BigButton>
+        <div className='QuestionPage flex_container'>
+            <div className='header'>
+                <NavBar> {question_data.question_title} </NavBar>
+            </div>
+            <div className='content'>
+                <RateList 
+                    {...question_data} 
+                    onChange={post_rate_request(url, question_data.response_comment)} 
+                />
+                <TextArea
+                    title='Comment'
+                    text={question_data.response_comment}
+                    onSave={post_comment_request(url, question_data.rate_chosen)}
+                />
+            </div>
+            <div className='footer'>
+                <BigButton
+                    onClick={() => {
+                        history.goBack();
+                    }}
+                >
+                    Back
+                </BigButton>
+            </div>
         </div>
     );
 }
 
-function RateList({rates}) {
+function RateList({rates, onChange, rate_chosen}) {
     return (
         <>
             <div className='section_header'>Rating</div>
-            <form>
+            <form onChange={(e)=>{onChange(e.target.value)}}>
                 {rates.map((rate, i) => (
-                    <Rating {...rate} key={i} />
+                    <Rating {...rate} rate_chosen={rate_chosen} key={i} />
                 ))}
             </form>
         </>
     );
 }
 
-function Rating({rate_id, rate_title, rate_criterion}) {
+function Rating({rate_number, rate_title, rate_criterion, rate_chosen}) {
     return (
         <>
-            <label id="radio_button" className="clickable">
-                <input type='radio' name='rating' value={rate_id} />
-                <span id='rate_title'> {rate_title}</span>
+            <label id="radio_button" className="clickable no_bold">
+                <input type='radio' name='rating' value={rate_number} checked={rate_chosen==rate_number}/>
+                <span id='rate_title' className="clickable"> {rate_title}</span>
                 <div id='rate_criteria'>{rate_criterion}</div>
             </label>
-            <br />
+            <br/>
         </>
     );
 }

@@ -18,8 +18,9 @@ Evaluation Overview Page
 
 // Entry point for the Evaluation Overview Page
 function EvaluationOverviewPage({history}) {
-    const {evaluation_id, framework_id} = history.location.state;
+    //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
+    const {evaluation_id, framework_id} = history.location.state;
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
@@ -101,7 +102,7 @@ function EvaluationOverviewPage({history}) {
                         history.goBack();
                     }}
                 >
-                    Save
+                    Back
                 </BigButton>
             </div>
         </div>

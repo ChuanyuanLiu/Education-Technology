@@ -19,6 +19,7 @@ function TextInput({text, onSave=f=>f}) {
             setActive(false);
         } else {
             setActive(true);
+            //TODO, set focus seems to have no effect.
             text_input.current.focus();
         }
     }

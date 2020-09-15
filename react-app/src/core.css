@@ -64,6 +64,10 @@ ul li {
    font-weight: bold; 
 }
 
+.no_bold:hover {
+    font-weight: normal;
+}
+
 .on {
    font-weight: 600; 
 }
