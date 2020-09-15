@@ -222,7 +222,7 @@ router.post('/update/response', function (req, res, next) {
         var evaluation_id = req.query.evaluation_id;
         var question_id = req.query.question_id;
         const sql = "INSERT INTO evaluation_response (question_id, rate_chosen, response_comment, evaluation_id) "
-            + "VALUES(" + question_id + "," + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + " "
+            + "VALUES(" + question_id + "," + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + ") "
             + "ON DUPLICATE KEY UPDATE rate_chosen = " + rate_chosen + ", response_comment = \"" + response_comment + "\";";
 
         sqlAdapter.sqlCall(sql, function (updateResponse) {
