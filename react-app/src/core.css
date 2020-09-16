@@ -163,6 +163,7 @@ body,
     background-color: transparent;
     border: none;
     width: auto;
+    text-align: center;
 }
 
 /* To make big button look consistent, a minimum width is set */
@@ -218,4 +219,17 @@ body,
     font-style: normal;
     font-size: 15px;
     font-weight: normal;
+}
+
+.StatusSwitch{
+    font-size: 15px;
+    left: 10px;
+    height: 45px;
+    padding-top: 15px;
+    position: relative;
+}
+.StatusSwitch-switch{
+   position: absolute;
+   right: 20px;
+   top: 15px;
 }

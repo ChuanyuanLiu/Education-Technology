@@ -6,7 +6,7 @@ function formatSectionHierarchy(joined, checkCompleteness = false) {
     let index = 0;
     let formatted = [];
 
-    console.log(joined);
+    // console.log(joined);
 
     for (let i = 0; i < joined.length; i++) {
 

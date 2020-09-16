@@ -103,7 +103,7 @@ CREATE TABLE `framework` (
 
 LOCK TABLES `framework` WRITE;
 /*!40000 ALTER TABLE `framework` DISABLE KEYS */;
-INSERT INTO `framework` VALUES (1,'Primary EdTech Framework','Gerald','2020-08-28 10:00:45',1,0),(2,'Secondary EdTech Framework','Gerald','2020-08-28 10:02:02',1,0);
+INSERT INTO `framework` VALUES (1,'Primary EdTech Framework','Gerald','2020-08-28 10:00:45',1,1),(2,'Secondary EdTech Framework','Gerald','2020-08-28 10:02:02',1,1);
 /*!40000 ALTER TABLE `framework` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,11 +145,11 @@ CREATE TABLE `framework_section_question` (
   `question_id` int NOT NULL AUTO_INCREMENT,
   `question_title` varchar(200) NOT NULL DEFAULT 'New Question',
   `section_id` int NOT NULL,
-  `rate_1_criteria` varchar(2000) NOT NULL DEFAULT 'New Criteria 1',
-  `rate_2_criteria` varchar(2000) NOT NULL DEFAULT 'New Criteria 2',
-  `rate_3_criteria` varchar(2000) NOT NULL DEFAULT 'New Criteria 3',
-  `rate_4_criteria` varchar(2000) NOT NULL DEFAULT 'New Criteria 4',
-  `rate_5_criteria` varchar(2000) NOT NULL DEFAULT 'New Criteria 5',
+  `rate_1_criterion` varchar(2000) NOT NULL DEFAULT 'New criterion 1',
+  `rate_2_criterion` varchar(2000) NOT NULL DEFAULT 'New criterion 2',
+  `rate_3_criterion` varchar(2000) NOT NULL DEFAULT 'New criterion 3',
+  `rate_4_criterion` varchar(2000) NOT NULL DEFAULT 'New criterion 4',
+  `rate_5_criterion` varchar(2000) NOT NULL DEFAULT 'New criterion 5',
   PRIMARY KEY (`question_id`),
   KEY `framework_question_id_idx` (`section_id`),
   CONSTRAINT `framework_section_id` FOREIGN KEY (`section_id`) REFERENCES `framework_section` (`section_id`)

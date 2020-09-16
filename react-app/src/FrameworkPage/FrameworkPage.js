@@ -4,6 +4,8 @@ import {UserOutlined} from "@ant-design/icons";
 import FrameworkComponent from "./FrameworkComponent";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
+import BigButton from "../Utils/BigButton";
+
 class FrameworkPage extends Component {
     constructor() {
         super();
@@ -23,7 +25,6 @@ class FrameworkPage extends Component {
 
     // go directly to the frameworkß
     handleClick(framework_id) {
-        alert(framework_id);
         this.props.history.replace({
             pathname: "/framework_overview",
             state: {
@@ -44,11 +45,16 @@ class FrameworkPage extends Component {
             <div className='flex_container'>
                 <div className='header'>
                     <NavBar>
-                        Choose Framework
+                        Frameworks
                         <SearchBar />
                     </NavBar>
                 </div>
                 <div className='content'>{frameworkList}</div>
+                <div className='footer'>
+                    <BigButton onClick={() => this.handleClick(-1)}>
+                        New Framework
+                    </BigButton>
+                </div>
             </div>
         );
     }
