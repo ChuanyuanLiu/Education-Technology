@@ -3,10 +3,10 @@ import 'antd/dist/antd.css';
 import { Switch } from 'antd';
 
 
-function StatusSwitch(){
+function StatusSwitch(props){
     return (
         <div className="StatusSwitch">
-            <span>Active</span>
+            <span>{props.switchName}</span>
             <label className="StatusSwitch-switch"><Switch size="default" /></label>
         </div>
     )

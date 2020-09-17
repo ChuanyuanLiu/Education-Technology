@@ -35,11 +35,14 @@ class FrameworkPage extends Component {
 
     render() {
         const frameworkList = this.state.frameworks.map((framework, i) => (
-            <FrameworkComponent
+            <div className="clickable">
+                <FrameworkComponent
                 key={i}
                 item={framework}
                 handleClick={this.handleClick}
-            />
+                />              
+            </div>
+
         ));
         return (
             <div className='flex_container'>
