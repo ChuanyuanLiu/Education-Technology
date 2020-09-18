@@ -44,7 +44,6 @@ router.get('/', function (req, res, next) {
             cleanRes.framework_published = frameworkRes.framework_published;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
-
         });
 
     } 
@@ -84,6 +83,37 @@ router.get('/', function (req, res, next) {
             
         });
 
+    }
+});
+
+// Create a new response to a question as part of an evaluation
+router.post('/update/question', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/update/question?question_id=1
+    if (req.query.question_id != null) {
+        var rate_1_criterion = req.body.rate_1_criterion;
+        var rate_2_criterion = req.body.rate_2_criterion;
+        var rate_3_criterion = req.body.rate_3_criterion;
+        var rate_4_criterion = req.body.rate_4_criterion;
+        var rate_5_criterion = req.body.rate_5_criterion;
+        var question_id = req.query.question_id;
+        console.log(rate_1_criterion);
+        const sql = "UPDATE framework_section_question "
+        + "SET rate_1_criterion = '" + rate_1_criterion
+        + "', rate_2_criterion = '" + rate_2_criterion
+        + "', rate_3_criterion = '" + rate_3_criterion
+        + "', rate_4_criterion = '" + rate_4_criterion
+        + "', rate_5_criterion = '" + rate_5_criterion
+        + "' WHERE question_id = " + question_id;
+
+        sqlAdapter.sqlCall(sql, function (updateQuestion) {
+            if (updateQuestion == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(successful);
+        });
     }
 });
 
