@@ -117,4 +117,27 @@ router.post('/update/question', function (req, res, next) {
     }
 });
 
+// Update framework
+router.post('/update/framework', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/update/framework?framework_id=1&&framework_active_status=0
+    if (req.query.framework_id != null) {
+        var framework_title = req.body.framework_title;
+        var active_status = req.query.framework_active_status
+        const sql = "UPDATE framework "
+        + "SET framework_title = '" + framework_title
+        + "' WHERE framework_id = " + framework_id 
+        + "AND framework_active_status = " +active_status;
+
+        sqlAdapter.sqlCall(sql, function (updateFramework) {
+            if (updateFramework == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(successful);
+        });
+    }
+});
+
 module.exports = router;
