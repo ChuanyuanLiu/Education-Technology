@@ -87,4 +87,93 @@ router.get('/', function (req, res, next) {
     }
 });
 
+//Create a new framework page
+router.get('/new', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/new
+    if (req.query.framework_id != null) {
+
+        // 1. Create a new framework that has all default values
+        const sqlFramework = "INSERT INTO framework VALUES ();"
+        // 2. Return the framework_id of newly created framework
+            + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+        // 3. Return general information of the newly created framework
+            + "SELECT f.framework_title FROM framework f WHERE f.framework_id = (SELECT LAST_INSERT_ID());"
+
+            sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
+
+                if (sqlRes == null) {
+                    res.send(unsuccessful);
+                    return;
+                }
+
+                res.send(sqlRes);
+            });
+    
+
+            // For section 
+            let framework_id = req.query.framework_id;
+            // 1. Create a new section that has all default values
+            const sqlSection = "INSERT INTO framework_section (framework_id) VALUES (" + framework_id + ");"
+            // 2. Return the section_id of newly created section
+            + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+            // 3. Return general information of the newly created section
+            + "SELECT s.section_title FROM framework_section s WHERE s.section_id = (SELECT LAST_INSERT_ID());"
+
+            sqlAdapter.sqlCall(sqlSection, function (sqlRes) {
+
+                if (sqlRes == null) {
+                    res.send(unsuccessful);
+                    return;
+                }
+
+                res.send(sqlRes);
+            });
+    
+
+            //For question
+            let section_id = req.query.section_id;
+            // 1. Create a new question that has all default values
+            const sqlQuestion = "INSERT INTO framework_section_question (section_id) VALUES (" + section_id + ");"
+            // 2. Return the question_id of newly created section
+            + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+             // 3. Return general information of the newly created question
+            + "SELECT q.question_title, "
+            + "q.rate_1_criterion, q.rate_2_criterion, q.rate_3_criterion, q.rate_4_criterion, q.rate_5_criterion "
+            + "FROM framework_section_question q WHERE q.question_id = (SELECT LAST_INSERT_ID());"
+
+
+            sqlAdapter.sqlCall(sqlQuestion, function (sqlRes) {
+
+                if (sqlRes == null) {
+                    res.send(unsuccessful);
+                    return;
+                }
+
+                res.send(sqlRes);
+            });
+
+    }
+});
+
+// Create a new section of the framework
+router.post('/update/section', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/update/section?section_id=1&framework_id=1
+    if (req.query.section_id != null && req.query.framework_id != null) {
+        var section_title = req.body.section_title;
+        const sql = "UPDATE framework_section "
+        + "SET section_title = '" + section_title
+        + "' WHERE section_id = " + section_id + "AND framework_id = " + framework_id;
+
+        sqlAdapter.sqlCall(sql, function (updateSection) {
+            if (updateSection == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(successful);
+        });
+    }
+});
 module.exports = router;
