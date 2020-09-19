@@ -32,6 +32,7 @@ function FrameworkOverview({history}){
         setFramework(new_framework)
     }
     useEffect(() => {
+        // Create a new framework if id is set as -1.
         if(framework_id !== -1){
             fetch(
                 `http://localhost:3001/framework?framework_id=${framework_id}`
@@ -39,7 +40,8 @@ function FrameworkOverview({history}){
                 .then(response => response.json())
                 .then(setFramework)
         }else{
-            initializeFramework()
+            initializeFramework();
+            //TODO: post the initialized framework
         }
     },[framework_id])
 
