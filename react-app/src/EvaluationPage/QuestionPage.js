@@ -100,7 +100,7 @@ function Rating({rate_number, rate_title, rate_criterion, rate_chosen}) {
     return (
         <>
             <label id="radio_button" className="clickable no_bold">
-                <input type='radio' name='rating' value={rate_number} defaultChecked={rate_chosen==rate_number}/>
+                <input type='radio' name='rating' value={rate_number} defaultChecked={rate_chosen===rate_number}/>
                 <span id='rate_title' > {rate_title}</span>
                 <div id='rate_criteria'>{rate_criterion}</div>
             </label>
