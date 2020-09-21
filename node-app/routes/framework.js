@@ -62,7 +62,7 @@ router.get('/', function (req, res, next) {
             }
             let Res = rateRes[0];
             let cleanRes = {};
-            cleanRes.question_id = req.query.question_id;
+            cleanRes.question_id = Res.question_id;
             cleanRes.question_title = Res.question_title;
             cleanRes.section_id = Res.section_id;
             cleanRes.rates = [];
