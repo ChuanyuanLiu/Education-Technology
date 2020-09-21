@@ -90,9 +90,7 @@ router.get('/', function (req, res, next) {
 //Create a new framework page
 router.get('/new', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/new
-    if (req.query.framework_id != null) {
-
+        // Example: http://localhost:3001/framework/new
         // 1. Create a new framework that has all default values
         const sqlFramework = "INSERT INTO framework VALUES ();"
         // 2. Return the framework_id of newly created framework
@@ -111,7 +109,11 @@ router.get('/new', function (req, res, next) {
             });
     
 
-            // For section 
+// For blank section in new framework page
+router.get('/section', function (req, res, next) {
+
+            // Example: http://localhost:3001/framework/section?framework_id=1 
+            if(req.query.framework_id != null){
             let framework_id = req.query.framework_id;
             // 1. Create a new section that has all default values
             const sqlSection = "INSERT INTO framework_section (framework_id) VALUES (" + framework_id + ");"
@@ -129,9 +131,14 @@ router.get('/new', function (req, res, next) {
 
                 res.send(sqlRes);
             });
-    
+        }
+});
 
-            //For question
+//For blank question
+router.get('/section/question', function (req, res, next){
+
+            // Example: http://localhost:3001/framework/section/question?section_id=1
+            if(req.query.section_id!= null){
             let section_id = req.query.section_id;
             // 1. Create a new question that has all default values
             const sqlQuestion = "INSERT INTO framework_section_question (section_id) VALUES (" + section_id + ");"
@@ -156,15 +163,16 @@ router.get('/new', function (req, res, next) {
     }
 });
 
-// Create a new section of the framework
+// Update section of the framework
 router.post('/update/section', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/update/section?section_id=1&framework_id=1
-    if (req.query.section_id != null && req.query.framework_id != null) {
+    // Example: http://localhost:3001/framework/section/update/section?section_id=1
+    if (req.query.section_id != null) {
         var section_title = req.body.section_title;
+        var section_id = req.query.section_id;
         const sql = "UPDATE framework_section "
         + "SET section_title = '" + section_title
-        + "' WHERE section_id = " + section_id + "AND framework_id = " + framework_id;
+        + "' WHERE section_id = " + section_id ;
 
         sqlAdapter.sqlCall(sql, function (updateSection) {
             if (updateSection == null) {
@@ -176,4 +184,28 @@ router.post('/update/section', function (req, res, next) {
         });
     }
 });
+});
+
+//Update framework details 
+router.post('/update/framework', function(req, res, next){
+   // Example: http://localhost:3001/framework/update/framework?framework_id=1 
+   if (req.query.framework_id != null) {
+    var framework_title = req.body.framework_title;
+    //var framework_active_status = req.query.framework_active_status;
+    const sql = "UPDATE framework "
+    + "SET framework_title = '" + framework_title
+    + "' WHERE framework_id = " + req.query.framework_id;
+    //framework_active_status = " + framework_active_status ;
+
+    sqlAdapter.sqlCall(sql, function (updateFramework) {
+        if (updateFramework == null) {
+            res.send(unsuccessful);
+            return;
+        }
+
+        res.send(successful);
+    });
+}
+});
+
 module.exports = router;
