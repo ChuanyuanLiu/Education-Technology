@@ -3,8 +3,6 @@ import NavBar from "../Utils/NavBar";
 import TextInput from "../Utils/TextInput"
 import StatusSwitch from "../Utils/StatusSwitch"
 import { useHistory } from "react-router-dom";
-import Button3D from "../Utils/Button3D"
-import BigButton from "../Utils/BigButton"
 import {RightOutlined, DownOutlined, EditOutlined, CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons"
 /*
 (Route from FrameworkPage)
@@ -32,6 +30,7 @@ function FrameworkOverview({history}){
         setFramework(new_framework)
     }
     useEffect(() => {
+        // Create a new framework if id is set as -1.
         if(framework_id !== -1){
             fetch(
                 `http://localhost:3001/framework?framework_id=${framework_id}`
@@ -39,7 +38,8 @@ function FrameworkOverview({history}){
                 .then(response => response.json())
                 .then(setFramework)
         }else{
-            initializeFramework()
+            initializeFramework();
+            //TODO: post the initialized framework
         }
     },[framework_id])
 
@@ -68,7 +68,7 @@ function FrameworkOverview({history}){
             framework_id: prevState.framework_id,
             framework_title: prevState.framework_title,
             sections: prevState.sections.map(data => {
-                if(data.section_id == section_id ){
+                if(data.section_id === section_id ){
                    return {
                        section_id: data.section_id,
                        section_title: data.section_title,
@@ -81,9 +81,9 @@ function FrameworkOverview({history}){
     }
 
     //TODO for POST request
-    const PostFramework = ()=>{
-        alert("saved")
-    }
+    // const PostFramework = ()=>{
+    //     alert("saved")
+    // }
 
     return  <div>
                 <NavBar>
@@ -209,8 +209,13 @@ function EditableSection(props){
 
 function Question(props){
     const history = useHistory()
-    const handleClick = (event) => {
-        
+    const handleClick = () => {
+        history.push({
+            pathname: "./framework_question",
+            state: {
+                question_id: props.question.question_id
+            },
+        });
     }
     return <div className="Question clickable" onClick={handleClick}>
                 {props.section_index + 1}.{props.question_index + 1} {props.question.question_title}

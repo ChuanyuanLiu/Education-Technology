@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "./FrameworkPage.css";
-import {UserOutlined} from "@ant-design/icons";
+// import {UserOutlined} from "@ant-design/icons";
 import FrameworkComponent from "./FrameworkComponent";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
