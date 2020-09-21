@@ -142,9 +142,9 @@ router.get('/version', function (req, res, next) {
     }
 });
 
-router.post('/update/question', function (req, res, next) {
+router.post('/section/question/rate/update', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/update/question?question_id=1
+    // Example: http://localhost:3001/framework/section/question/rate/update?question_id={qid}
     if (req.query.question_id != null) {
         var rate_1_criterion = req.body.rate_1_criterion;
         var rate_2_criterion = req.body.rate_2_criterion;
