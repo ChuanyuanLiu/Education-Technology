@@ -110,10 +110,10 @@ router.get('/new', function (req, res, next) {
 });
     
 
-// For blank section in new framework page
-router.get('/section', function (req, res, next) {
+// For new blank section in new framework page
+router.get('/section/new', function (req, res, next) {
 
-            // Example: http://localhost:3001/framework/section?framework_id=1 
+            // Example: http://localhost:3001/framework/section/new?framework_id=1 
             if(req.query.framework_id != null){
             let framework_id = req.query.framework_id;
             // 1. Create a new section that has all default values
@@ -135,10 +135,10 @@ router.get('/section', function (req, res, next) {
         }
 });
 
-//For blank question
-router.get('/section/question', function (req, res, next){
+//For new blank question
+router.get('/section/question/new', function (req, res, next){
 
-            // Example: http://localhost:3001/framework/section/question?section_id=1
+            // Example: http://localhost:3001/framework/section/question/new?section_id=1
             if(req.query.section_id!= null){
             let section_id = req.query.section_id;
             // 1. Create a new question that has all default values
@@ -191,9 +191,10 @@ router.post('/update', function(req, res, next){
    // Example: http://localhost:3001/framework/update?framework_id=1 
    if (req.query.framework_id != null) {
     var framework_title = req.body.framework_title;
+    var framework_id = req.query.framework_id;
     const sql = "UPDATE framework "
     + "SET framework_title = \"" + framework_title
-    + "\" WHERE framework_id = " + req.query.framework_id;
+    + "\" WHERE framework_id = " + framework_id;
    
     sqlAdapter.sqlCall(sql, function (updateFramework) {
         if (updateFramework == null) {
