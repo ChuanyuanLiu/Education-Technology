@@ -107,6 +107,7 @@ router.get('/new', function (req, res, next) {
 
                 res.send(sqlRes);
             });
+});
     
 
 // For blank section in new framework page
@@ -166,7 +167,7 @@ router.get('/section/question', function (req, res, next){
 // Update section of the framework
 router.post('/update/section', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/section/update/section?section_id=1
+    // Example: http://localhost:3001/framework/section/update?section_id=1
     if (req.query.section_id != null) {
         var section_title = req.body.section_title;
         var section_id = req.query.section_id;
@@ -184,19 +185,16 @@ router.post('/update/section', function (req, res, next) {
         });
     }
 });
-});
 
 //Update framework details 
 router.post('/update/framework', function(req, res, next){
    // Example: http://localhost:3001/framework/update/framework?framework_id=1 
    if (req.query.framework_id != null) {
     var framework_title = req.body.framework_title;
-    //var framework_active_status = req.query.framework_active_status;
     const sql = "UPDATE framework "
     + "SET framework_title = '" + framework_title
     + "' WHERE framework_id = " + req.query.framework_id;
-    //framework_active_status = " + framework_active_status ;
-
+   
     sqlAdapter.sqlCall(sql, function (updateFramework) {
         if (updateFramework == null) {
             res.send(unsuccessful);
