@@ -165,7 +165,7 @@ router.get('/section/question', function (req, res, next){
 });
 
 // Update section of the framework
-router.post('/update/section', function (req, res, next) {
+router.post('/section/update', function (req, res, next) {
 
     // Example: http://localhost:3001/framework/section/update?section_id=1
     if (req.query.section_id != null) {
@@ -187,13 +187,13 @@ router.post('/update/section', function (req, res, next) {
 });
 
 //Update framework details 
-router.post('/update/framework', function(req, res, next){
-   // Example: http://localhost:3001/framework/update/framework?framework_id=1 
+router.post('/update', function(req, res, next){
+   // Example: http://localhost:3001/framework/update?framework_id=1 
    if (req.query.framework_id != null) {
     var framework_title = req.body.framework_title;
     const sql = "UPDATE framework "
-    + "SET framework_title = '" + framework_title
-    + "' WHERE framework_id = " + req.query.framework_id;
+    + "SET framework_title = \"" + framework_title
+    + "\" WHERE framework_id = " + req.query.framework_id;
    
     sqlAdapter.sqlCall(sql, function (updateFramework) {
         if (updateFramework == null) {
