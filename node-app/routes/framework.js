@@ -60,8 +60,28 @@ router.get('/', function (req, res, next) {
                 res.send(unsuccessful);
                 return;
             }
-
-            res.send(rateRes);
+            let Res = rateRes[0];
+            let cleanRes = {};
+            cleanRes.question_id = req.query.question_id;
+            cleanRes.question_title = Res.question_title;
+            cleanRes.section_id = Res.section_id;
+            cleanRes.rates = [];
+            let rate_titles = ["Not Applicable", "Below Basic", "Basic", "Adequate", "Exceptional"];
+            let rate_criteria = [];
+            rate_criteria.push(Res.rate_1_criterion);
+            rate_criteria.push(Res.rate_2_criterion);
+            rate_criteria.push(Res.rate_3_criterion);
+            rate_criteria.push(Res.rate_4_criterion);
+            rate_criteria.push(Res.rate_5_criterion);
+            for (let i = 0; i < 5; i++) {
+                let cleanRate = {
+                    'rate_number': i + 1,
+                    'rate_title': rate_titles[i],
+                    'rate_criterion': rate_criteria[i]
+                };
+                cleanRes.rates[i] = cleanRate;
+            }
+            res.send(cleanRes);
         });
     }
 
