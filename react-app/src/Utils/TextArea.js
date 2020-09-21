@@ -62,7 +62,6 @@ function text_to_html(text) {
        html.push(<br key={i*2+1}/>);
        i += 1;
     }
-    console.log(html);
     return html;
 }
 

@@ -1,7 +1,13 @@
 const fetch = require('node-fetch');
 
-const url = "http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=1";
-data = {rate_chosen: 1, response_comment: "new comment"};
+const url = "http://localhost:3001/framework/section/question/rate/update?question_id=1";
+data = {
+    rate_1_criterion: "1",
+    rate_2_criterion: "2",
+    rate_3_criterion: "3",
+    rate_4_criterion: "4",
+    rate_5_criterion: "5"
+};
 data_text = JSON.stringify(data);
 param = {
     headers: {"Content-Type": "application/json"},

@@ -251,9 +251,11 @@ body,
     height: 100%;
     resize: none;
     position: absolute;
+    padding-left: 10px;
 }
 
 .TextArea .hidden {
+    padding-left: 10px;
     visibility: hidden;
     width: 100%;
     word-wrap: break-word;
