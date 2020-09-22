@@ -9,9 +9,9 @@ import {RightOutlined, DownOutlined, EditOutlined, CheckOutlined, CloseOutlined,
 /*
 (Route from FrameworkPage)
 Framework Overview Page
-    |-- Statue
+    |-- Status
         |--  Active Switch
-        |-- Published Switch
+        |--  Published Switch
     |-- SectionList
             |-- Section
                     |-- Question (rout to Question Page)
@@ -56,7 +56,6 @@ function FrameworkOverview({history}){
             framework_id: prevState.framework_id,
             framework_title: prevState.framework_title,
             sections:[...prevState.sections, newSection]
-            
         }))
     }
     //Add question with given section_id, called from EditableSection
@@ -158,9 +157,11 @@ function EditableSection(props){
 
     return <div>
                 <div className="editable_section" >
+                    {/* Can be used to question edit page */}
                     <div className="section_input clickable" onClick={getActive? null: toggleExpand}> 
                         <span>Section {props.section_index + 1}</span>
-                            {getActive?  <input value={getText}
+                            {getActive?  
+                                <input value={getText}
                                                 disabled={!getActive}
                                                 style={inputStyle}
                                                 onChange={handleChange}
@@ -209,6 +210,7 @@ function EditableSection(props){
 
 function Question(props){
     const history = useHistory()
+    //TODO add direct to question edit page
     const handleClick = (event) => {
         
     }

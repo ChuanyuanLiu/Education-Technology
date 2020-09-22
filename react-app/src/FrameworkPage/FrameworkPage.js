@@ -13,6 +13,7 @@ class FrameworkPage extends Component {
             frameworks: [],
         };
         this.handleClick = this.handleClick.bind(this);
+        this.createNew = this.createNew.bind(this);
     }
 
     componentDidMount() {
@@ -31,6 +32,16 @@ class FrameworkPage extends Component {
                 framework_id,
             },
         });
+    }
+
+    createNew(){
+        var newId
+        fetch("http://localhost:3001/framework/new")
+        .then((response) => response.json())
+        .then((data) => {
+            alert(data)
+        })
+        // this.handleClick(newId)
     }
 
     render() {
@@ -54,7 +65,7 @@ class FrameworkPage extends Component {
                 </div>
                 <div className='content'>{frameworkList}</div>
                 <div className='footer'>
-                    <BigButton onClick={() => this.handleClick(-1)}>
+                    <BigButton onClick={() => this.createNew}>
                         New Framework
                     </BigButton>
                 </div>
