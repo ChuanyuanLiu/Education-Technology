@@ -6,27 +6,27 @@
         {
             "rate_number": 1,
             "rate_title": "Not Applicable",
-            "rate_criterion": "undefined"
+            "rate_criterion": "Not Applicable"
         },
         {
             "rate_number": 2,
             "rate_title": "Below Basic",
-            "rate_criterion": "undefined"
+            "rate_criterion": "There is no evidence of the content model used"
         },
         {
             "rate_number": 3,
             "rate_title": "Basic",
-            "rate_criterion": "undefined"
+            "rate_criterion": "States the main topics of the domain area covered. Lacks detail."
         },
         {
             "rate_number": 4,
             "rate_title": "Adequate",
-            "rate_criterion": "undefined"
+            "rate_criterion": "States the main topics and sub-topics of the domain area covered. Shows links to existing curricula."
         },
         {
             "rate_number": 5,
             "rate_title": "Exceptional",
-            "rate_criterion": "undefined"
+            "rate_criterion": "Detailed statement of topics and subtopics covered. Shows links to existing curricula. Shows pre-requisite content required."
         }
     ]
 }
