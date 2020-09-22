@@ -24,11 +24,10 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
-            if (rateRes == null || JSON.stringify(rateRes) == '[]') {
+            if (rateRes == null || JSON.stringify(rateRes) == '[[],[]]') {
                 res.send(unsuccessful);
                 return;
             }
-
             // Format output into hierarchies
             let questionRes = rateRes[0];
             let responseRes = rateRes[1];

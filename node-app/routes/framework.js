@@ -26,7 +26,7 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (frameworkhomepageRes) {
 
-            if (frameworkhomepageRes == null || JSON.stringify(frameworkhomepageRes) == '[]') {
+            if (frameworkhomepageRes == null || JSON.stringify(frameworkhomepageRes) == '[[],[]]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -117,7 +117,7 @@ router.get('/new', function (req, res, next) {
 
             sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
 
-                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -144,7 +144,7 @@ router.get('/section/new', function (req, res, next) {
 
             sqlAdapter.sqlCall(sqlSection, function (sqlRes) {
 
-                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -173,7 +173,7 @@ router.get('/section/question/new', function (req, res, next){
 
             sqlAdapter.sqlCall(sqlQuestion, function (sqlRes) {
 
-                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
                     res.send(unsuccessful);
                     return;
                 }
