@@ -26,7 +26,7 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (frameworkhomepageRes) {
 
-            if (frameworkhomepageRes == null) {
+            if (frameworkhomepageRes == null || JSON.stringify(frameworkhomepageRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -56,10 +56,11 @@ router.get('/', function (req, res, next) {
             + "WHERE question_id = " + req.query.question_id;
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
-            if (rateRes == null) {
+            if (rateRes == null || JSON.stringify(rateRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
+            console.log(rateRes);
             let Res = rateRes[0];
             let cleanRes = {};
             cleanRes.question_id = Res.question_id;
@@ -91,7 +92,7 @@ router.get('/', function (req, res, next) {
         const sql = "SELECT * FROM framework";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
 
-            if (frameworkRes == null) {
+            if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -116,7 +117,7 @@ router.get('/new', function (req, res, next) {
 
             sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
 
-                if (sqlRes == null) {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -143,7 +144,7 @@ router.get('/section/new', function (req, res, next) {
 
             sqlAdapter.sqlCall(sqlSection, function (sqlRes) {
 
-                if (sqlRes == null) {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -172,7 +173,7 @@ router.get('/section/question/new', function (req, res, next){
 
             sqlAdapter.sqlCall(sqlQuestion, function (sqlRes) {
 
-                if (sqlRes == null) {
+                if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -198,7 +199,7 @@ router.post('/section/update', function (req, res, next) {
         + "' WHERE section_id = " + section_id ;
 
         sqlAdapter.sqlCall(sql, function (updateSection) {
-            if (updateSection == null) {
+            if (updateSection == null || JSON.stringify(updateSection) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -219,7 +220,7 @@ router.post('/update', function(req, res, next){
     + "\" WHERE framework_id = " + framework_id;
    
     sqlAdapter.sqlCall(sql, function (updateFramework) {
-        if (updateFramework == null) {
+        if (updateFramework == null || JSON.stringify(updateFramework) == '[]') {
             res.send(unsuccessful);
             return;
         }
@@ -267,7 +268,7 @@ router.get('/version', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (frameworkversionRes) {
 
-            if (frameworkversionRes == null) {
+            if (frameworkversionRes == null || JSON.stringify(frameworkversionRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -308,7 +309,7 @@ router.post('/section/question/rate/update', function (req, res, next) {
             + "', rate_5_criterion = '" + rate_5_criterion
             + "' WHERE question_id = " + question_id;
         sqlAdapter.sqlCall(sql, function (updateQuestion) {
-            if (updateQuestion == null) {
+            if (updateQuestion == null || JSON.stringify(updateQuestion) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -328,7 +329,7 @@ router.post('/activestatus/update', function (req, res, next) {
             + " WHERE framework_id = " + req.query.framework_id;
 
         sqlAdapter.sqlCall(sql, function (updateActive) {
-            if (updateActive == null) {
+            if (updateActive == null || JSON.stringify(updateActive) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -350,7 +351,7 @@ router.post('/publishstatus/update', function (req, res, next) {
             + " AND framework_published = 0";
 
         sqlAdapter.sqlCall(sql, function (updateActive) {
-            if (updateActive == null) {
+            if (updateActive == null || JSON.stringify(updateActive) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
