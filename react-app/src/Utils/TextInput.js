@@ -7,7 +7,7 @@ import Button3D from './Button3D'
  * @param onSave(text): triggers when the save button is pressed
  * @ignore children
  */
-function TextInput({text, onSave=f=>f}) {
+function TextInput({textAlign,text, onSave=f=>f}) {
     const [getText, setText] = useState(text);
     const [getActive, setActive] = useState(false);
     const text_input = useRef(null);
@@ -25,7 +25,7 @@ function TextInput({text, onSave=f=>f}) {
     }
 
     return (
-        <div className='TextInput'>
+        <div className={textAlign === 'left'? "TextInput-textLeft": 'TextInput'}>
             <input
                 ref={text_input}
                 type='text'

@@ -44,7 +44,6 @@ router.get('/', function (req, res, next) {
             cleanRes.framework_published = frameworkRes.framework_published;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
-
         });
 
     } 
