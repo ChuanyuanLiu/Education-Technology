@@ -109,7 +109,7 @@ router.get('/version', function (req, res, next) {
     if (req.query.framework_id != null) {
         // Example: http://localhost:3001/framework/version?framework_id=1
         // Returns single framework with sections and questions
-        // Execute 2 sql statements.
+        // Execute 6 sql statements.
         // 1. Create a new framework, insert the data copied from previous framework
         const sql = "INSERT INTO framework(framework_title,framework_author) "
             + "SELECT CONCAT(framework_title,' - Copy'),framework_author "
