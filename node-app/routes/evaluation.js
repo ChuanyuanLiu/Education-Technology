@@ -24,11 +24,10 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
-            if (rateRes == null) {
+            if (rateRes == null || JSON.stringify(rateRes) == '[[],[]]') {
                 res.send(unsuccessful);
                 return;
             }
-
             // Format output into hierarchies
             let questionRes = rateRes[0];
             let responseRes = rateRes[1];
@@ -84,7 +83,7 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(evalSql, function (evalRes) {
 
-            if (evalRes == null) {
+            if (evalRes == null || JSON.stringify(evalRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -102,7 +101,7 @@ router.get('/', function (req, res, next) {
 
             sqlAdapter.sqlCall(respSql, function (respRes) {
 
-                if (respRes == null) {
+                if (respRes == null || JSON.stringify(respRes) == '[]') {
                     res.send(unsuccessful);
                     return;
                 }
@@ -123,7 +122,7 @@ router.get('/', function (req, res, next) {
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
         sqlAdapter.sqlCall(sql, function (sqlRes) {
-            if (sqlRes == null) {
+            if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -159,7 +158,7 @@ router.get('/new', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (sqlRes) {
 
-            if (sqlRes == null) {
+            if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -176,7 +175,7 @@ router.get('/new', function (req, res, next) {
         // Default; return all active and published frameworks.
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_published = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
-            if (frameworkRes == null) {
+            if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
@@ -199,7 +198,7 @@ router.post('/update/title', function (req, res, next) {
         + "' WHERE evaluation_id = " + id;
 
     sqlAdapter.sqlCall(sql, function (updateRes) {
-        if (updateRes == null) {
+        if (updateRes == null || JSON.stringify(updateRes) == '[]') {
             res.send(unsuccessful);
             return;
         }
@@ -222,7 +221,7 @@ router.post('/update/response', function (req, res, next) {
             + "ON DUPLICATE KEY UPDATE rate_chosen = " + rate_chosen + ", response_comment = \"" + response_comment + "\";";
 
         sqlAdapter.sqlCall(sql, function (updateResponse) {
-            if (updateResponse == null) {
+            if (updateResponse == null || JSON.stringify(updateResponse) == '[]') {
                 res.send(unsuccessful);
                 return;
             }
