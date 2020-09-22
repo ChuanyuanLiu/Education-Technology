@@ -142,6 +142,7 @@ body,
 
 .scrollable {
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 .NavBar {
@@ -234,7 +235,9 @@ body,
     height: 45px;
     position: relative;
     padding-top: 12px;
-    margin: auto;
+    text-align: left;
+    margin-bottom: 3px;
+    margin-right:5px;
 }
 .StatusSwitch-switch {
    position: absolute;

@@ -6,11 +6,13 @@ import { Switch } from 'antd';
 function StatusSwitch(props){
     return (
         <div className="StatusSwitch">
-            <span>{props.switchName}</span>
+            {props.switchName}
             <label className="StatusSwitch-switch">
                 <Switch onChange={props.handleChange} 
                         size="default" 
-                        checked={props.value}/>
+                        checked={props.value}
+                        disabled={props.disabled}
+                        defaultChecked={false}/>
             </label>
         </div>
     )

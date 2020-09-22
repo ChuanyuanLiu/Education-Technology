@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react"
 import NavBar from "../Utils/NavBar";
 import TextInput from "../Utils/TextInput"
+import BigButton from "../Utils/BigButton"
 import StatusSwitch from "../Utils/StatusSwitch"
 import { useHistory } from "react-router-dom";
 import {RightOutlined, DownOutlined, EditOutlined, CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons"
@@ -31,7 +32,6 @@ function FrameworkOverview({history}){
         setSections(data.sections)
         setPublished(data.framework_published)
         setFramework(data)
-
     }
     useEffect(() => {
         // Create a new framework if id is set as -1.
@@ -81,10 +81,6 @@ function FrameworkOverview({history}){
         )
     }
 
-    //TODO for POST request
-    // const PostFramework = ()=>{
-    //     alert("saved")
-    // 
     const setActive = () =>{
         const url = `http://localhost:3001/framework/activestatus/update?framework_id=${framework_data.framework_id}`;
         const newActiveStatus = {
@@ -103,34 +99,75 @@ function FrameworkOverview({history}){
             (prevState) => {return (1 - prevState)}
         )
     }
-    return  <div>
+
+    const handlePublish = () =>{
+        const url = `http://localhost:3001/framework/publishstatus/update?framework_id=${framework_data.framework_id}`;
+        const newPublishStatus = {
+                framework_publish_status: 1
+            }
+        const param = {
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(newPublishStatus),
+            method: "POST",
+        }
+        fetch(url, param)
+            .then((data) => data.text())
+            .then(response => {
+                if(response === "The call to the SQL database was successful."){
+                    setPublished(1)
+                }
+            })
+            .catch(console.err);
+    }
+
+    const handleNewVersion = () =>{
+
+    }
+    return  <div className="flex_container ">
                 <NavBar>
                     <TextInput text={frameworkTitle}/>
                 </NavBar>
-                <div className="section_header">Status</div>
-                <StatusSwitch handleChange={setActive} 
-                              value={activeStatus}
-                              switchName="Active" />
-                <SectionList addSection={addSection}
-                             addQuestion={addQuestion} 
-                             sections={sections}/>
+                <div className="content scrollable">
+                    <div className="section_header">Status</div>
+                        <StatusSwitch handleChange={setActive} 
+                                    value={activeStatus}
+                                    switchName="Active"
+                                    disabled={!published} />
+                        <SectionList addSection={addSection}
+                                     addQuestion={addQuestion} 
+                                     sections={sections}
+                                     published={published}
+                                    />         
+                    </div>
+                <div className="footer">
+                    <ButtomButton hasPublished={published} 
+                                  isActive={activeStatus}
+                                  handlePublish={handlePublish}
+                                  handleNewVersion={handleNewVersion}/>
+                </div>
+
+               
             </div>
 }
 
 function SectionList(props){
     return (
-        <div>
+        <div className="content">
             <div className='section_header'>Sections</div>
             <div>
                 {props.sections.map((section, i) => <EditableSection addQuestion={props.addQuestion}
                                                                      section_index={i} 
-                                                                     section={section}/>)}
+                                                                     section={section}
+                                                                     published={props.published}/>)
+                }               
+                                                                     
             </div>
-            <div className="editable_section clickable new_section"
-                onClick={props.addSection}>
-                Add Section
-                <PlusOutlined onClick={props.handleClick} className="right_button add_button" />
-           </div>
+            {props.published? null: 
+                <div className="editable_section clickable new_section"
+                    onClick={props.addSection}>
+                    Add Section
+                    <PlusOutlined onClick={props.handleClick} className="right_button add_button" />
+                </div>}
         </div>
     ) 
 }
@@ -181,16 +218,16 @@ function EditableSection(props){
                     <div className="section_input clickable" onClick={getActive? null: toggleExpand}> 
                         <span>Section {props.section_index + 1}</span>
                             {getActive?  
-                                <input value={getText}
+                                    <input value={getText}
                                                 disabled={!getActive}
                                                 style={inputStyle}
                                                 onChange={handleChange}
-                                />: <span> {getText} </span>         
+                                    />: <span> {getText} </span>         
                             }
                         </div>
                     {/* Button to change the title */}
                     <div className="section_input_button">
-                        {getActive? <span >                                        
+                        {props.published? null :getActive? <span >                                        
                                         <CheckOutlined className="saveOrNot" onClick={toggleSave}/> 
                                         <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
                                     </span>
@@ -212,13 +249,16 @@ function EditableSection(props){
                                         section_index={props.section_index}
                                         question_index={i}
                                         question={data} 
-                                        key={i} />)}
-                                    <div className="clickable new_question"
-                                         onClick={()=>props.addQuestion(props.section.section_id)} >
-                                        Add Question
-                                        <PlusOutlined 
-                                        className="right_button add_button" />
-                                    </div>
+                                        key={i} 
+                                        published={props.published}/>)}
+                                    {props.published? null:
+                                        <div className="clickable new_question"
+                                            onClick={()=>props.addQuestion(props.section.section_id)} >
+                                            Add Question
+                                            <PlusOutlined 
+                                            className="right_button add_button" />
+                                        </div>
+                                    }
                             </div>
                         : null
                     }
@@ -231,10 +271,12 @@ function EditableSection(props){
 function Question(props){
     const history = useHistory()
     const handleClick = () => {
+        alert(props.published)
         history.push({
             pathname: "./framework_question",
             state: {
-                question_id: props.question.question_id
+                question_id: props.question.question_id,
+                published: props.published
             },
         });
     }
@@ -244,6 +286,16 @@ function Question(props){
            </div>
 }
 
+function ButtomButton({hasPublished, handlePublish, handleNewVersion}){
+    return <div>
+            { 
+                hasPublished? 
+                    <BigButton onClick={handleNewVersion}><div>Save As New</div></BigButton>:
+                    <BigButton onClick={handlePublish}><div>Publish</div></BigButton>
+            }
+           </div>
+    
+}
  
 
 

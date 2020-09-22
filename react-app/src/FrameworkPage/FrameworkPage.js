@@ -56,13 +56,14 @@ class FrameworkPage extends Component {
         ));
         return (
             <div className='flex_container'>
+
                 <div className='header'>
                     <NavBar>
                         Frameworks
                         <SearchBar />
                     </NavBar>
                 </div>
-                <div className='content'>{frameworkList}</div>
+                <div className='content scrollable'>{frameworkList}</div>
                 <div className='footer'>
                     <BigButton onClick={() => this.createNew}>
                         New Framework
