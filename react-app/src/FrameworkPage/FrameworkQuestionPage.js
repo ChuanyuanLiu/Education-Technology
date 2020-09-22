@@ -26,14 +26,19 @@ function FrameworkQuestionPage({history}) {
     }, [question_id]);
 
     // POST the entire rates
-    const post_request = (question_id, rates, field_name) => (text) => {
+    // Only update rate criterion of corresponding rate title 
+    // Since the API demand rate_1_criterion instead of titles, reformat required
+    const post_request = (question_id, rates, rate_title) => (text) => {
         var new_rating = {};
+        var i = 1;
         for (var rating of rates) {
-            if (rating.field_name === field_name) {
-                new_rating[rating.field_name] = text;
+            // update only the corresponding rate title
+            if (rating.rate_title === rate_title) {
+                new_rating[`rate_${i}_criterion`] = text;
             } else {
-                new_rating[rating.field_name] = rating.rate_criterion;
+                new_rating[`rate_${i}_criterion`] = rating.rate_criterion;
             }
+            i += 1;
         }
         const url = `http://localhost:3001/framework/section/question/rate/update?question_id=${question_id}`;
         const param = {
@@ -41,6 +46,7 @@ function FrameworkQuestionPage({history}) {
             body: JSON.stringify(new_rating),
             method: "POST",
         };
+        console.log(param);
         fetch(url, param)
             .then((data) => data.text())
             .then(console.log)
@@ -69,7 +75,7 @@ function RatingList({question_id, rates, post_request}) {
     return (
         <div className='RatingList'>
             {rates.map((rating, i) => {
-                const {rate_title, rate_criterion, field_name} = rating;
+                const {rate_title, rate_criterion} = rating;
                 return (
                     <TextArea
                         title={rate_title}
@@ -78,7 +84,7 @@ function RatingList({question_id, rates, post_request}) {
                         onSave={post_request(
                             question_id,
                             rates,
-                            field_name
+                            rate_title
                         )}
                     />
                 );
