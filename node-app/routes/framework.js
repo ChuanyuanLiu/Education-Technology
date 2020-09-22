@@ -147,8 +147,11 @@ router.get('/section/new', function (req, res, next) {
                     res.send(unsuccessful);
                     return;
                 }
-
-                res.send(sqlRes);
+                let cleanRes = {};
+                cleanRes.section_id = sqlRes[1][0].LAST_INSERT_ID;
+                cleanRes.section_title = sqlRes[2][0].section_title;
+                res.send(cleanRes);
+               
             });
         }
 });
@@ -164,9 +167,7 @@ router.get('/section/question/new', function (req, res, next){
             // 2. Return the question_id of newly created section
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
              // 3. Return general information of the newly created question
-            + "SELECT q.question_title, "
-            + "q.rate_1_criterion, q.rate_2_criterion, q.rate_3_criterion, q.rate_4_criterion, q.rate_5_criterion "
-            + "FROM framework_section_question q WHERE q.question_id = (SELECT LAST_INSERT_ID());"
+            + "SELECT q.question_title FROM framework_section_question q WHERE q.question_id = (SELECT LAST_INSERT_ID());"
 
 
             sqlAdapter.sqlCall(sqlQuestion, function (sqlRes) {
@@ -175,8 +176,11 @@ router.get('/section/question/new', function (req, res, next){
                     res.send(unsuccessful);
                     return;
                 }
-
-                res.send(sqlRes);
+            let cleanRes = {};
+            cleanRes.question_id = sqlRes[1][0].LAST_INSERT_ID;
+            cleanRes.question_title = sqlRes[2][0].question_title;              
+            res.send(cleanRes);
+                
             });
 
     }
