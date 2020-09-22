@@ -1,0 +1,32 @@
+{
+    "question_id": 1,
+    "question_title": "Content Model",
+    "section_id": 1,
+    "rates": [
+        {
+            "rate_number": 1,
+            "rate_title": "Not Applicable",
+            "rate_criterion": "undefined"
+        },
+        {
+            "rate_number": 2,
+            "rate_title": "Below Basic",
+            "rate_criterion": "undefined"
+        },
+        {
+            "rate_number": 3,
+            "rate_title": "Basic",
+            "rate_criterion": "undefined"
+        },
+        {
+            "rate_number": 4,
+            "rate_title": "Adequate",
+            "rate_criterion": "undefined"
+        },
+        {
+            "rate_number": 5,
+            "rate_title": "Exceptional",
+            "rate_criterion": "undefined"
+        }
+    ]
+}
