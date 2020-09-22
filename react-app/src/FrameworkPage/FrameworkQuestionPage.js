@@ -21,14 +21,14 @@ function FrameworkQuestionPage({history}) {
     useEffect(() => {
         fetch(`http://localhost:3001/framework?question_id=${question_id}`)
             .then((data) => data.json())
-            .then((data) => setQuestion(data[0]))
+            .then(setQuestion)
             .catch(console.error);
     }, [question_id]);
 
-    // POST the entire rating_list
-    const post_request = (question_id, rating_list, field_name) => (text) => {
+    // POST the entire rates
+    const post_request = (question_id, rates, field_name) => (text) => {
         var new_rating = {};
-        for (var rating of rating_list) {
+        for (var rating of rates) {
             if (rating.field_name === field_name) {
                 new_rating[rating.field_name] = text;
             } else {
@@ -49,26 +49,6 @@ function FrameworkQuestionPage({history}) {
 
     if (questionData == null) return <h1>Loading</h1>;
 
-    // Preprocessing because the backend doesn't supply adequate information;
-    const NUM_RATING = 5;
-    const RATING_TITLE = [
-        "Not Applicable",
-        "Below Basic",
-        "Basic",
-        "Adequate",
-        "Exceptional",
-    ];
-    var rating_list = [];
-    for (var i = 1; i <= NUM_RATING; i++) {
-        // field name corresponds to the field name in database
-        const field_name = `rate_${i}_criterion`;
-        rating_list.push({
-            field_name,
-            rate_title: RATING_TITLE[i - 1],
-            rate_criterion: questionData[field_name],
-        });
-    }
-
     const {question_title} = questionData;
     return (
         <div className='FrameworkQuestionPage flex_container'>
@@ -77,19 +57,18 @@ function FrameworkQuestionPage({history}) {
             </div>
             <div className='content scrollable'>
                 <RatingList
-                    question_id={question_id}
-                    rating_list={rating_list}
                     post_request={post_request}
+                    {...questionData}
                 />
             </div>
         </div>
     );
 }
 
-function RatingList({question_id, rating_list, post_request}) {
+function RatingList({question_id, rates, post_request}) {
     return (
         <div className='RatingList'>
-            {rating_list.map((rating, i) => {
+            {rates.map((rating, i) => {
                 const {rate_title, rate_criterion, field_name} = rating;
                 return (
                     <TextArea
@@ -98,7 +77,7 @@ function RatingList({question_id, rating_list, post_request}) {
                         key={i}
                         onSave={post_request(
                             question_id,
-                            rating_list,
+                            rates,
                             field_name
                         )}
                     />
