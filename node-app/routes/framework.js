@@ -120,8 +120,10 @@ router.get('/new', function (req, res, next) {
                     res.send(unsuccessful);
                     return;
                 }
-
-                res.send(sqlRes);
+                let cleanRes = {};
+                cleanRes.framework_id = sqlRes[1][0].LAST_INSERT_ID;
+                cleanRes.framework_title = sqlRes[2][0].framework_title;
+                res.send(cleanRes);
             });
 });
     
