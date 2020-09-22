@@ -7,10 +7,11 @@ import QuestionPage from "./EvaluationPage/QuestionPage"
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import "antd/dist/antd.css";
 import "./core.css";
-import "./googleFont.css"
+import "./googleFont.css";
 import FrameworkSelection from "./EvaluationPage/FrameworkSelection";
-import FrameworkPage from "./FrameworkPage/FrameworkPage"
-import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview"
+import FrameworkPage from "./FrameworkPage/FrameworkPage";
+import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview";
+import FrameworkQuestionPage from "./FrameworkPage/FrameworkQuestionPage";
 function App(){
     return (
         <React.StrictMode>
@@ -23,6 +24,7 @@ function App(){
                 <Route path='/new_evaluation' component={FrameworkSelection} />
                 <Route path='/framework' component={FrameworkPage} />
                 <Route path='/framework_overview' component={FrameworkOverviewPage} />
+                <Route path='/framework_question' component={FrameworkQuestionPage} />
             </Router>
          </React.StrictMode>
     )

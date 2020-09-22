@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "./FrameworkPage.css";
-import {UserOutlined} from "@ant-design/icons";
+// import {UserOutlined} from "@ant-design/icons";
 import FrameworkComponent from "./FrameworkComponent";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
@@ -24,7 +24,7 @@ class FrameworkPage extends Component {
             });
     }
 
-    // go directly to the frameworkß
+    // go directly to the framework
     handleClick(framework_id) {
         this.props.history.replace({
             pathname: "/framework_overview",
@@ -46,9 +46,8 @@ class FrameworkPage extends Component {
 
     render() {
         const frameworkList = this.state.frameworks.map((framework, i) => (
-            <div className="clickable">
+            <div className="clickable" key={i}>
                 <FrameworkComponent
-                key={i}
                 item={framework}
                 handleClick={this.handleClick}
                 />              

@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React from "react";
 import 'antd/dist/antd.css';
 import { Switch } from 'antd';
 
@@ -7,7 +7,11 @@ function StatusSwitch(props){
     return (
         <div className="StatusSwitch">
             <span>{props.switchName}</span>
-            <label className="StatusSwitch-switch"><Switch size="default" /></label>
+            <label className="StatusSwitch-switch">
+                <Switch onChange={props.handleChange} 
+                        size="default" 
+                        checked={props.value}/>
+            </label>
         </div>
     )
 }

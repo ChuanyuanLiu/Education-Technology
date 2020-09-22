@@ -3,8 +3,6 @@ import NavBar from "../Utils/NavBar";
 import TextInput from "../Utils/TextInput"
 import StatusSwitch from "../Utils/StatusSwitch"
 import { useHistory } from "react-router-dom";
-import Button3D from "../Utils/Button3D"
-import BigButton from "../Utils/BigButton"
 import {RightOutlined, DownOutlined, EditOutlined, CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons"
 /*
 (Route from FrameworkPage)
@@ -23,23 +21,31 @@ Framework Overview Page
 function FrameworkOverview({history}){
     const {framework_id} = history.location.state
     const [framework_data, setFramework] = useState(null)
-    function initializeFramework(){
-        const new_framework = {
-            framework_title: "New Framework",
-            framework_author: "",
-            sections: []
-          }
-        setFramework(new_framework)
+    const [activeStatus, setActiveStatus] = useState(0)
+    const [published, setPublished] = useState(0)
+    const [frameworkTitle, setFrameworkTitle] = useState("new")
+    const [sections, setSections] = useState([])
+    function initializeFramework(data){
+        setFrameworkTitle(data.framework_title)
+        setActiveStatus(data.framework_active_status)
+        setSections(data.sections)
+        setPublished(data.framework_published)
+        setFramework(data)
+
     }
     useEffect(() => {
+        // Create a new framework if id is set as -1.
         if(framework_id !== -1){
             fetch(
                 `http://localhost:3001/framework?framework_id=${framework_id}`
             )
                 .then(response => response.json())
-                .then(setFramework)
+                .then(data =>{
+                    initializeFramework(data)
+                })
         }else{
-            initializeFramework()
+            initializeFramework();
+            //TODO: post the initialized framework
         }
     },[framework_id])
 
@@ -52,22 +58,18 @@ function FrameworkOverview({history}){
             section_title:"New Section",
             questions:[]
         }
-        setFramework((prevState) => ({
-            framework_id: prevState.framework_id,
-            framework_title: prevState.framework_title,
-            sections:[...prevState.sections, newSection]
-        }))
+        setSections((prevState) => (
+           [...prevState, newSection]
+        ))
     }
     //Add question with given section_id, called from EditableSection
     const addQuestion = (section_id) => {
         const newQuestion = {
             question_title: "New Question"
         }
-        setFramework((prevState) => ({
-            framework_id: prevState.framework_id,
-            framework_title: prevState.framework_title,
-            sections: prevState.sections.map(data => {
-                if(data.section_id == section_id ){
+        setSections((prevState) => (
+            prevState.map(data => {
+                if(data.section_id === section_id ){
                    return {
                        section_id: data.section_id,
                        section_title: data.section_title,
@@ -75,25 +77,43 @@ function FrameworkOverview({history}){
                    }
                 }
                 return data
-            })
-        }))
+            }))
+        )
     }
 
     //TODO for POST request
-    const PostFramework = ()=>{
-        alert("saved")
+    // const PostFramework = ()=>{
+    //     alert("saved")
+    // 
+    const setActive = () =>{
+        const url = `http://localhost:3001/framework/activestatus/update?framework_id=${framework_data.framework_id}`;
+        const newActiveStatus = {
+                framework_active_status: (1-framework_data.framework_active_status)
+            }
+        const param = {
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(newActiveStatus),
+            method: "POST",
+        }
+        fetch(url, param)
+            .then((data) => data.text())
+            .then(console.log)
+            .catch(console.err);
+        setActiveStatus(
+            (prevState) => {return (1 - prevState)}
+        )
     }
-
     return  <div>
                 <NavBar>
-                    <TextInput text={framework_data.framework_title}/>
+                    <TextInput text={frameworkTitle}/>
                 </NavBar>
                 <div className="section_header">Status</div>
-                <StatusSwitch switchName="Active" />
-                <StatusSwitch switchName="Published" />
+                <StatusSwitch handleChange={setActive} 
+                              value={activeStatus}
+                              switchName="Active" />
                 <SectionList addSection={addSection}
                              addQuestion={addQuestion} 
-                             sections={framework_data.sections}/>
+                             sections={sections}/>
             </div>
 }
 
@@ -210,9 +230,13 @@ function EditableSection(props){
 
 function Question(props){
     const history = useHistory()
-    //TODO add direct to question edit page
-    const handleClick = (event) => {
-        
+    const handleClick = () => {
+        history.push({
+            pathname: "./framework_question",
+            state: {
+                question_id: props.question.question_id
+            },
+        });
     }
     return <div className="Question clickable" onClick={handleClick}>
                 {props.section_index + 1}.{props.question_index + 1} {props.question.question_title}
