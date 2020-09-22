@@ -288,7 +288,7 @@ router.get('/version', function (req, res, next) {
     }
 });
 
-//update question
+// Update the question
 router.post('/section/question/rate/update', function (req, res, next) {
 
     // Example: http://localhost:3001/framework/section/question/rate/update?question_id={qid}
@@ -317,4 +317,46 @@ router.post('/section/question/rate/update', function (req, res, next) {
     }
 });
 
+// Update the active status
+router.post('/activestatus/update', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/activestatus/update?framework_id={fid}
+    if (req.query.framework_id != null) {
+        let framework_active_status = req.body.framework_active_status;
+        const sql = "UPDATE framework "
+            + "SET framework_active_status = " + framework_active_status
+            + " WHERE framework_id = " + req.query.framework_id;
+
+        sqlAdapter.sqlCall(sql, function (updateActive) {
+            if (updateActive == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(successful);
+        });
+    }
+});
+
+// Update the published status
+router.post('/publishstatus/update', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/publishstatus/update?framework_id={fid}
+    if (req.query.framework_id != null) {
+        let framework_publish_status = req.body.framework_publish_status;
+        const sql = "UPDATE framework "
+            + "SET framework_published = " + framework_publish_status
+            + " WHERE framework_id = " + req.query.framework_id
+            + " AND framework_published = 0";
+
+        sqlAdapter.sqlCall(sql, function (updateActive) {
+            if (updateActive == null) {
+                res.send(unsuccessful);
+                return;
+            }
+
+            res.send(successful);
+        });
+    }
+});
 module.exports = router;
