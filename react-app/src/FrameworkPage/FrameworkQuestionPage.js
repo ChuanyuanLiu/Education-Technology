@@ -28,7 +28,7 @@ function FrameworkQuestionPage({history}) {
     // POST the entire rates
     const post_request = (question_id, rates, field_name) => (text) => {
         var new_rating = {};
-        for (var rating of rates) {
+        for (const rating of rates) {
             if (rating.field_name === field_name) {
                 new_rating[rating.field_name] = text;
             } else {
@@ -41,6 +41,7 @@ function FrameworkQuestionPage({history}) {
             body: JSON.stringify(new_rating),
             method: "POST",
         };
+        console.log(param);
         fetch(url, param)
             .then((data) => data.text())
             .then(console.log)
