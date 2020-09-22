@@ -13,6 +13,7 @@ class FrameworkPage extends Component {
             frameworks: [],
         };
         this.handleClick = this.handleClick.bind(this);
+        this.createNew = this.createNew.bind(this);
     }
 
     componentDidMount() {
@@ -33,6 +34,16 @@ class FrameworkPage extends Component {
         });
     }
 
+    createNew(){
+        var newId
+        fetch("http://localhost:3001/framework/new")
+        .then((response) => response.json())
+        .then((data) => {
+            alert(data)
+        })
+        // this.handleClick(newId)
+    }
+
     render() {
         const frameworkList = this.state.frameworks.map((framework, i) => (
             <div className="clickable" key={i}>
@@ -45,15 +56,16 @@ class FrameworkPage extends Component {
         ));
         return (
             <div className='flex_container'>
+
                 <div className='header'>
                     <NavBar>
                         Frameworks
                         <SearchBar />
                     </NavBar>
                 </div>
-                <div className='content'>{frameworkList}</div>
+                <div className='content scrollable'>{frameworkList}</div>
                 <div className='footer'>
-                    <BigButton onClick={() => this.handleClick(-1)}>
+                    <BigButton onClick={() => this.createNew}>
                         New Framework
                     </BigButton>
                 </div>
