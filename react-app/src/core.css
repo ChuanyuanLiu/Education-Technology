@@ -228,7 +228,7 @@ body,
     font-weight: normal;
 }
 
-.StatusSwitch{
+.StatusSwitch {
     font-size: 15px;
     left: 10px;
     height: 45px;
@@ -236,8 +236,28 @@ body,
     padding-top: 12px;
     margin: auto;
 }
-.StatusSwitch-switch{
+.StatusSwitch-switch {
    position: absolute;
    right: 20px;
    top: 8px;
+}
+
+.TextArea .container {
+    position: relative;
+}
+
+.TextArea textarea{
+    width: 100%;
+    height: 100%;
+    resize: none;
+    position: absolute;
+    padding-left: 10px;
+}
+
+.TextArea .hidden {
+    padding-left: 10px;
+    visibility: hidden;
+    width: 100%;
+    word-wrap: break-word;
+    padding-bottom: 1.5em;
 }

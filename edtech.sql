@@ -91,7 +91,7 @@ CREATE TABLE `framework` (
   `framework_title` varchar(200) NOT NULL DEFAULT 'New Framework',
   `framework_author` varchar(50) NOT NULL DEFAULT 'Author',
   `framework_creation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `framework_active_status` tinyint NOT NULL DEFAULT 1,
+  `framework_active_status` tinyint NOT NULL DEFAULT 0,
   `framework_published` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`framework_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -103,7 +103,7 @@ CREATE TABLE `framework` (
 
 LOCK TABLES `framework` WRITE;
 /*!40000 ALTER TABLE `framework` DISABLE KEYS */;
-INSERT INTO `framework` VALUES (1,'Primary EdTech Framework','Gerald','2020-08-28 10:00:45',1,1),(2,'Secondary EdTech Framework','Gerald','2020-08-28 10:02:02',1,1);
+INSERT INTO `framework` VALUES (1,'Primary EdTech Framework','Gerald','2020-08-28 10:00:45',1,1),(2,'Secondary EdTech Framework','Gerald','2020-08-28 10:02:02',0,1);
 /*!40000 ALTER TABLE `framework` ENABLE KEYS */;
 UNLOCK TABLES;
 
