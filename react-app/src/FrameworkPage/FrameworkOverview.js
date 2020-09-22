@@ -271,7 +271,6 @@ function EditableSection(props){
 function Question(props){
     const history = useHistory()
     const handleClick = () => {
-        alert(props.published)
         history.push({
             pathname: "./framework_question",
             state: {
