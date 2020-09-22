@@ -29,7 +29,9 @@ function TextArea({title = "TextArea", text = "", onSave=f=>f}) {
     return (
         <form className="TextArea">
             <div className='section_header'>
-                {title}
+                <label htmlFor={title}>
+                    {title}
+                </label>
                 <div className='right'>
                     <Button3D
                         on={getActive}
@@ -41,6 +43,7 @@ function TextArea({title = "TextArea", text = "", onSave=f=>f}) {
             </div>
             <div className="container">
                 <textarea
+                    id={title}
                     disabled={!getActive}
                     onChange={appendText}
                     value={getText}
