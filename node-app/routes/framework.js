@@ -92,7 +92,7 @@ router.get('/', function (req, res, next) {
         const sql = "SELECT * FROM framework";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
 
-            if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
+            if (frameworkRes == null) {
                 res.send(unsuccessful);
                 return;
             }
