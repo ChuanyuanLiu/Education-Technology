@@ -34,8 +34,8 @@ router.get('/', function (req, res, next) {
             // Store hierarchy inside JSON object with framework_id
             let cleanRes = {};
             let frameworkRes = frameworkhomepageRes[0][0];
-            // console.log(frameworkRes);
             let questionRes = frameworkhomepageRes[1];
+
             cleanRes.framework_id = frameworkRes.framework_id;
             cleanRes.framework_title = frameworkRes.framework_title;
             cleanRes.framework_author = frameworkRes.framework_author;
@@ -60,7 +60,6 @@ router.get('/', function (req, res, next) {
                 res.send(unsuccessful);
                 return;
             }
-            console.log(rateRes);
             let Res = rateRes[0];
             let cleanRes = {};
             cleanRes.question_id = Res.question_id;
@@ -98,7 +97,6 @@ router.get('/', function (req, res, next) {
             }
 
             res.send(frameworkRes);
-
         });
 
     }
@@ -300,7 +298,6 @@ router.post('/section/question/rate/update', function (req, res, next) {
         var rate_4_criterion = req.body.rate_4_criterion;
         var rate_5_criterion = req.body.rate_5_criterion;
         var question_id = req.query.question_id;
-        console.log(rate_1_criterion);
         const sql = "UPDATE framework_section_question "
             + "SET rate_1_criterion = '" + rate_1_criterion
             + "', rate_2_criterion = '" + rate_2_criterion
