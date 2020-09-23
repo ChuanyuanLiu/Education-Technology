@@ -15,7 +15,7 @@ import {Divider} from 'antd'
  */
 
 const PUBLISHED_TRUE = 1;
-const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
+const PUBLISHED_MESSAGE = "This question can NOT be edited because it belongs to a published framework";
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
@@ -78,7 +78,7 @@ function FrameworkQuestionPage({history}) {
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
                 <NavBar>Question Details</NavBar>
-                <Reminder text={PUBLISHED_MESSAGE} is_hidden={disabled}/>
+                <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
             </div>
             <div className='content scrollable'>
                 <TextArea
