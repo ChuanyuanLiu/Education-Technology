@@ -2,10 +2,12 @@ import React from "react";
 import {render, cleanup, waitForDomChange, fireEvent} from "@testing-library/react";
 import FrameworkQuestionPage from "../FrameworkQuestionPage";
 
-// data client receives from get request
-import get_data from "./get.json"
-// data client sends for a post request
-import post_data from "./post.json"
+// data client receives after requesting for questions
+import get_data from "./get_questions.json"
+// data client sends to server to update rating criteria 
+import post_data from "./post_rate_criterions.json"
+// data client sends to sever to update question title
+import post_question_title_data from "./post_question_title.json"
 
 // Mock fetch by redefining it as a jest function before testing
 function mock_fetch(is_success, return_value) {
@@ -29,6 +31,7 @@ function mock_fetch(is_success, return_value) {
 
 /** Acceptance test 2.2.9
  * Gerald can edit the existing questions into what he wants 
+ * Assumes question not published
  * */
 describe("AC 2.2.9", () => {
     
@@ -65,7 +68,7 @@ describe("AC 2.2.9", () => {
         }
     });
 
-    test("Send correct post request", async() => {
+    test("Edit ratings", async() => {
         global.fetch = mock_fetch(true, {json:()=>Promise.resolve(get_data)})
 
         initial_render();        
@@ -86,6 +89,26 @@ describe("AC 2.2.9", () => {
         fireEvent.click(button);
         // Check if the correct body of the post message has been send
         expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_data));
+    })
+
+    test("Edit question title", async()=> {
+        global.fetch = mock_fetch(true, {json:()=>Promise.resolve(get_data)});
+        initial_render();
+        await waitForDomChange(()=> expect(fetch).toHaveBeenCalledTimes(1));
+
+        const button = document.querySelector(`button[name='Question Title']`);
+        const textarea = document.querySelector(`textarea[name='Question Title']`);
+        const field_name = "question_title";
+
+        global.fetch = mock_fetch(true, {text:()=>Promise.resolve("success")});
+
+        expect(textarea.disabled).toBe(true);
+        fireEvent.click(button);
+        expect(textarea.disabled).toBe(false);
+        fireEvent.change(textarea, {target:{value:post_question_title_data[field_name]}});
+        fireEvent.click(button);
+        // Check if the correct body of the post message has been send
+        expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_question_title_data));
     })
 });
 

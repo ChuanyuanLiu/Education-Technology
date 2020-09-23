@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
+import {Divider} from 'antd'
 
 /**
  * Route from Framework Overview Page
@@ -16,6 +17,7 @@ const PUBLISHED_TRUE = 1;
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
+    const disabled = published == PUBLISHED_TRUE;
 
     const [questionData, setQuestion] = useState(null);
     // GET
@@ -41,7 +43,7 @@ function FrameworkQuestionPage({history}) {
             }
             i += 1;
         }
-        const url = `http://localhost:3001/framework/section/question/rate/update?question_id=${question_id}`;
+        const url = `http://localhost:3001/framework/section/question/update?question_id=${question_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(new_rating),
@@ -49,30 +51,51 @@ function FrameworkQuestionPage({history}) {
         };
         fetch(url, param)
             .then((data) => data.text())
-            .then((data) => {console.log("Post request", data)})
+            .then((data) => {console.log("Posted rating request", data)})
             .catch(console.err);
     };
+
+    const post_title = (question_id) => (text) => {
+        const url = `http://localhost:3001/framework/section/question/update?question_id=${question_id}`;
+        const param = {
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({"question_title": text}),
+            method: "POST"
+        };
+        fetch(url, param)
+            .then((data) => data.text())
+            .then((data) => {console.log("Posted title request", data)})
+            .catch(console.err);
+    }
 
     if (questionData == null) return <h1>Loading</h1>;
 
     const {question_title} = questionData;
+
     return (
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
-                <NavBar>{question_title}</NavBar>
+                <NavBar>Question Details</NavBar>
             </div>
             <div className='content scrollable'>
+                <TextArea
+                    title={"Question Title"}
+                    text={question_title}
+                    onSave={post_title(question_id)}
+                    disabled={disabled}
+                />
+                <Divider/>
                 <RatingList
                     post_request={post_request}
                     {...questionData}
-                    published = {published}
+                    disabled = {disabled}
                 />
             </div>
         </div>
     );
 }
 
-function RatingList({question_id, rates, post_request, published}) {
+function RatingList({question_id, rates, post_request, disabled}) {
     return (
         <div className='RatingList'>
             {rates.map((rating, i) => {
@@ -87,7 +110,7 @@ function RatingList({question_id, rates, post_request, published}) {
                             rates,
                             rate_title
                         )}
-                        disabled = {published===PUBLISHED_TRUE}
+                        disabled = {disabled}
                     />
                 );
             })}
