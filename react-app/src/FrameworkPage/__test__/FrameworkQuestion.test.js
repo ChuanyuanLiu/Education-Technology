@@ -1,9 +1,11 @@
 import React from "react";
 import {render, cleanup, waitForDomChange, fireEvent} from "@testing-library/react";
 import FrameworkQuestionPage from "../FrameworkQuestionPage";
-import get_data from "./get.json"
-import post_data from "./post.json"
 
+// data client receives from get request
+import get_data from "./get.json"
+// data client sends for a post request
+import post_data from "./post.json"
 
 // Mock fetch by redefining it as a jest function before testing
 function mock_fetch(is_success, return_value) {
@@ -20,11 +22,6 @@ function mock_fetch(is_success, return_value) {
     return fetch;    
 }
 
-// Create DOM before each test
-function initial_render() {
-    const history = {location: {state: {question_id: 1, published: 0}}};
-    return render(<FrameworkQuestionPage history={history} />);
-}
 
 /** Acceptance test 2.2.8
  * Gerald updates New question's rating explanations with appropriate text
@@ -34,12 +31,24 @@ function initial_render() {
  * Gerald can edit the existing questions into what he wants 
  * */
 describe("AC 2.2.9", () => {
+    
+    // Create DOM before each test
+    // Assumes fetch has been defined
+    function initial_render() {
+        const history = {location: {state: {question_id: 1, published: 0}}};
+        return render(<FrameworkQuestionPage history={history} />);
+    }
+
     // Set DOM tree to empty after tests
-    afterEach(cleanup);
+    // Reset fetch
+    afterEach(()=>{
+        fetch.mockClear();
+        cleanup();
+    });
 
     test("5 text areas", async () => {
         global.fetch = mock_fetch(true, {json:()=>Promise.resolve(get_data)})
-        const {getByLabelText, getAllByText} = initial_render(get_data);
+        const {getByLabelText, getAllByText} = initial_render();
         const {rates} = get_data;
 
         // Wait to loading
@@ -57,9 +66,9 @@ describe("AC 2.2.9", () => {
     });
 
     test("Send correct post request", async() => {
-        initial_render(get_data);        
         global.fetch = mock_fetch(true, {json:()=>Promise.resolve(get_data)})
 
+        initial_render();        
         // Wait to loading
         await waitForDomChange(() => expect(fetch).toHaveBeenCalledTimes(1));
 
@@ -80,8 +89,38 @@ describe("AC 2.2.9", () => {
     })
 });
 
+/** Additional Test
+ * Question not editable if already published
+ * */
+describe("Publishing logic", () => {
 
+    // Create DOM before each test
+    function initial_render() {
+        const history = {location: {state: {question_id: 1, published: 1}}};
+        return render(<FrameworkQuestionPage history={history} />);
+    }
 
+    // Set DOM tree to empty after tests
+    // Reset fetch
+    afterEach(()=>{
+        fetch.mockClear();
+        cleanup();
+    });
+
+    test("Not editable because published", async () => {
+        global.fetch = mock_fetch(true, {json: ()=>Promise.resolve(get_data)})
+        const {queryAllByRole} = initial_render();
+
+        await waitForDomChange(() => expect(fetch).toHaveBeenCalledTimes(1));
+
+        // Buttons are hidden
+        expect(queryAllByRole('button', { name: /edit/i })).toStrictEqual([]);
+        // Text areas are not editable
+        for (const textarea of queryAllByRole('textarea')) {
+            expect(textarea.disabled).toBe(true);
+        }
+    })
+});
 
 
 /** Additional Test

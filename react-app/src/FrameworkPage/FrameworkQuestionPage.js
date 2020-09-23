@@ -12,8 +12,10 @@ import TextArea from "../Utils/TextArea";
  *          |-- TextArea
  */
 
+const PUBLISHED_TRUE = 1;
+
 function FrameworkQuestionPage({history}) {
-    const {question_id} = history.location.state;
+    const {question_id, published} = history.location.state;
 
     const [questionData, setQuestion] = useState(null);
     // GET
@@ -63,13 +65,14 @@ function FrameworkQuestionPage({history}) {
                 <RatingList
                     post_request={post_request}
                     {...questionData}
+                    published = {published}
                 />
             </div>
         </div>
     );
 }
 
-function RatingList({question_id, rates, post_request}) {
+function RatingList({question_id, rates, post_request, published}) {
     return (
         <div className='RatingList'>
             {rates.map((rating, i) => {
@@ -84,6 +87,7 @@ function RatingList({question_id, rates, post_request}) {
                             rates,
                             rate_title
                         )}
+                        disabled = {published===PUBLISHED_TRUE}
                     />
                 );
             })}
