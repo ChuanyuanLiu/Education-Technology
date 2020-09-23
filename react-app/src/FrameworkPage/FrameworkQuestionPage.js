@@ -16,12 +16,11 @@ function FrameworkQuestionPage({history}) {
     const {question_id} = history.location.state;
 
     const [questionData, setQuestion] = useState(null);
-
     // GET
     useEffect(() => {
         fetch(`http://localhost:3001/framework?question_id=${question_id}`)
             .then((data) => data.json())
-            .then(setQuestion)
+            .then((data) => {setQuestion(data); console.log("Get request")})
             .catch(console.error);
     }, [question_id]);
 
@@ -46,10 +45,9 @@ function FrameworkQuestionPage({history}) {
             body: JSON.stringify(new_rating),
             method: "POST",
         };
-        console.log(param);
         fetch(url, param)
             .then((data) => data.text())
-            .then(console.log)
+            .then((data) => {console.log("Post request", data)})
             .catch(console.err);
     };
 

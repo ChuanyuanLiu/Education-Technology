@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import Button3D from "./Button3D";
 
 /** 
- * Display and edit a large text area
+ * Display a header with title and a button to toggle edit on a large text area
+ * - all input elements will have name assigned as title
+ * - the header is associated with the text area
  * @param {string} title  
  * @param {string} text: the placeholder text 
  * @param {Function} onSave(text): triggers when the button is released, and supply the updated text
@@ -29,7 +31,7 @@ function TextArea({title = "TextArea", text = "", onSave=f=>f}) {
     return (
         <form className="TextArea">
             <div className='section_header'>
-                <label htmlFor={title}>
+                <label name={title} htmlFor={title}>
                     {title}
                 </label>
                 <div className='right'>
@@ -38,11 +40,13 @@ function TextArea({title = "TextArea", text = "", onSave=f=>f}) {
                         onClick={toggleActive}
                         on_text='save'
                         off_text='edit'
+                        name={title}
                     />
                 </div>
             </div>
             <div className="container">
                 <textarea
+                    name={title}
                     id={title}
                     disabled={!getActive}
                     onChange={appendText}
