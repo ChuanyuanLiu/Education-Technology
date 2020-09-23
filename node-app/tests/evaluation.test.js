@@ -1,4 +1,4 @@
-var sqlConnector = require('../routes/sqlConnector');
+var sqlConnector = require('../utils/sqlAdapter');
 
 afterAll(() => {
     sqlConnector.closeConnection();
@@ -207,22 +207,19 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
         const sql = "SELECT * "
         + "FROM framework_section_question "
         + "WHERE question_id = " + question_id + ";"
-        + "SELECT *"
-        + "FROM evaluation_response "
-        + "WHERE question_id = " + question_id + " AND evaluation_id = " + evaluation_id + ";";
 
         sqlConnector.sqlCall(sql, function (rateRes) {
             let count = 0;
-            let questionRes = rateRes[0][0];
-            if (questionRes.rate_1_criteria != null)
+            let questionRes = rateRes[0];
+            if (questionRes.rate_1_criterion != null)
                 count++;
-            if (questionRes.rate_2_criteria != null)
+            if (questionRes.rate_2_criterion != null)
                 count++;
-            if (questionRes.rate_3_criteria != null)
+            if (questionRes.rate_3_criterion != null)
                 count++;
-            if (questionRes.rate_4_criteria != null)
+            if (questionRes.rate_4_criterion != null)
                 count++;
-            if (questionRes.rate_5_criteria != null)
+            if (questionRes.rate_5_criterion != null)
                 count++;
             expect(count).toEqual(5);
             done();
