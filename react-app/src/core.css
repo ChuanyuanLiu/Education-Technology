@@ -264,3 +264,11 @@ body,
     word-wrap: break-word;
     padding-bottom: 1.5em;
 }
+
+
+/* Reminder.js */
+.Reminder {
+    text-align: center;
+    background-color: var(--focus_color);
+    color: var(--primary_color);
+}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
+import Reminder from "../Utils/Reminder";
 import {Divider} from 'antd'
 
 /**
@@ -14,6 +15,7 @@ import {Divider} from 'antd'
  */
 
 const PUBLISHED_TRUE = 1;
+const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
@@ -72,10 +74,11 @@ function FrameworkQuestionPage({history}) {
 
     const {question_title} = questionData;
 
-    return (
+     return (
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
                 <NavBar>Question Details</NavBar>
+                <Reminder text={PUBLISHED_MESSAGE} is_hidden={disabled}/>
             </div>
             <div className='content scrollable'>
                 <TextArea
