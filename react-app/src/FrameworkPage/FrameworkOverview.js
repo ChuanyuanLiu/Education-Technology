@@ -27,13 +27,22 @@ function FrameworkOverview({history}){
     const [published, setPublished] = useState(0)
     const [frameworkTitle, setFrameworkTitle] = useState("")
     const [sections, setSections] = useState([])
+    const [expandedSections, setExpandedSections] = useState([])
+
     function initializeFramework(data){
         setFrameworkTitle(data.framework_title)
         setActiveStatus(data.framework_active_status)
         setSections(data.sections)
         setPublished(data.framework_published)
         setFramework(data)
+        if(history.location.state.session === undefined){
+            var state = history.location.state
+            state.session = []
+            history.replace({...history.location, state})
+        }
+        setExpandedSections(history.location.state.session)
     }
+
     useEffect(() => {
             fetch(
                 `http://localhost:3001/framework?framework_id=${framework_id}`
@@ -45,7 +54,7 @@ function FrameworkOverview({history}){
             .catch(console.err)
         },[framework_id])
 
-    if (framework_data == null) {
+    if (framework_data === null|| expandedSections === []) {
         return <h1>Loading...</h1>;
     }
     //Add section to framework, called from SectionList
@@ -151,6 +160,35 @@ function FrameworkOverview({history}){
             } })
             .catch(console.err);
     }
+    const saveExpand = (section_id) => {
+        var state = history.location.state
+        if(state.session === undefined){
+            state.session = []
+        }
+        if(!state.session.includes(section_id)){
+            state.session.push(section_id)
+        }
+        setExpandedSections(state.session)
+        history.replace({...history.location, state})
+    }
+    const deletExpand = (section_id) => {
+        //alert("Unregister" + section_id)
+
+        var state = history.location.state
+        if(state.session === undefined){
+            state.session = []
+        }
+        const index = state.session.indexOf(section_id)
+        if(index > -1){
+            state.session.splice(index, 1)
+        }
+        setExpandedSections(state.session)
+        history.replace({...history.location, state})
+    }
+
+    const checkExpand = (section_id) =>{
+        return expandedSections.includes(section_id)
+    }
     return  <div className="flex_container ">
                 <NavBar>
                     <TextInput text={frameworkTitle}
@@ -177,6 +215,10 @@ function FrameworkOverview({history}){
                                      addQuestion={addQuestion} 
                                      sections={sections}
                                      published={published}
+                                     registerExpand={saveExpand}
+                                     registerUnexpand={deletExpand}
+                                     checkExpand={checkExpand}
+                                     expandedSections={expandedSections}
                                     />         
                     </div>
                     <div className="footer">
@@ -199,7 +241,11 @@ function SectionList(props){
                     <EditableSection addQuestion={props.addQuestion}
                                      section_index={i} 
                                      section={section}
-                                     published={props.published}/>)
+                                     published={props.published}
+                                     defaultExpand={props.checkExpand(section.section_id)}
+                                     registerExpand={props.registerExpand}
+                                     registerUnexpand={props.registerUnexpand}
+                                     expandedSections={props.expandedSections}/>)
                 }               
                                                                      
             </div>
@@ -214,7 +260,8 @@ function SectionList(props){
 }
 
 function EditableSection(props){
-        // track expand or not
+    // track expand or not
+
     const [getExpand, setExpand] = useState(false)
     const [getActive, setActive] = useState(false)
     const [getText, setText] = useState(props.section.section_title)
@@ -222,8 +269,15 @@ function EditableSection(props){
     // TO expand a section to see questions
     const toggleExpand = (event) => {
         event.preventDefault()
+        if(!getExpand){
+            props.registerExpand(props.section.section_id)
+        }else{
+            props.registerUnexpand(props.section.section_id)
+        }
         setExpand(!getExpand)
     }
+    
+    useEffect(() => setExpand(props.defaultExpand),[props.defaultExpand])
     // Save the changes to section title
     const toggleSave = (event) => {
         event.preventDefault()
@@ -305,6 +359,7 @@ function EditableSection(props){
                                         question={data} 
                                         key={i} 
                                         published={props.published}
+                                        expandedSections={props.expandedSections}
                                     />)}
 
                                 {props.published? null:
@@ -326,12 +381,14 @@ function EditableSection(props){
 
 function Question(props){
     const history = useHistory()
+
     const handleClick = () => {
+        // alert(props.expandedSections)
         history.push({
             pathname: "./framework_question",
             state: {
                 question_id: props.question.question_id,
-                published: props.published
+                published: props.published,
             },
         });
     }
