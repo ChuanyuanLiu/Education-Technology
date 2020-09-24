@@ -254,9 +254,9 @@ describe("GET /evaluation?evaluation_id={eid}", () => {
 
         let evaluation_id = 1;
         const sql = "SELECT * "
-        + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
-        + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
-        + "WHERE evaluation.evaluation_id = " + evaluation_id + ";"
+        + "FROM (evaluation e LEFT JOIN framework_section s ON e.framework_id = s.framework_id) " 
+        + "JOIN framework_section_question q ON s.section_id = q.section_id "
+        + "WHERE e.evaluation_id = " + evaluation_id + ";"
         + "SELECT * "
         + "FROM evaluation_response "
         + "WHERE evaluation_id = " + evaluation_id + ";";
