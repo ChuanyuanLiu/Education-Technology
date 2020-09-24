@@ -373,3 +373,53 @@ describe("POST /framework/activestatus/update?framework_id={fid}", () => {
     });
 
 });
+
+describe("POST /framework/publishstatus/update?framework_id={fid}", () => {
+
+    const initFramework = "INSERT INTO framework () VALUES ();";
+
+    const resetTable = "DELETE FROM framework WHERE framework_id = (SELECT LAST_INSERT_ID());";
+
+    const inputOn = `UPDATE framework`
+        + ` SET framework_published = 1`
+        + ` WHERE framework_id = (SELECT LAST_INSERT_ID())`
+        + ` AND framework_published = 0;`;
+    
+    const inputOff = `UPDATE framework`
+        + ` SET framework_published = 0`
+        + ` WHERE framework_id = (SELECT LAST_INSERT_ID())`
+        + ` AND framework_published = 0;`;
+
+    const inputCheck = `SELECT framework_published`
+        + ` FROM framework`
+        + ` WHERE framework_id = (SELECT LAST_INSERT_ID());`;
+
+    // Obtain the previous status
+    beforeEach(done => {
+        sqlAdapter.sqlCall(initFramework, function(prevRes) {
+            done();
+        });
+    });
+
+    // Reset the status to the previous status after each test
+    afterEach(done => {
+        sqlAdapter.sqlCall(resetTable, function(resetRes) {
+            done();
+        });
+    });
+
+    test("Should correctly toggle on the framework publish status", done => {
+        sqlAdapter.sqlCall(inputOn + inputCheck, function(inputRes) {
+            expect(inputRes[1][0].framework_published).toEqual(1);
+            done();
+        });
+    });
+
+    test("Should prevent toggling off the framework publish status", done => {
+        sqlAdapter.sqlCall(inputOn + inputOff + inputCheck, function(inputRes) {
+            expect(inputRes[2][0].framework_published).toEqual(1);
+            done();
+        });
+    });
+
+});
