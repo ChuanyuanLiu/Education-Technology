@@ -15,7 +15,7 @@ import {Divider} from 'antd'
  */
 
 const PUBLISHED_TRUE = 1;
-const PUBLISHED_MESSAGE = "This question can NOT be edited because it belongs to a published framework";
+const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
@@ -45,7 +45,7 @@ function FrameworkQuestionPage({history}) {
             }
             i += 1;
         }
-        const url = `http://localhost:3001/framework/section/question/update?question_id=${question_id}`;
+        const url = `http://localhost:3001/framework/section/question/rate/update?question_id=${question_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(new_rating),
@@ -78,7 +78,7 @@ function FrameworkQuestionPage({history}) {
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
                 <NavBar>Question Details</NavBar>
-                
+                <Reminder text={PUBLISHED_MESSAGE} is_hidden={disabled}/>
             </div>
             <div className='content scrollable'>
                 <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
