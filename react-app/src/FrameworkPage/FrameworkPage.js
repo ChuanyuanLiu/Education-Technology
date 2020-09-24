@@ -26,7 +26,7 @@ class FrameworkPage extends Component {
 
     // go directly to the framework
     handleClick(framework_id) {
-        this.props.history.replace({
+        this.props.history.push({
             pathname: "/framework_overview",
             state: {
                 framework_id,
@@ -35,13 +35,12 @@ class FrameworkPage extends Component {
     }
 
     createNew(){
-        var newId
         fetch("http://localhost:3001/framework/new")
         .then((response) => response.json())
         .then((data) => {
-            alert(data)
+            this.handleClick(data.framework_id)
         })
-        // this.handleClick(newId)
+        
     }
 
     render() {
@@ -65,7 +64,7 @@ class FrameworkPage extends Component {
                 </div>
                 <div className='content scrollable'>{frameworkList}</div>
                 <div className='footer'>
-                    <BigButton onClick={() => this.createNew}>
+                    <BigButton onClick={this.createNew}>
                         New Framework
                     </BigButton>
                 </div>

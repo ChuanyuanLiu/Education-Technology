@@ -3,6 +3,7 @@ import NavBar from "../Utils/NavBar";
 import TextInput from "../Utils/TextInput"
 import BigButton from "../Utils/BigButton"
 import StatusSwitch from "../Utils/StatusSwitch"
+import Reminder from "../Utils/Reminder"
 import { useHistory } from "react-router-dom";
 import {RightOutlined, DownOutlined, EditOutlined, CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons"
 /*
@@ -24,7 +25,7 @@ function FrameworkOverview({history}){
     const [framework_data, setFramework] = useState(null)
     const [activeStatus, setActiveStatus] = useState(0)
     const [published, setPublished] = useState(0)
-    const [frameworkTitle, setFrameworkTitle] = useState("new")
+    const [frameworkTitle, setFrameworkTitle] = useState("")
     const [sections, setSections] = useState([])
     function initializeFramework(data){
         setFrameworkTitle(data.framework_title)
@@ -34,51 +35,51 @@ function FrameworkOverview({history}){
         setFramework(data)
     }
     useEffect(() => {
-        // Create a new framework if id is set as -1.
-        if(framework_id !== -1){
             fetch(
                 `http://localhost:3001/framework?framework_id=${framework_id}`
             )
-                .then(response => response.json())
-                .then(data =>{
-                    initializeFramework(data)
-                })
-        }else{
-            initializeFramework();
-            //TODO: post the initialized framework
-        }
-    },[framework_id])
+            .then(response => response.json())
+            .then(data =>{
+                initializeFramework(data)
+            })
+            .catch(console.err)
+        },[framework_id])
 
     if (framework_data == null) {
         return <h1>Loading...</h1>;
     }
     //Add section to framework, called from SectionList
     const addSection = ()=>{
-        const newSection = {
-            section_title:"New Section",
-            questions:[]
-        }
-        setSections((prevState) => (
-           [...prevState, newSection]
-        ))
+        const url = `http://localhost:3001/framework/section/new?framework_id=${framework_id}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                setSections((prevState) => (
+                    [...prevState, {...data, questions:[]}]
+                 ))
+            })
+            .catch(console.err);
     }
     //Add question with given section_id, called from EditableSection
     const addQuestion = (section_id) => {
-        const newQuestion = {
-            question_title: "New Question"
-        }
-        setSections((prevState) => (
-            prevState.map(data => {
-                if(data.section_id === section_id ){
-                   return {
-                       section_id: data.section_id,
-                       section_title: data.section_title,
-                       questions: [...data.questions, newQuestion]
-                   }
-                }
-                return data
-            }))
-        )
+        const url = `http://localhost:3001/framework/section/question/new?section_id=${section_id}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                setSections((prevState) => (
+                    prevState.map(section => {
+                        if(section.section_id === section_id ){
+                           return {
+                               section_id: section.section_id,
+                               section_title: section.section_title,
+                               questions: [...section.questions, data]
+                           }
+                        }
+                        return section
+                    }))
+                )
+            })
+            .catch(console.err);
     }
 
     const setActive = () =>{
@@ -121,13 +122,52 @@ function FrameworkOverview({history}){
     }
 
     const handleNewVersion = () =>{
+        const url = `http://localhost:3001/framework/version?framework_id=${framework_id}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // history.replace({
+                //     pathname: "/framework_overview",
+                //     state: {
+                //         framework_id: data.framework_id
+                //     },
+                // }) 
+                history.goBack()
+            })
+            .catch(console.err)
+    }
 
+    const postTitle = (framework_id) => (text) => {
+        const url = `http://localhost:3001/framework/update?framework_id=${framework_id}`;
+        const param = {
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({framework_title: text}),
+            method: "POST"
+        };
+        fetch(url, param)
+            .then((data) => data.text())
+            .then((response) =>{if(response === "The call to the SQL database was successful."){
+                setFrameworkTitle(text)
+            } })
+            .catch(console.err);
     }
     return  <div className="flex_container ">
                 <NavBar>
-                    <TextInput text={frameworkTitle}/>
+                    <TextInput text={frameworkTitle}
+                               title={"Framework Title"}
+                               onSave={postTitle(framework_id)}
+                               disabled={published}
+                    />
                 </NavBar>
+
                 <div className="content scrollable">
+                    {published ?
+                    <Reminder is_hidden = {published}>
+                        <span>
+                            This framework cannot be edited as it has been published, 
+                            click "Save as New" to generate a new copy
+                        </span>
+                    </Reminder> : null}
                     <div className="section_header">Status</div>
                         <StatusSwitch handleChange={setActive} 
                                     value={activeStatus}
@@ -139,12 +179,12 @@ function FrameworkOverview({history}){
                                      published={published}
                                     />         
                     </div>
-                <div className="footer">
-                    <ButtomButton hasPublished={published} 
-                                  isActive={activeStatus}
-                                  handlePublish={handlePublish}
-                                  handleNewVersion={handleNewVersion}/>
-                </div>
+                    <div className="footer">
+                        <ButtomButton hasPublished={published} 
+                                    isActive={activeStatus}
+                                    handlePublish={handlePublish}
+                                    handleNewVersion={handleNewVersion}/>
+                    </div>
 
                
             </div>
@@ -155,10 +195,11 @@ function SectionList(props){
         <div className="content">
             <div className='section_header'>Sections</div>
             <div>
-                {props.sections.map((section, i) => <EditableSection addQuestion={props.addQuestion}
-                                                                     section_index={i} 
-                                                                     section={section}
-                                                                     published={props.published}/>)
+                {props.sections.map((section, i) => 
+                    <EditableSection addQuestion={props.addQuestion}
+                                     section_index={i} 
+                                     section={section}
+                                     published={props.published}/>)
                 }               
                                                                      
             </div>
@@ -187,10 +228,22 @@ function EditableSection(props){
     const toggleSave = (event) => {
         event.preventDefault()
         setActive(!getActive)
-        // Document current text to prevent roll back
-        if(getActive === true){
-            setLastText(getText);
-        }
+        const url = `http://localhost:3001/framework/section/update?section_id=${props.section.section_id}`;
+        const param = {
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({section_title: getText}),
+            method: "POST"
+        };
+        fetch(url, param)
+            .then((data) => data.text())
+            .then((response) =>{
+                if(response === "The call to the SQL database was successful."){
+                // Document current text to prevent roll back
+                    if(getActive === true){
+                        setLastText(getText);
+                    }
+            } })
+            .catch(console.err);
     }
     //Called when user click "x" while editing section title
     const toggleRollBack = (event) =>{
@@ -227,12 +280,13 @@ function EditableSection(props){
                         </div>
                     {/* Button to change the title */}
                     <div className="section_input_button">
-                        {props.published? null :getActive? <span >                                        
-                                        <CheckOutlined className="saveOrNot" onClick={toggleSave}/> 
-                                        <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
-                                    </span>
-                                    :
-                                    <EditOutlined onClick={toggleSave}/>}
+                        {props.published? null :getActive? 
+                            <span >                                        
+                                <CheckOutlined className="saveOrNot" onClick={toggleSave}/> 
+                                <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
+                            </span>
+                            :
+                            <EditOutlined onClick={toggleSave}/>}
                     </div>
                     {/* right button to fold the section */}
                     <div className="right_button">
@@ -242,24 +296,26 @@ function EditableSection(props){
                 </div>   
 
                 <ul className={getExpand? "question_list": null}>
-                    {
-                        getExpand?
-                            <div>{props.section.questions.map(
-                                        (data, i) => <Question 
+                    {getExpand?
+                        <div>{props.section.questions.map(
+                                (data, i) => 
+                                    <Question 
                                         section_index={props.section_index}
                                         question_index={i}
                                         question={data} 
                                         key={i} 
-                                        published={props.published}/>)}
-                                    {props.published? null:
-                                        <div className="clickable new_question"
-                                            onClick={()=>props.addQuestion(props.section.section_id)} >
-                                            Add Question
-                                            <PlusOutlined 
-                                            className="right_button add_button" />
-                                        </div>
-                                    }
-                            </div>
+                                        published={props.published}
+                                    />)}
+
+                                {props.published? null:
+                                    <div className="clickable new_question"
+                                        onClick={()=>props.addQuestion(props.section.section_id)} >
+                                        Add Question
+                                        <PlusOutlined 
+                                        className="right_button add_button" />
+                                    </div>
+                                }
+                        </div>
                         : null
                     }
                 </ul>

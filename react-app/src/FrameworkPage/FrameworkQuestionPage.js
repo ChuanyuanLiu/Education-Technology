@@ -78,9 +78,10 @@ function FrameworkQuestionPage({history}) {
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
                 <NavBar>Question Details</NavBar>
-                <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
+                
             </div>
             <div className='content scrollable'>
+                <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
                 <TextArea
                     title={"Question Title"}
                     text={question_title}

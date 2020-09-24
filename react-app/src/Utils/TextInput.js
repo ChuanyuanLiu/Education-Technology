@@ -7,7 +7,7 @@ import Button3D from './Button3D'
  * @param onSave(text): triggers when the save button is pressed
  * @ignore children
  */
-function TextInput({textAlign,text, onSave=f=>f}) {
+function TextInput({disabled, textAlign,text, onSave=f=>f}) {
     const [getText, setText] = useState(text);
     const [getActive, setActive] = useState(false);
     const text_input = useRef(null);
@@ -36,12 +36,14 @@ function TextInput({textAlign,text, onSave=f=>f}) {
                 disabled={!getActive}
             />
             <div className="right">
-            <Button3D
+            {disabled ? null : 
+                <Button3D
                 on={getActive}
                 onClick={toggleActive}
                 on_text='save'
                 off_text='edit'
-            />
+                />}
+
             </div>
         </div>
     );
