@@ -25,7 +25,7 @@ function FrameworkOverview({history}){
     const [framework_data, setFramework] = useState(null)
     const [activeStatus, setActiveStatus] = useState(0)
     const [published, setPublished] = useState(0)
-    const [frameworkTitle, setFrameworkTitle] = useState("new")
+    const [frameworkTitle, setFrameworkTitle] = useState("")
     const [sections, setSections] = useState([])
     function initializeFramework(data){
         setFrameworkTitle(data.framework_title)
@@ -55,11 +55,10 @@ function FrameworkOverview({history}){
             .then(response => response.json())
             .then(data => {
                 setSections((prevState) => (
-                    [...prevState, data]
+                    [...prevState, {...data, questions:[]}]
                  ))
             })
             .catch(console.err);
-            
     }
     //Add question with given section_id, called from EditableSection
     const addQuestion = (section_id) => {
@@ -76,26 +75,11 @@ function FrameworkOverview({history}){
                                questions: [...section.questions, data]
                            }
                         }
-                        return data
+                        return section
                     }))
                 )
             })
             .catch(console.err);
-        // const newQuestion = {
-        //     question_title: "New Question"
-        // }
-        // setSections((prevState) => (
-        //     prevState.map(data => {
-        //         if(data.section_id === section_id ){
-        //            return {
-        //                section_id: data.section_id,
-        //                section_title: data.section_title,
-        //                questions: [...data.questions, newQuestion]
-        //            }
-        //         }
-        //         return data
-        //     }))
-        // )
     }
 
     const setActive = () =>{
@@ -142,13 +126,13 @@ function FrameworkOverview({history}){
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                history.replace({
-                    pathname: "/framework_overview",
-                    state: {
-                        framework_id: data.framework_id
-                    },
-                }) 
-                
+                // history.replace({
+                //     pathname: "/framework_overview",
+                //     state: {
+                //         framework_id: data.framework_id
+                //     },
+                // }) 
+                history.goBack()
             })
             .catch(console.err)
     }
@@ -211,10 +195,11 @@ function SectionList(props){
         <div className="content">
             <div className='section_header'>Sections</div>
             <div>
-                {props.sections.map((section, i) => <EditableSection addQuestion={props.addQuestion}
-                                                                     section_index={i} 
-                                                                     section={section}
-                                                                     published={props.published}/>)
+                {props.sections.map((section, i) => 
+                    <EditableSection addQuestion={props.addQuestion}
+                                     section_index={i} 
+                                     section={section}
+                                     published={props.published}/>)
                 }               
                                                                      
             </div>
@@ -295,12 +280,13 @@ function EditableSection(props){
                         </div>
                     {/* Button to change the title */}
                     <div className="section_input_button">
-                        {props.published? null :getActive? <span >                                        
-                                        <CheckOutlined className="saveOrNot" onClick={toggleSave}/> 
-                                        <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
-                                    </span>
-                                    :
-                                    <EditOutlined onClick={toggleSave}/>}
+                        {props.published? null :getActive? 
+                            <span >                                        
+                                <CheckOutlined className="saveOrNot" onClick={toggleSave}/> 
+                                <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
+                            </span>
+                            :
+                            <EditOutlined onClick={toggleSave}/>}
                     </div>
                     {/* right button to fold the section */}
                     <div className="right_button">
@@ -310,24 +296,26 @@ function EditableSection(props){
                 </div>   
 
                 <ul className={getExpand? "question_list": null}>
-                    {
-                        getExpand?
-                            <div>{props.section.questions.map(
-                                        (data, i) => <Question 
+                    {getExpand?
+                        <div>{props.section.questions.map(
+                                (data, i) => 
+                                    <Question 
                                         section_index={props.section_index}
                                         question_index={i}
                                         question={data} 
                                         key={i} 
-                                        published={props.published}/>)}
-                                    {props.published? null:
-                                        <div className="clickable new_question"
-                                            onClick={()=>props.addQuestion(props.section.section_id)} >
-                                            Add Question
-                                            <PlusOutlined 
-                                            className="right_button add_button" />
-                                        </div>
-                                    }
-                            </div>
+                                        published={props.published}
+                                    />)}
+
+                                {props.published? null:
+                                    <div className="clickable new_question"
+                                        onClick={()=>props.addQuestion(props.section.section_id)} >
+                                        Add Question
+                                        <PlusOutlined 
+                                        className="right_button add_button" />
+                                    </div>
+                                }
+                        </div>
                         : null
                     }
                 </ul>
