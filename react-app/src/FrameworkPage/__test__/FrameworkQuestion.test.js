@@ -34,11 +34,13 @@ function mock_fetch(is_success, return_value) {
  * Assumes question not published
  * */
 describe("AC 2.2.9", () => {
+
+    const QUESTION_ID = 1;
     
     // Create DOM before each test
     // Assumes fetch has been defined
     function initial_render() {
-        const history = {location: {state: {question_id: 1, published: 0}}};
+        const history = {location: {state: {question_id: QUESTION_ID, published: 0}}};
         return render(<FrameworkQuestionPage history={history} />);
     }
 
@@ -89,6 +91,9 @@ describe("AC 2.2.9", () => {
         fireEvent.click(button);
         // Check if the correct body of the post message has been send
         expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_data));
+        expect(fetch.mock.calls[0][0]).toBe(`http://localhost:3001/framework/section/question/rate/update?question_id=${QUESTION_ID}`)
+        // Only called once
+        expect(fetch.mock.calls.length).toBe(1);
     })
 
     test("Edit question title", async()=> {
@@ -109,6 +114,9 @@ describe("AC 2.2.9", () => {
         fireEvent.click(button);
         // Check if the correct body of the post message has been send
         expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_question_title_data));
+        expect(fetch.mock.calls[0][0]).toBe(`http://localhost:3001/framework/section/question/update?question_id=${QUESTION_ID}`)
+        // Only called once
+        expect(fetch.mock.calls.length).toBe(1);
     })
 });
 
