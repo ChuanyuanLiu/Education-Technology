@@ -312,3 +312,64 @@ describe("POST /framework/section/question/rate/update?question_id={qid}", () =>
     });
 
 });
+
+describe("POST /framework/activestatus/update?framework_id={fid}", () => {
+
+    const framework_id = 1;
+    let prev_status = 0;
+
+    const inputOn = `UPDATE framework`
+        + ` SET framework_active_status = 1`
+        + ` WHERE framework_id = ${framework_id};`;
+
+    const inputOff = `UPDATE framework`
+        + ` SET framework_active_status = 0`
+        + ` WHERE framework_id = ${framework_id};`;
+
+    const inputCheck = `SELECT framework_active_status`
+        + ` FROM framework`
+        + ` WHERE framework_id = ${framework_id};`;
+
+    // Obtain the previous status
+    beforeEach(done => {
+        sqlAdapter.sqlCall(inputCheck, function(prevRes) {
+            prev_status = prevRes[0].framework_active_status;
+            done();
+        });
+    });
+
+    // Reset the status to the previous status after each test
+    afterEach(done => {
+        const resetTable = `UPDATE framework`
+            + ` SET framework_active_status = '${prev_status}'`
+            + ` WHERE framework_id = ${framework_id};`
+        sqlAdapter.sqlCall(resetTable, function(resetRes) {
+            done();
+        });
+    });
+
+    test("Should correctly toggle on the framework active status", done => {
+        sqlAdapter.sqlCall(inputOn + inputCheck, function(inputRes) {
+            expect(inputRes[1][0].framework_active_status).toEqual(1);
+            done();
+        });
+    });
+
+    test("Should correctly toggle off the framework active status", done => {
+        sqlAdapter.sqlCall(inputOff + inputCheck, function(inputRes) {
+            expect(inputRes[1][0].framework_active_status).toEqual(0);
+            done();
+        });
+    });
+
+    test("Should not update the status for an invalid framework ID", done => {
+        const inputInvalidId = `UPDATE framework`
+            + ` SET framework_active_status = '${1 - prev_status}'`
+            + ` WHERE framework_id = 0;`;
+        sqlAdapter.sqlCall(inputInvalidId + inputCheck, function(inputRes) {
+            expect(inputRes[1][0].framework_title).not.toEqual(1 - prev_status);
+            done();
+        }); 
+    });
+
+});
