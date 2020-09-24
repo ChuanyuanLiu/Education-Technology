@@ -1,5 +1,8 @@
 var sqlAdapter = require('../utils/sqlAdapter');
 
+const title_empty = "";
+const id_empty = 0;
+
 afterAll(() => {
     sqlAdapter.closeConnection();
 });

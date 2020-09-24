@@ -12,6 +12,10 @@ function formatSectionHierarchy(joined, checkCompleteness = false) {
 
         let row = joined[i];
         let sid = row.section_id;
+        if (row.defined_section_id != null) {
+            sid = row.defined_section_id;
+        }
+        console.log(sid);
 
         // Initialise new section
         if (!sidToIndex.has(sid)) {
