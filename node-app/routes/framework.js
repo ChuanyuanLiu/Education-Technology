@@ -19,10 +19,10 @@ router.get('/', function (req, res, next) {
             + "FROM framework "
             + "WHERE framework_id = " + req.query.framework_id + ";"
             // 2. Return sections and questions.
-            + "SELECT * "
-            + "FROM framework_section JOIN framework_section_question "
-            + "ON framework_section.section_id = framework_section_question.section_id "
-            + "WHERE framework_section.framework_id = " + req.query.framework_id;
+            + "SELECT *, s.section_id AS defined_section_id "
+            + "FROM framework_section s LEFT JOIN framework_section_question q "
+            + "ON s.section_id = q.section_id "
+            + "WHERE s.framework_id = " + req.query.framework_id;
 
         sqlAdapter.sqlCall(sql, function (frameworkhomepageRes) {
 
