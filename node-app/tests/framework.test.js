@@ -262,13 +262,12 @@ describe("4. GET /framework/version?framework_id={fid}", () => {
                     
                     // Delete the new added data
                     sqlConnector.sqlCall(resetTable, function(res) {
-                    })
-                    
-                    done();                     
+                        done();
+                    });
                 });
             });
         });
-    })
+    });
 
     
     // 2. EC2: The title of new inserted framwork should be 'Old title - Copy'
@@ -280,11 +279,10 @@ describe("4. GET /framework/version?framework_id={fid}", () => {
                     expect(checkRes[0].framework_title).toEqual(oldframework_title + " - Copy");
                     // Delete the new added data
                     sqlConnector.sqlCall(resetTable, function(res) {
-                    })
-    
-                    done();                     
+                        done();
+                    });            
                 });
             });
         });
-    })
+    });
 });
