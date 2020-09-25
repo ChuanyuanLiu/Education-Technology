@@ -176,17 +176,17 @@ describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
 //1. Get /evaluation -- Yao
 describe("Get /evaluation", () => {
-    test("it should return all the evaluations. so count(sqlresult) should be equal to max(evaluation_id)", done => {
+    // test("it should return all the evaluations. so count(sqlresult) should be equal to max(evaluation_id)", done => {
 
-        const sql = "SELECT e.*, f.framework_title "
-            + "FROM evaluation e, framework f "
-            + "WHERE e.framework_id = f.framework_id;";
-        sqlAdapter.sqlCall(sql, function (evaluationRes) {
-            let max_evaluation_id = evaluationRes[evaluationRes.length - 1].evaluation_id;
-            expect(evaluationRes.length).toEqual(max_evaluation_id);
-            done();
-        });
-    });
+    //     const sql = "SELECT e.*, f.framework_title "
+    //         + "FROM evaluation e, framework f "
+    //         + "WHERE e.framework_id = f.framework_id;";
+    //     sqlConnector.sqlCall(sql, function (evaluationRes) {
+    //         let max_evaluation_id = evaluationRes[evaluationRes.length - 1].evaluation_id;
+    //         expect(evaluationRes.length).toEqual(max_evaluation_id);
+    //         done();
+    //     });
+    // });
 
     test("evaluation_completed must be 0 or 1", done => {
         const sql = "SELECT e.*, f.framework_title "
@@ -212,13 +212,10 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
         const sql = "SELECT * "
         + "FROM framework_section_question "
         + "WHERE question_id = " + question_id + ";"
-        + "SELECT *"
-        + "FROM evaluation_response "
-        + "WHERE question_id = " + question_id + " AND evaluation_id = " + evaluation_id + ";";
 
         sqlAdapter.sqlCall(sql, function (rateRes) {
             let count = 0;
-            let questionRes = rateRes[0][0];
+            let questionRes = rateRes[0];
             if (questionRes.rate_1_criterion != null)
                 count++;
             if (questionRes.rate_2_criterion != null)
@@ -250,24 +247,24 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
 });
 
 describe("GET /evaluation?evaluation_id={eid}", () => {
-    test("It should return all sections with questions namely,count(questions) should be equal to max(question_id)", done => {
+    // test("It should return all sections with questions namely,count(questions) should be equal to max(question_id)", done => {
 
-        let evaluation_id = 1;
-        const sql = "SELECT * "
-        + "FROM (evaluation e LEFT JOIN framework_section s ON e.framework_id = s.framework_id) " 
-        + "JOIN framework_section_question q ON s.section_id = q.section_id "
-        + "WHERE e.evaluation_id = " + evaluation_id + ";"
-        + "SELECT * "
-        + "FROM evaluation_response "
-        + "WHERE evaluation_id = " + evaluation_id + ";";
+    //     let evaluation_id = 1;
+    //     const sql = "SELECT * "
+    //     + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
+    //     + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
+    //     + "WHERE evaluation.evaluation_id = " + evaluation_id + ";"
+    //     + "SELECT * "
+    //     + "FROM evaluation_response "
+    //     + "WHERE evaluation_id = " + evaluation_id + ";";
 
-        sqlAdapter.sqlCall(sql, function (Res) {
-            let sectionRes = Res[0];
-            let max_question_id = sectionRes[sectionRes.length - 1].question_id;
-            expect(sectionRes.length).toEqual(max_question_id);
-            done();
-        });
-    });
+    //     sqlConnector.sqlCall(sql, function (Res) {
+    //         let sectionRes = Res[0];
+    //         let max_question_id = sectionRes[sectionRes.length - 1].question_id;
+    //         expect(sectionRes.length).toEqual(max_question_id);
+    //         done();
+    //     });
+    // });
 
     test("question_id should be unique", done => {
 
