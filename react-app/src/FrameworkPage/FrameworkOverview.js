@@ -245,7 +245,8 @@ function SectionList(props){
                                      defaultExpand={props.checkExpand(section.section_id)}
                                      registerExpand={props.registerExpand}
                                      registerUnexpand={props.registerUnexpand}
-                                     expandedSections={props.expandedSections}/>)
+                                     expandedSections={props.expandedSections}
+                    />)
                 }               
                                                                      
             </div>

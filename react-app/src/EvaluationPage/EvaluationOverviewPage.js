@@ -21,6 +21,7 @@ function EvaluationOverviewPage({history}) {
     //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
     const {evaluation_id, framework_id} = history.location.state;
+    const [expandedSections, setExpandedSections] = useState([])
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
@@ -28,6 +29,12 @@ function EvaluationOverviewPage({history}) {
             .then((response) => response.json())
             .then(setEvaluation)
             .catch(console.error);
+        if(history.location.state.session === undefined){
+            var state = history.location.state
+            state.session = []
+            history.replace({...history.location, state})
+        }
+        setExpandedSections(history.location.state.session)
     }, [evaluation_id, framework_id]);
 
     if (evaluation_id == null || framework_id == null) {
@@ -69,6 +76,34 @@ function EvaluationOverviewPage({history}) {
         post_request(url, title, text);
     };
 
+    const saveExpand = (section_id) => {
+        var state = history.location.state
+        if(state.session === undefined){
+            state.session = []
+        }
+        if(!state.session.includes(section_id)){
+            state.session.push(section_id)
+        }
+        setExpandedSections(state.session)
+        history.replace({...history.location, state})
+    }
+    const deletExpand = (section_id) => {
+        //alert("Unregister" + section_id)
+
+        var state = history.location.state
+        if(state.session === undefined){
+            state.session = []
+        }
+        const index = state.session.indexOf(section_id)
+        if(index > -1){
+            state.session.splice(index, 1)
+        }
+        setExpandedSections(state.session)
+        history.replace({...history.location, state})
+    }
+    const checkExpand = (section_id) =>{
+        return expandedSections.includes(section_id)
+    }
     return (
         <div className='EvaluationPage flex_container'>
             <div className='header'>
@@ -94,6 +129,10 @@ function EvaluationOverviewPage({history}) {
                 <SectionsList
                     evaluation_id={evaluation_id}
                     {...evaluation_data}
+                    registerExpand={saveExpand}
+                    registerUnexpand={deletExpand}
+                    checkExpand={checkExpand}
+                    expandedSections={expandedSections}
                 />
             </div>
             <div className='footer'>
@@ -110,7 +149,9 @@ function EvaluationOverviewPage({history}) {
 }
 
 // Display a list of sections
-function SectionsList({evaluation_id, sections}) {
+function SectionsList({evaluation_id, sections, registerExpand,
+                    registerUnexpand,checkExpand,expandedSections}) 
+{
     return (
         <>
             <div className='section_header'>Sections</div>
@@ -120,6 +161,9 @@ function SectionsList({evaluation_id, sections}) {
                     evaluation_id={evaluation_id}
                     section_index={i}
                     {...section}
+                    defaultExpand={checkExpand(section.section_id)}
+                    registerExpand={registerExpand}
+                    registerUnexpand={registerUnexpand}
                 />
             ))}
         </>
@@ -127,14 +171,20 @@ function SectionsList({evaluation_id, sections}) {
 }
 
 // Display a list of questions
-function Section({evaluation_id, section_title, section_index, questions}) {
+function Section({evaluation_id, section_title, section_index, questions,
+                  registerExpand, section_id, registerUnexpand, defaultExpand}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
         event.preventDefault();
+        if(!getExpand){
+            registerExpand(section_id)
+        }else{
+            registerUnexpand(section_id)
+        }
         setExpand(!getExpand);
     };
-
+    useEffect(() => setExpand(defaultExpand),[defaultExpand])
     return (
         <>
             <div
