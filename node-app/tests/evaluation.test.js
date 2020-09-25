@@ -52,6 +52,7 @@ describe("GET /evaluation/new", () => {
 describe("GET /evaluation/new?framework_id={id}", () => {
 
     let framework_id = 1;
+    let evaluation_id = 0;
 
     test("evaluation_id must be unique", done => {
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + framework_id + " );"
@@ -60,7 +61,7 @@ describe("GET /evaluation/new?framework_id={id}", () => {
 
         sqlAdapter.sqlCall(sql, function (evaluationRes) {
             
-            let evaluation_id = evaluationRes[1][0].LAST_INSERT_ID;
+            evaluation_id = evaluationRes[1][0].LAST_INSERT_ID;
             let id_count = 0;
             for (let i = 0; i < evaluationRes[2].length; i++) {
                 if (evaluationRes[2][i].evaluation_id == evaluation_id) {
@@ -69,6 +70,14 @@ describe("GET /evaluation/new?framework_id={id}", () => {
             }
             
             expect(id_count).toEqual(1);
+            done();
+        });
+    });
+
+    afterEach(done => {
+        const resetTable = `DELETE FROM evaluation`
+            + ` WHERE evaluation_id = ${evaluation_id};`
+        sqlAdapter.sqlCall(resetTable, function(resetRes) {
             done();
         });
     });
