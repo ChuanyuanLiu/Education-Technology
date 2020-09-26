@@ -50,7 +50,7 @@ function mock_fetch(is_success, return_value) {
 }
 
 function inital_render() {
-    const history = {location: {state: {framework_id: FRAMEWORK_ID}}, goBack: ()=>{}};
+    const history = {location: {state: {framework_id: FRAMEWORK_ID}}, goBack: ()=>{}, replace:()=>{}};
     return render(<FrameworkOverview history={history} />);
 }
 
@@ -112,7 +112,7 @@ describe("AC 2.2", () => {
             expect(fetch).toHaveBeenCalledTimes(1);
         });
         expect(fetch.mock.calls[0][0]).toBe(get_new_question_url);
-        screen.getByText(/.*New Question.*/);
+        screen.getAllByText(/.*New Question.*/);
     });
 });
 
@@ -163,7 +163,7 @@ describe("AC 2.4", () => {
             expect(fetch).toHaveBeenCalledTimes(1);
         });
 
-        // post active request
+        // post publish request
         global.fetch = mock_fetch(true, {
             text: () => Promise.resolve("success"),
         });
@@ -192,7 +192,7 @@ describe("AC 2.5", () => {
         global.fetch = mock_fetch(true, {
             json: () => Promise.resolve(PUBLISHED_FRAMEWORK_DATA),
         });
-        inital_render();
+        const {getByText} = inital_render();
         await waitForDomChange(() => {
             expect(fetch).toHaveBeenCalledTimes(1);
         });
@@ -202,7 +202,7 @@ describe("AC 2.5", () => {
             json: () => Promise.resolve(UNPUBLISHED_FRAMEWORK_DATA_NEW),
         });
         // switch now display non-active
-        const save_new = screen.getByRole("button", {name: /save as new/i});
+        const save_new = getByText('Save As New');
         fireEvent.click(save_new);
         expect(fetch.mock.calls[0][0]).toBe(create_new_url);
     });
