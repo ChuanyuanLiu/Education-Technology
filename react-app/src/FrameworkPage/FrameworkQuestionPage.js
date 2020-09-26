@@ -19,7 +19,7 @@ const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a p
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
-    const disabled = published == PUBLISHED_TRUE;
+    const disabled = published === PUBLISHED_TRUE;
 
     const [questionData, setQuestion] = useState(null);
     // GET
@@ -53,7 +53,7 @@ function FrameworkQuestionPage({history}) {
         };
         fetch(url, param)
             .then((data) => data.text())
-            .then((data) => {console.log("Posted rating request", data)})
+            .then((data) => {console.log(data)})
             .catch(console.err);
     };
 
@@ -66,7 +66,7 @@ function FrameworkQuestionPage({history}) {
         };
         fetch(url, param)
             .then((data) => data.text())
-            .then((data) => {console.log("Posted title request", data)})
+            .then((data) => {console.log(data)})
             .catch(console.err);
     }
 
@@ -78,7 +78,6 @@ function FrameworkQuestionPage({history}) {
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
                 <NavBar>Question Details</NavBar>
-                <Reminder text={PUBLISHED_MESSAGE} is_hidden={disabled}/>
             </div>
             <div className='content scrollable'>
                 <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
