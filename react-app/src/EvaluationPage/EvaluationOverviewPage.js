@@ -29,6 +29,7 @@ function EvaluationOverviewPage({history}) {
             .then((response) => response.json())
             .then(setEvaluation)
             .catch(console.error);
+        //TODO, Why is session included in useEffect?
         if(history.location.state.session === undefined){
             var state = history.location.state
             state.session = []

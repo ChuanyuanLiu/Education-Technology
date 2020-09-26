@@ -19,7 +19,7 @@ const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a p
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
-    const disabled = published == PUBLISHED_TRUE;
+    const disabled = published === PUBLISHED_TRUE;
 
     const [questionData, setQuestion] = useState(null);
     // GET

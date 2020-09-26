@@ -250,6 +250,7 @@ function SectionList(props){
                                      registerExpand={props.registerExpand}
                                      registerUnexpand={props.registerUnexpand}
                                      expandedSections={props.expandedSections}
+                                     key={i}
                     />)
                 }               
                                                                      

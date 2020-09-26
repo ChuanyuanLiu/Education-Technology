@@ -17,8 +17,6 @@ function QuestionPage({history}) {
     const {evaluation_id, question_id} = history.location.state;
     const [question_data, setQuestion] = useState(null);
 
-    console.log(fetch);
-
     //TODO, catch connection reused error on screen
     useEffect(() => {
         fetch(
