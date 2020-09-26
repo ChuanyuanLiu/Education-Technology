@@ -20,6 +20,10 @@ Framework Overview Page
     |-- Footer
 */
 
+/**
+ * FrameworkOverview Page that lists all sections and questions related to the framework
+ * @param {int} history.location.state.framework_id 
+ * */
 function FrameworkOverview({history}){
     const {framework_id} = history.location.state
     const [framework_data, setFramework] = useState(null)

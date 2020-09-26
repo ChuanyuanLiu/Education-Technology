@@ -10,6 +10,8 @@ import post_data from "./post_rate_criterions.json"
 import post_question_title_data from "./post_question_title.json"
 
 // Mock fetch by redefining it as a jest function before testing
+const QUESTION_ID = 1;
+
 function mock_fetch(is_success, return_value) {
     const fetch = jest.fn();
     if (is_success) {
@@ -24,18 +26,12 @@ function mock_fetch(is_success, return_value) {
     return fetch;    
 }
 
-
-/** Acceptance test 2.2.8
- * Gerald updates New question's rating explanations with appropriate text
- *  */
-
 /** Acceptance test 2.2.9
  * Gerald can edit the existing questions into what he wants 
  * Assumes question not published
  * */
 describe("AC 2.2.9", () => {
 
-    const QUESTION_ID = 1;
     
     // Create DOM before each test
     // Assumes fetch has been defined
@@ -49,6 +45,15 @@ describe("AC 2.2.9", () => {
     afterEach(()=>{
         fetch.mockClear();
         cleanup();
+    });
+
+    test("Correct fetch request", async ()=> {
+        global.fetch = mock_fetch(true, {json:()=>Promise.resolve(get_data)});
+        initial_render();
+
+        await waitForDomChange(()=> expect(fetch).toHaveBeenCalledTimes(1));
+
+        expect(fetch.mock.calls[0][0]).toBe(`http://localhost:3001/framework?question_id=${QUESTION_ID}`);
     });
 
     test("5 text areas", async () => {
@@ -127,7 +132,7 @@ describe("Publishing logic", () => {
 
     // Create DOM before each test
     function initial_render() {
-        const history = {location: {state: {question_id: 1, published: 1}}};
+        const history = {location: {state: {question_id: QUESTION_ID, published: 1}}};
         return render(<FrameworkQuestionPage history={history} />);
     }
 

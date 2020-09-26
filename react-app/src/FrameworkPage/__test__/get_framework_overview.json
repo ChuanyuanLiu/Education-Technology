@@ -1,0 +1,28 @@
+{
+    "framework_id": 1,
+    "framework_title": "Primary EdTech Framework",
+    "framework_author": "Gerald",
+    "framework_creation_time": "2020-08-28 20:00:45",
+    "framework_active_status": 1,
+    "framework_published": 0,
+    "sections": [
+        {
+            "section_id": 1,
+            "section_title": "Educational Theory",
+            "questions": [
+                {
+                    "question_id": 1,
+                    "question_title": "Content Model"
+                },
+                {
+                    "question_id": 2,
+                    "question_title": "Learner Model"
+                },
+                {
+                    "question_id": 3,
+                    "question_title": "Pedagogical Model"
+                }
+            ]
+        }
+    ]
+}
