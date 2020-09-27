@@ -105,9 +105,8 @@ function FrameworkOverview({history}){
             body: JSON.stringify(newActiveStatus),
             method: "POST",
         }
+        // Had to remove the .then(data=>data.text()) because it caused an error in testing.
         fetch(url, param)
-            .then((data) => data.text())
-            .then(console.log)
             .catch(console.err);
         setActiveStatus(
             (prevState) => {return (1 - prevState)}
