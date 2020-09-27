@@ -31,7 +31,7 @@ $ git push #Push all changed files on your branch
 $ git checkout dev #Switched to branch 'dev'
 $ git merge feature/username/task_name #Updating ea1b82a..05e9557 (Summary of changes)
 $ git branch -d feature/username/task_name #Deleted branch feature/username/task_name (was 05e9557).
-$ git push origin dev
+Create a pull request on Bitbucket, add front/back end teammate and architecture lead as reviewer.
 ```
 
 ## Setup
