@@ -208,7 +208,7 @@ router.post('/section/update', function (req, res, next) {
 });
 
 // Delete the section of the framework
-router.post('/section/delete', function (req, res, next) {
+router.get('/section/delete', function (req, res, next) {
 
     // Example: http://localhost:3001/framework/section/delete?section_id=1
     // First, delete all the questions inside the section
@@ -397,7 +397,7 @@ router.post('/section/question/rate/update', function (req, res, next) {
 });
 
 // Delete the question of the section
-router.post('/section/question/delete', function (req, res, next) {
+router.get('/section/question/delete', function (req, res, next) {
 
     // Example: http://localhost:3001/framework/section/question/delete?question_id=1
 
