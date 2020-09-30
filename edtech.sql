@@ -45,7 +45,7 @@ CREATE TABLE `evaluation` (
 --
 
 LOCK TABLES `evaluation` WRITE;
-INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',1,1);
+INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',0,1);
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -76,6 +76,7 @@ CREATE TABLE `evaluation_response` (
 
 LOCK TABLES `evaluation_response` WRITE;
 /*!40000 ALTER TABLE `evaluation_response` DISABLE KEYS */;
+INSERT INTO `evaluation_response` VALUES (1,1,'This is a comment.',1),(2,1,'This is a comment.',1),(3,1,'This is a comment.',1),(4,1,'This is a comment.',1),(5,1,'This is a comment.',1),(6,1,'This is a comment.',1),(7,1,'This is a comment.',1),(8,1,'This is a comment.',1),(9,1,'This is a comment.',1),(10,1,'This is a comment.',1),(11,1,'This is a comment.',1),(12,1,'This is a comment.',1),(13,1,'This is a comment.',1),(14,1,'This is a comment.',1),(15,1,'This is a comment.',1),(16,1,'This is a comment.',1),(17,1,'This is a comment.',1),(18,1,'This is a comment.',1),(19,1,'This is a comment.',1),(20,1,'This is a comment.',1),(21,1,'This is a comment.',1),(22,1,'This is a comment.',1),(23,1,'This is a comment.',1);
 /*!40000 ALTER TABLE `evaluation_response` ENABLE KEYS */;
 UNLOCK TABLES;
 
