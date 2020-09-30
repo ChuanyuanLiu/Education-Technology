@@ -378,7 +378,7 @@ router.post('/section/question/rate/update', function (req, res, next) {
         var rate_4_criterion = req.body.rate_4_criterion;
         var rate_5_criterion = req.body.rate_5_criterion;
         var question_id = req.query.question_id;
-        // console.log(rate_1_criterion);
+
         const sql = "UPDATE framework_section_question "
             + "SET rate_1_criterion = '" + rate_1_criterion
             + "', rate_2_criterion = '" + rate_2_criterion
