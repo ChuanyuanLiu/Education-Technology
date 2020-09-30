@@ -207,6 +207,36 @@ router.post('/section/update', function (req, res, next) {
     }
 });
 
+// Delete the section of the framework
+router.post('/section/delete', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/section/delete?section_id=1
+    // First, delete all the questions inside the section
+    if (req.query.section_id != null) {
+        var section_id = req.query.section_id;
+        const sql1 = "DELETE FROM framework_section_question "
+        + "WHERE section_id = " + section_id ;
+
+        sqlAdapter.sqlCall(sql1, function (deleteSection) {
+            if (deleteSection == null || JSON.stringify(deleteSection) == '[]') {
+                res.send(unsuccessful);
+                return;
+            }
+            // Then, delete the section
+            const sql2 = "DELETE FROM framework_section "
+            + "WHERE section_id = " + section_id ;
+            sqlAdapter.sqlCall(sql2, function (deleteSection2) {
+                if (deleteSection2 == null || JSON.stringify(deleteSection2) == '[]') {
+                    res.send(unsuccessful);
+                    return;
+                }
+
+                res.send(successful);
+            });
+        });
+    }
+});
+
 //Update framework details 
 router.post('/update', function(req, res, next){
    // Example: http://localhost:3001/framework/update?framework_id=1 
@@ -362,6 +392,27 @@ router.post('/section/question/rate/update', function (req, res, next) {
                 return;
             }
             res.send(successful);
+        });
+    }
+});
+
+// Delete the question of the section
+router.post('/section/question/delete', function (req, res, next) {
+
+    // Example: http://localhost:3001/framework/section/question/delete?question_id=1
+
+    if (req.query.question_id != null) {
+        var question_id = req.query.question_id;
+        const sql = "DELETE FROM framework_section_question "
+        + "WHERE question_id = " + question_id ;
+
+        sqlAdapter.sqlCall(sql, function (deleteQuestion) {
+            if (deleteQuestion == null || JSON.stringify(deleteQuestion) == '[]') {
+                res.send(unsuccessful);
+                return;
+            }
+
+             res.send(successful);
         });
     }
 });
