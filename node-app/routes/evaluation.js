@@ -139,7 +139,6 @@ router.get('/', function (req, res, next) {
                     }
                 }
             
-                console.log(cleanRes);
                 res.send(cleanRes);
 
             });
