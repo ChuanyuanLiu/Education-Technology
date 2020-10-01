@@ -200,29 +200,31 @@ function FrameworkOverview({history}){
                                disabled={published}
                     />
                 </NavBar>
-
-                <div className="content scrollable">
-                    {published ?
+                {published ?
                     <Reminder is_hidden = {published}>
                         <span>
                             This framework cannot be edited as it has been published, 
                             click "Save as New" to generate a new copy
                         </span>
                     </Reminder> : null}
-                    <div className="section_header">Status</div>
-                        <StatusSwitch handleChange={setActive} 
-                                    value={activeStatus}
-                                    switchName="Active"
-                                    disabled={!published} />
-                        <SectionList addSection={addSection}
-                                     addQuestion={addQuestion} 
-                                     sections={sections}
-                                     published={published}
-                                     registerExpand={saveExpand}
-                                     registerUnexpand={deletExpand}
-                                     checkExpand={checkExpand}
-                                     expandedSections={expandedSections}
-                                    />         
+                <div className= "element_container scrollable">
+                    <div className="content scrollable">
+
+                        <div className="section_header">Status</div>
+                            <StatusSwitch handleChange={setActive} 
+                                        value={activeStatus}
+                                        switchName="Active"
+                                        disabled={!published} />
+                            <SectionList addSection={addSection}
+                                        addQuestion={addQuestion} 
+                                        sections={sections}
+                                        published={published}
+                                        registerExpand={saveExpand}
+                                        registerUnexpand={deletExpand}
+                                        checkExpand={checkExpand}
+                                        expandedSections={expandedSections}
+                                        />         
+                        </div>
                     </div>
                     <div className="footer">
                         <ButtomButton hasPublished={published} 
@@ -230,6 +232,7 @@ function FrameworkOverview({history}){
                                     handlePublish={handlePublish}
                                     handleNewVersion={handleNewVersion}/>
                     </div>
+
 
                
             </div>
@@ -258,7 +261,7 @@ function SectionList(props){
                 <div className="editable_section clickable new_section"
                     onClick={props.addSection}>
                     Add Section
-                    <PlusOutlined onClick={props.handleClick} className="right_button add_button" />
+                    <PlusOutlined onClick={props.handleClick} className="left_button add_button" />
                 </div>}
         </div>
     ) 
@@ -326,6 +329,11 @@ function EditableSection(props){
 
     return <div>
                 <div className="editable_section" >
+                                        {/* right button to fold the section */}
+                    <div className="left_button">
+                        {getExpand? <DownOutlined onClick={toggleExpand}/> : 
+                                    <RightOutlined onClick={toggleExpand}/>}                    
+                    </div>
                     {/* Can be used to question edit page */}
                     <div className="section_input clickable" onClick={getActive? null: toggleExpand}> 
                         <span>Section {props.section_index + 1}</span>
@@ -336,7 +344,7 @@ function EditableSection(props){
                                                 onChange={handleChange}
                                     />: <span> {getText} </span>         
                             }
-                        </div>
+                    </div>
                     {/* Button to change the title */}
                     <div className="section_input_button">
                         {props.published? null :getActive? 
@@ -346,11 +354,6 @@ function EditableSection(props){
                             </span>
                             :
                             <EditOutlined onClick={toggleSave}/>}
-                    </div>
-                    {/* right button to fold the section */}
-                    <div className="right_button">
-                        {getExpand? <DownOutlined onClick={toggleExpand}/> : 
-                                    <RightOutlined onClick={toggleExpand}/>}                    
                     </div>
                 </div>   
 
@@ -372,7 +375,7 @@ function EditableSection(props){
                                         onClick={()=>props.addQuestion(props.section.section_id)} >
                                         Add Question
                                         <PlusOutlined 
-                                        className="right_button add_button" />
+                                        className="left_button add_button" />
                                     </div>
                                 }
                         </div>
@@ -399,7 +402,7 @@ function Question(props){
     }
     return <div className="Question clickable" onClick={handleClick}>
                 {props.section_index + 1}.{props.question_index + 1} {props.question.question_title}
-                <RightOutlined className="right_button" />
+                <RightOutlined className="left_button" />
            </div>
 }
 

@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import Button3D from "./Button3D";
+import { EditOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons"
+
 
 /**
  * Display a header with title and a button to toggle edit on a large text area
@@ -20,6 +22,7 @@ function TextArea({
 }) {
     // track changes to text
     const [getText, setText] = useState(text);
+    const [getPrevText, setPrevText] = useState(text);
     const appendText = (event) => {
         setText(event.target.value);
     };
@@ -30,29 +33,35 @@ function TextArea({
         // Save when the button transition from active (save) to edit
         if (getActive) {
             onSave(getText);
+            setPrevText(getText);
         }
         setActive(!getActive);
     };
 
-    const button = disabled ? <div/> : (
-        <Button3D
-            on={getActive}
-            onClick={toggleActive}
-            on_text='save'
-            off_text='edit'
-            name={title}
-        />
-    );
-
+    const toggleRollBack = () => {
+        if(getActive){
+            setText(getPrevText)
+        }
+        setActive(!getActive)
+    }
     return (
-        <form className='TextArea'>
+            <form className='TextArea'>
             <div className='section_header'>
                 <label name={title} htmlFor={title}>
                     {title}
                 </label>
-                <div className='right'>{button}</div>
+                <div className="section_input_button">
+                {disabled? null :
+                    getActive? 
+                        <span >                                        
+                            <CheckOutlined className="saveOrNot" onClick={toggleActive}/> 
+                            <CloseOutlined className="saveOrNot" onClick={toggleRollBack}/>
+                        </span>
+                        :
+                        <EditOutlined onClick={toggleActive}/>}
+                </div>
             </div>
-            <div className='container'>
+            <div className="container">
                 <textarea
                     name={title}
                     id={title}
@@ -60,9 +69,11 @@ function TextArea({
                     onChange={appendText}
                     value={getText}
                 />
-                <div className='hidden'>{text_to_html(getText)}</div>
             </div>
+                {/* <div className='hidden'>{text_to_html(getText)}</div> */}
+
         </form>
+        
     );
 }
 

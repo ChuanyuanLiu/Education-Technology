@@ -5,6 +5,7 @@ import Button3D from "../Utils/Button3D";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
+import {RightOutlined, DownOutlined} from "@ant-design/icons"
 /*
 (Route from EvaluationInfo)
 Evaluation Overview Page
@@ -118,15 +119,18 @@ function EvaluationOverviewPage({history}) {
                     />
                 </NavBar>
             </div>
-            <div className='content'>
-                <TextArea
-                    title='Summary'
-                    text={evaluation_data.evaluation_summary}
-                    onSave={post_summary_request(
-                        post_url,
-                        evaluation_data.evaluation_title
-                    )}
-                />
+            <div className='content scrollable element_container'>
+                <div>
+                    <TextArea
+                        title='Summary'
+                        text={evaluation_data.evaluation_summary}
+                        onSave={post_summary_request(
+                            post_url,
+                            evaluation_data.evaluation_title
+                        )}
+                    />
+                </div>
+
                 <SectionsList
                     evaluation_id={evaluation_id}
                     {...evaluation_data}
@@ -188,19 +192,16 @@ function Section({evaluation_id, section_title, section_index, questions,
     useEffect(() => setExpand(defaultExpand),[defaultExpand])
     return (
         <>
+
             <div
                 onClick={toggleExpand}
                 className={"sub_header clickable " + (getExpand ? "on" : "")}
             >
-                {`Section ${section_index + 1} ${section_title}`}
-                <div className='right'>
-                    <Button3D
-                        on={getExpand}
-                        onClick={toggleExpand}
-                        on_text='collapse'
-                        off_text='expand'
-                    />
+                <div className="left_button">
+                    {getExpand? <DownOutlined onClick={toggleExpand}/> : 
+                                <RightOutlined onClick={toggleExpand}/>}                    
                 </div>
+                {`Section ${section_index + 1} ${section_title}`}
             </div>
             <ul>
                 {getExpand

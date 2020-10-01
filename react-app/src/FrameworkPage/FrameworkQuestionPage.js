@@ -3,6 +3,7 @@ import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
 import Reminder from "../Utils/Reminder";
 import {Divider} from 'antd'
+import TextInput from "../Utils/TextInput"
 
 /**
  * Route from Framework Overview Page
@@ -77,17 +78,17 @@ function FrameworkQuestionPage({history}) {
      return (
         <div className='FrameworkQuestionPage flex_container'>
             <div className='header'>
-                <NavBar>Question Details</NavBar>
+                <NavBar>      
+                    <TextInput
+                        title={"Question Title"}
+                        text={question_title}
+                        onSave={post_title(question_id)}
+                        disabled={disabled}
+                    />
+                </NavBar>
             </div>
-            <div className='content scrollable'>
+            <div className='content scrollable element_container'>
                 <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
-                <TextArea
-                    title={"Question Title"}
-                    text={question_title}
-                    onSave={post_title(question_id)}
-                    disabled={disabled}
-                />
-                <Divider/>
                 <RatingList
                     post_request={post_request}
                     {...questionData}
