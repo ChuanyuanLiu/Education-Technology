@@ -685,7 +685,7 @@ describe("4. GET /framework/version?framework_id={fid}", () => {
     });
 
     
-    // 2. EC2: The title of new inserted framwork should be 'Old title - Copy'
+    // 2. EC2: The title of newly inserted framework should be 'Old title - Copy'
     test("Should insert the new framework in the database", done => {
         sqlAdapter.sqlCall(getOldFramework_title, function(inputRes) {
             let oldframework_title = inputRes[0].framework_title;

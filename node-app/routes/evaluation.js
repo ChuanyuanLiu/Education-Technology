@@ -109,8 +109,37 @@ router.get('/', function (req, res, next) {
                 let cleanRes = evalRes[0];
                 cleanRes.sections = jsonUtils.formatSectionHierarchy(respRes, true);
 
-                res.send(cleanRes);
+                // Update the completed status to 1(true) if all sections are completed
+                if(cleanRes.evaluation_completed == 0)
+                {
+                    let evaluation_completed = 1;
+                    for (let i = 0; i < cleanRes.sections.length; i++)
+                    {
+                        if (cleanRes.sections[i].section_completed == 0)
+                        {
+                            evaluation_completed = 0;
+                            break;
+                        }
+                    }
 
+                    cleanRes.evaluation_completed = evaluation_completed;
+                    
+                    // Update the database if all sections are completed
+                    if (evaluation_completed == 1)
+                    {
+                        
+                        const updateCompletedSql = "UPDATE evaluation SET evaluation_completed = 1 WHERE evaluation_id = " + req.query.evaluation_id;
+                        sqlAdapter.sqlCall(updateCompletedSql, function (updateCompletedRes) {
+
+                            if (updateCompletedRes == null || JSON.stringify(updateCompletedRes) == '[]') {
+                                res.send(unsuccessful);
+                                return;
+                            }
+                        });
+                    }
+                }
+            
+                res.send(cleanRes);
             });
         });
 
