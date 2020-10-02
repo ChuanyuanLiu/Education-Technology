@@ -207,24 +207,21 @@ function FrameworkOverview({history}){
                             click "Save as New" to generate a new copy
                         </span>
                     </Reminder> : null}
-                <div className= "element_container scrollable">
-                    <div className="content scrollable">
-
-                        <div className="section_header">Status</div>
-                            <StatusSwitch handleChange={setActive} 
-                                        value={activeStatus}
-                                        switchName="Active"
-                                        disabled={!published} />
-                            <SectionList addSection={addSection}
-                                        addQuestion={addQuestion} 
-                                        sections={sections}
-                                        published={published}
-                                        registerExpand={saveExpand}
-                                        registerUnexpand={deletExpand}
-                                        checkExpand={checkExpand}
-                                        expandedSections={expandedSections}
-                                        />         
-                        </div>
+                <div className= "scrollable content">
+                    <div className="section_header">Status</div>
+                        <StatusSwitch handleChange={setActive} 
+                                    value={activeStatus}
+                                    switchName="Active"
+                                    disabled={!published} />
+                        <SectionList addSection={addSection}
+                                    addQuestion={addQuestion} 
+                                    sections={sections}
+                                    published={published}
+                                    registerExpand={saveExpand}
+                                    registerUnexpand={deletExpand}
+                                    checkExpand={checkExpand}
+                                    expandedSections={expandedSections}
+                                    />         
                     </div>
                     <div className="footer">
                         <ButtomButton hasPublished={published} 
@@ -232,9 +229,7 @@ function FrameworkOverview({history}){
                                     handlePublish={handlePublish}
                                     handleNewVersion={handleNewVersion}/>
                     </div>
-
-
-               
+    
             </div>
 }
 

@@ -87,7 +87,7 @@ function FrameworkQuestionPage({history}) {
                     />
                 </NavBar>
             </div>
-            <div className='content scrollable element_container'>
+            <div className='content scrollable'>
                 <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
                 <RatingList
                     post_request={post_request}

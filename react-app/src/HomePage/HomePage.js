@@ -45,12 +45,12 @@ function PageOptionList(props) {
 function HomePage(props) {
     return (
         <div className='HomePage'>
-            <Layout>
+
                 <NavBar> Home </NavBar>
                 <Content >
                     <PageOptionList />
                 </Content>
-            </Layout>
+
         </div>
     );
 }

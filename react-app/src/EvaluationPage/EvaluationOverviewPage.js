@@ -119,7 +119,7 @@ function EvaluationOverviewPage({history}) {
                     />
                 </NavBar>
             </div>
-            <div className='content scrollable element_container'>
+            <div className='content scrollable '>
                 <div>
                     <TextArea
                         title='Summary'

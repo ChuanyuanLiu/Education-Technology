@@ -178,18 +178,18 @@ body,
 #big_button {
     padding: 5px 100px 5px 100px;
     min-width: 300px;
+    height: 50px;
     border-radius: 10px;
     color: white;
-    background-color: var(--tint_color);
+    background-color: var(--primary_color);
     font-size: medium;
-    box-shadow: 2px 8px black, -2px 8px black;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    font-size: large;
 }
 
 #big_button:hover {
-    box-shadow: 0px 2px black;
     position: relative;
-    font-weight: bold;
-    top: 6px;
+    top: 2px;
 }
 /* present element in a list, element includes evaluation/framework/report */
 .elementInfo  {
@@ -281,6 +281,7 @@ body,
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
-    background-color: white;
+    background-color: #f0f2f5;
     height: 100%;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 8px 16px 0 rgba(0, 0, 0, 0.19);
 }

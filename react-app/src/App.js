@@ -14,19 +14,23 @@ import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview";
 import FrameworkQuestionPage from "./FrameworkPage/FrameworkQuestionPage";
 function App(){
     return (
-        <React.StrictMode>
-            <Router >
-                <Route exact path='/' component={Login} />
-                <Route path='/home_page' component={HomePage}/>
-                <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
-                <Route path='/evaluation' component={Evaluation}/>
-                <Route path='/question' component={QuestionPage} />
-                <Route path='/new_evaluation' component={FrameworkSelection} />
-                <Route path='/framework' component={FrameworkPage} />
-                <Route path='/framework_overview' component={FrameworkOverviewPage} />
-                <Route path='/framework_question' component={FrameworkQuestionPage} />
-            </Router>
-         </React.StrictMode>
+        <div className='element_container'>
+            <React.StrictMode>
+                <Router >
+                    <Route exact path='/' component={Login} />
+                    <Route path='/home_page' component={HomePage}/>
+                    <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
+                    <Route path='/evaluation' component={Evaluation}/>
+                    <Route path='/question' component={QuestionPage} />
+                    <Route path='/new_evaluation' component={FrameworkSelection} />
+                    <Route path='/framework' component={FrameworkPage} />
+                    <Route path='/framework_overview' component={FrameworkOverviewPage} />
+                    <Route path='/framework_question' component={FrameworkQuestionPage} />
+                </Router>
+            </React.StrictMode>
+
+        </div>
+
     )
 }
 

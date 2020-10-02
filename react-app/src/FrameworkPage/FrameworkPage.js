@@ -61,7 +61,7 @@ class FrameworkPage extends Component {
                         <SearchBar />
                     </NavBar>
                 </div>
-                <div className='content scrollable element_container'>
+                <div className='content scrollable'>
                     {frameworkList}
                 </div>
                 <div className='footer'>

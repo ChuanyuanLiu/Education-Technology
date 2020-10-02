@@ -37,7 +37,7 @@ class EvaluationPage extends React.Component {
                         <SearchBar />
                     </NavBar>
                 </div>
-                <div className='content scrollable element_container'>
+                <div className='content scrollable'>
                     {evaluationlist} 
                 </div>
                 <div className='footer'>
