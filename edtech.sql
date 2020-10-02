@@ -34,6 +34,7 @@ CREATE TABLE `evaluation` (
   `evaluation_summary` varchar(10000) NOT NULL DEFAULT '',
   `evaluation_completed` tinyint NOT NULL DEFAULT 0,
   `framework_id` int NOT NULL,
+  `evaluation_finalised` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`evaluation_id`),
   KEY `framework_id_idx` (`framework_id`),
   CONSTRAINT `evaluation_framework_id` FOREIGN KEY (`framework_id`) REFERENCES `framework` (`framework_id`)
@@ -45,7 +46,7 @@ CREATE TABLE `evaluation` (
 --
 
 LOCK TABLES `evaluation` WRITE;
-INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',0,1);
+INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',0,1,0);
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -93,7 +94,7 @@ CREATE TABLE `framework` (
   `framework_author` varchar(50) NOT NULL DEFAULT 'Author',
   `framework_creation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `framework_active_status` tinyint NOT NULL DEFAULT 0,
-  `framework_published` tinyint NOT NULL DEFAULT 0,
+  `framework_finalised` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`framework_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -183,6 +184,7 @@ CREATE TABLE `report` (
   `report_recommendation` varchar(10000) NOT NULL DEFAULT '',
   `report_published` tinyint NOT NULL DEFAULT 0,
   `evaluation_id` int NOT NULL,
+  `report_generated` longblob NULL,
   PRIMARY KEY (`report_id`),
   KEY `evaluation_id_idx` (`evaluation_id`),
   CONSTRAINT `evaluation_id` FOREIGN KEY (`evaluation_id`) REFERENCES `evaluation` (`evaluation_id`)
