@@ -41,7 +41,7 @@ router.get('/', function (req, res, next) {
             cleanRes.framework_author = frameworkRes.framework_author;
             cleanRes.framework_creation_time = frameworkRes.framework_creation_time;
             cleanRes.framework_active_status = frameworkRes.framework_active_status;
-            cleanRes.framework_published = frameworkRes.framework_published;
+            cleanRes.framework_finalised = frameworkRes.framework_finalised;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
         });
@@ -310,7 +310,7 @@ router.get('/version', function (req, res, next) {
             cleanRes.framework_author = frameworkRes.framework_author;
             cleanRes.framework_creation_time = frameworkRes.framework_creation_time;
             cleanRes.framework_active_status = frameworkRes.framework_active_status;
-            cleanRes.framework_published = frameworkRes.framework_published;
+            cleanRes.framework_finalised = frameworkRes.framework_finalised;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
         });
@@ -438,16 +438,16 @@ router.post('/activestatus/update', function (req, res, next) {
     }
 });
 
-// Update the published status
-router.post('/publishstatus/update', function (req, res, next) {
+// Update the finalised status
+router.post('/finalisedstatus/update', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/publishstatus/update?framework_id={fid}
+    // Example: http://localhost:3001/framework/finalisedstatus/update?framework_id={fid}
     if (req.query.framework_id != null) {
-        let framework_publish_status = req.body.framework_publish_status;
+        let framework_finalised_status = req.body.framework_finalised_status;
         const sql = "UPDATE framework "
-            + "SET framework_published = " + framework_publish_status
+            + "SET framework_finalised = " + framework_finalised_status
             + " WHERE framework_id = " + req.query.framework_id
-            + " AND framework_published = 0";
+            + " AND framework_finalised = 0";
 
         sqlAdapter.sqlCall(sql, function (updateActive) {
             if (updateActive == null || JSON.stringify(updateActive) == '[]') {
