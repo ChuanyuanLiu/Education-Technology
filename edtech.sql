@@ -184,7 +184,7 @@ CREATE TABLE `report` (
   `report_recommendation` varchar(10000) NOT NULL DEFAULT '',
   `report_published` tinyint NOT NULL DEFAULT 0,
   `evaluation_id` int NOT NULL,
-  `report_generated` longblob NULL,
+  `report_csv` longblob NULL,
   PRIMARY KEY (`report_id`),
   KEY `evaluation_id_idx` (`evaluation_id`),
   CONSTRAINT `evaluation_id` FOREIGN KEY (`evaluation_id`) REFERENCES `evaluation` (`evaluation_id`)
