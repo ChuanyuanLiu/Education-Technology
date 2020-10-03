@@ -5,8 +5,8 @@ var sqlAdapter = require('../utils/sqlAdapter');
 var jsonUtils = require('../utils/jsonUtils');
 const { response } = require('express');
 
-const unsuccessful = "The call to the SQL database was unsuccessful.";
-const successful = "The call to the SQL database was successful."
+const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
+const SUCCESSFUL = "The call to the SQL database was successful."
 
 router.get('/', function (req, res, next) {
 
@@ -27,7 +27,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (frameworkhomepageRes) {
 
             if (frameworkhomepageRes == null || JSON.stringify(frameworkhomepageRes) == '[[],[]]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -41,7 +41,7 @@ router.get('/', function (req, res, next) {
             cleanRes.framework_author = frameworkRes.framework_author;
             cleanRes.framework_creation_time = frameworkRes.framework_creation_time;
             cleanRes.framework_active_status = frameworkRes.framework_active_status;
-            cleanRes.framework_published = frameworkRes.framework_published;
+            cleanRes.framework_finalised = frameworkRes.framework_finalised;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
         });
@@ -57,7 +57,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
             if (rateRes == null || JSON.stringify(rateRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
             let Res = rateRes[0];
@@ -92,7 +92,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
 
             if (frameworkRes == null) {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -116,7 +116,7 @@ router.get('/new', function (req, res, next) {
             sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
 
                 if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
                 let cleanRes = {};
@@ -143,7 +143,7 @@ router.get('/section/new', function (req, res, next) {
             sqlAdapter.sqlCall(sqlSection, function (sqlRes) {
 
                 if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
                 let cleanRes = {};
@@ -172,7 +172,7 @@ router.get('/section/question/new', function (req, res, next){
             sqlAdapter.sqlCall(sqlQuestion, function (sqlRes) {
 
                 if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
             let cleanRes = {};
@@ -198,11 +198,11 @@ router.post('/section/update', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (updateSection) {
             if (updateSection == null || JSON.stringify(updateSection) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });
@@ -219,7 +219,7 @@ router.get('/section/delete', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql1, function (deleteSection) {
             if (deleteSection == null || JSON.stringify(deleteSection) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
             // Then, delete the section
@@ -227,11 +227,11 @@ router.get('/section/delete', function (req, res, next) {
             + "WHERE section_id = " + section_id ;
             sqlAdapter.sqlCall(sql2, function (deleteSection2) {
                 if (deleteSection2 == null || JSON.stringify(deleteSection2) == '[]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
 
-                res.send(successful);
+                res.send(SUCCESSFUL);
             });
         });
     }
@@ -249,11 +249,11 @@ router.post('/update', function(req, res, next){
    
     sqlAdapter.sqlCall(sql, function (updateFramework) {
         if (updateFramework == null || JSON.stringify(updateFramework) == '[]') {
-            res.send(unsuccessful);
+            res.send(UNSUCCESSFUL);
             return;
         }
 
-        res.send(successful);
+        res.send(SUCCESSFUL);
     });
 }
 });
@@ -297,7 +297,7 @@ router.get('/version', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (frameworkversionRes) {
 
             if (frameworkversionRes == null || JSON.stringify(frameworkversionRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -310,7 +310,7 @@ router.get('/version', function (req, res, next) {
             cleanRes.framework_author = frameworkRes.framework_author;
             cleanRes.framework_creation_time = frameworkRes.framework_creation_time;
             cleanRes.framework_active_status = frameworkRes.framework_active_status;
-            cleanRes.framework_published = frameworkRes.framework_published;
+            cleanRes.framework_finalised = frameworkRes.framework_finalised;
             cleanRes.sections = jsonUtils.formatSectionHierarchy(questionRes);
             res.send(cleanRes);
         });
@@ -337,10 +337,10 @@ router.post('/section/question/rate/update', function (req, res, next) {
             + "' WHERE question_id = " + question_id;
         sqlAdapter.sqlCall(sql, function (updateQuestion) {
             if (updateQuestion == null || JSON.stringify(updateQuestion) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });
@@ -358,10 +358,10 @@ router.post('/section/question/update', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (updateQuestion) {
             if (updateQuestion == null || JSON.stringify(updateQuestion) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });
@@ -388,10 +388,10 @@ router.post('/section/question/rate/update', function (req, res, next) {
             + "' WHERE question_id = " + question_id;
         sqlAdapter.sqlCall(sql, function (updateQuestion) {
             if (updateQuestion == null || JSON.stringify(updateQuestion) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });
@@ -408,11 +408,11 @@ router.get('/section/question/delete', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (deleteQuestion) {
             if (deleteQuestion == null || JSON.stringify(deleteQuestion) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-             res.send(successful);
+             res.send(SUCCESSFUL);
         });
     }
 });
@@ -429,33 +429,33 @@ router.post('/activestatus/update', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (updateActive) {
             if (updateActive == null || JSON.stringify(updateActive) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });
 
-// Update the published status
-router.post('/publishstatus/update', function (req, res, next) {
+// Update the finalised status
+router.post('/finalisedstatus/update', function (req, res, next) {
 
-    // Example: http://localhost:3001/framework/publishstatus/update?framework_id={fid}
+    // Example: http://localhost:3001/framework/finalisedstatus/update?framework_id={fid}
     if (req.query.framework_id != null) {
-        let framework_publish_status = req.body.framework_publish_status;
+        let framework_finalised_status = req.body.framework_finalised_status;
         const sql = "UPDATE framework "
-            + "SET framework_published = " + framework_publish_status
+            + "SET framework_finalised = " + framework_finalised_status
             + " WHERE framework_id = " + req.query.framework_id
-            + " AND framework_published = 0";
+            + " AND framework_finalised = 0";
 
         sqlAdapter.sqlCall(sql, function (updateActive) {
             if (updateActive == null || JSON.stringify(updateActive) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
     }
 });

@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var sqlAdapter = require('../utils/sqlAdapter');
+var sqlAdapter = require('../utils/sqlAdapter');   
 var jsonUtils = require('../utils/jsonUtils');
 
-const unsuccessful = "The call to the SQL database was unsuccessful.";
-const successful = "The call to the SQL database was successful."
+const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
+const SUCCESSFUL = "The call to the SQL database was successful."
 
 //Evaluation Home page & edit previous evaluation
 router.get('/', function (req, res, next) {
@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
             if (rateRes == null || JSON.stringify(rateRes) == '[[],[]]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
             // Format output into hierarchies
@@ -84,7 +84,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(evalSql, function (evalRes) {
 
             if (evalRes == null || JSON.stringify(evalRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -102,7 +102,7 @@ router.get('/', function (req, res, next) {
             sqlAdapter.sqlCall(respSql, function (respRes) {
 
                 if (respRes == null || JSON.stringify(respRes) == '[]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
 
@@ -132,7 +132,7 @@ router.get('/', function (req, res, next) {
                         sqlAdapter.sqlCall(updateCompletedSql, function (updateCompletedRes) {
 
                             if (updateCompletedRes == null || JSON.stringify(updateCompletedRes) == '[]') {
-                                res.send(unsuccessful);
+                                res.send(UNSUCCESSFUL);
                                 return;
                             }
                         });
@@ -152,7 +152,7 @@ router.get('/', function (req, res, next) {
             + "WHERE e.framework_id = f.framework_id;"
         sqlAdapter.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -165,7 +165,7 @@ router.get('/', function (req, res, next) {
 //New evaluation page
 router.get('/new', function (req, res, next) {
 
-    // Select an active and published framework to generate evaluation
+    // Select an active and finalised framework to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     // Excute 4 SQL statements:
     if (req.query.framework_id != null) {
@@ -188,7 +188,7 @@ router.get('/new', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (sqlRes) {
 
             if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -201,11 +201,11 @@ router.get('/new', function (req, res, next) {
 
     } else {
 
-        // Default; return all active and published frameworks.
-        const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_published = 1";
+        // Default; return all active and finalised frameworks.
+        const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_finalised = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
             if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -228,11 +228,11 @@ router.post('/update/title', function (req, res, next) {
 
     sqlAdapter.sqlCall(sql, function (updateRes) {
         if (updateRes == null || JSON.stringify(updateRes) == '[]') {
-            res.send(unsuccessful);
+            res.send(UNSUCCESSFUL);
             return;
         }
 
-        res.send(successful);
+        res.send(SUCCESSFUL);
     });
 });
 
@@ -251,11 +251,11 @@ router.post('/update/response', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (updateResponse) {
             if (updateResponse == null || JSON.stringify(updateResponse) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
 
     }

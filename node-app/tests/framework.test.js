@@ -372,23 +372,23 @@ describe("POST /framework/activestatus/update?framework_id={fid}", () => {
 
 });
 
-describe("POST /framework/publishstatus/update?framework_id={fid}", () => {
+describe("POST /framework/finalisedstatus/update?framework_id={fid}", () => {
 
     const initFramework = "INSERT INTO framework () VALUES ();";
 
     const resetTable = "DELETE FROM framework WHERE framework_id = (SELECT LAST_INSERT_ID());";
 
     const inputOn = `UPDATE framework`
-        + ` SET framework_published = 1`
+        + ` SET framework_finalised = 1`
         + ` WHERE framework_id = (SELECT LAST_INSERT_ID())`
-        + ` AND framework_published = 0;`;
+        + ` AND framework_finalised = 0;`;
     
     const inputOff = `UPDATE framework`
-        + ` SET framework_published = 0`
+        + ` SET framework_finalised = 0`
         + ` WHERE framework_id = (SELECT LAST_INSERT_ID())`
-        + ` AND framework_published = 0;`;
+        + ` AND framework_finalised = 0;`;
 
-    const inputCheck = `SELECT framework_published`
+    const inputCheck = `SELECT framework_finalised`
         + ` FROM framework`
         + ` WHERE framework_id = (SELECT LAST_INSERT_ID());`;
 
@@ -406,16 +406,16 @@ describe("POST /framework/publishstatus/update?framework_id={fid}", () => {
         });
     });
 
-    test("Should correctly toggle on the framework publish status", done => {
+    test("Should correctly toggle on the framework finalised status", done => {
         sqlAdapter.sqlCall(inputOn + inputCheck, function(inputRes) {
-            expect(inputRes[1][0].framework_published).toEqual(1);
+            expect(inputRes[1][0].framework_finalised).toEqual(1);
             done();
         });
     });
 
-    test("Should prevent toggling off the framework publish status", done => {
+    test("Should prevent toggling off the framework finalised status", done => {
         sqlAdapter.sqlCall(inputOn + inputOff + inputCheck, function(inputRes) {
-            expect(inputRes[2][0].framework_published).toEqual(1);
+            expect(inputRes[2][0].framework_finalised).toEqual(1);
             done();
         });
     });
@@ -446,7 +446,7 @@ describe("Get /framework", () => {
     });
 
     // 3. EC3: Returned data should contain all valid fields in the framework.
-    // Namely 'framework_id', 'framework_title', 'framework_author', 'framework_creation_time', 'framework_active_status' and 'framework_published'
+    // Namely 'framework_id', 'framework_title', 'framework_author', 'framework_creation_time', 'framework_active_status' and 'framework_finalised'
     test("Returned data should contain all valid fields in the framework.", done => {
         sqlAdapter.sqlCall(input, function(res) 
         {
@@ -455,7 +455,7 @@ describe("Get /framework", () => {
             expect("framework_author" in res[0]).toEqual(true);
             expect("framework_creation_time" in res[0]).toEqual(true);
             expect("framework_active_status" in res[0]).toEqual(true);
-            expect("framework_published" in res[0]).toEqual(true);
+            expect("framework_finalised" in res[0]).toEqual(true);
             done();
         });
     });
@@ -481,12 +481,12 @@ describe("Get /framework", () => {
         });
     });
 
-    //6. EC6: 'framework_published' should be either 0 or 1
-    test("'framework_published' should be either 0 or 1", done => {
+    //6. EC6: 'framework_finalised' should be either 0 or 1
+    test("'framework_finalised' should be either 0 or 1", done => {
         sqlAdapter.sqlCall(input, function(res) 
         {
             let isvalidvalue = false;
-            if (res[0].framework_published == 0 || res[0].framework_published == 1 )
+            if (res[0].framework_finalised == 0 || res[0].framework_finalised == 1 )
                 isvalidvalue = true;
             expect(isvalidvalue).toEqual(true);
             done();

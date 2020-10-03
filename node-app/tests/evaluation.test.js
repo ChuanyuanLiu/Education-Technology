@@ -119,7 +119,7 @@ describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
         })
     });
     
-    test("Should corrently store the new response in the database", done => {
+    test("Should correctly store the new response in the database", done => {
         sqlAdapter.sqlCall(inputUpper, function(inputRes) {
             sqlAdapter.sqlCall(inputCheck, function(checkRes) {
                 expect(checkRes[0].rate_chosen).toEqual(rate_chosen_upper);
