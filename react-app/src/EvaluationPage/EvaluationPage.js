@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
-import SearchBar from "../Utils/SearchBar";
+import SearchBar, {sentence_contains} from "../Utils/SearchBar";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
 
@@ -36,23 +36,10 @@ function EvaluationPage() {
 
     const goToNewEvaluation = () => history.push("./new_evaluation");
 
-    /**
-     * Check if the sentence contains a word
-     * Case insensitive and ignores white space
-     * @param {string} sentence
-     * @param {string} word
-     * @returns {boolean}
-     */
-    function contains(sentence, word) {
-        const cleanSentence = sentence.replaceAll(" ", "").toLowerCase();
-        const cleanWord = word.replaceAll(" ", "").toLowerCase();
-        return cleanSentence.includes(cleanWord);
-    }
-
     const filterEvaluationList = (text) => {
         setEvaluationList(
             evaluationListAll.filter((evaluation) =>
-                contains(evaluation[SEARCH_FIELD], text)
+                sentence_contains(evaluation[SEARCH_FIELD], text)
             )
         );
     };
