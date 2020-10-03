@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import "./FrameworkPage.css";
 // import {UserOutlined} from "@ant-design/icons";
-import FrameworkComponent from "./FrameworkComponent";
+import FrameworkInfo from "./FrameworkInfo";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
 import BigButton from "../Utils/BigButton";
@@ -34,28 +34,25 @@ class FrameworkPage extends Component {
         });
     }
 
-    createNew(){
+    createNew() {
         fetch("http://localhost:3001/framework/new")
-        .then((response) => response.json())
-        .then((data) => {
-            this.handleClick(data.framework_id)
-        })
-        
+            .then((response) => response.json())
+            .then((data) => {
+                this.handleClick(data.framework_id);
+            });
     }
 
     render() {
         const frameworkList = this.state.frameworks.map((framework, i) => (
-            <div className="clickable" key={i}>
-                <FrameworkComponent
-                item={framework}
-                handleClick={this.handleClick}
-                />              
+            <div className='clickable' key={i}>
+                <FrameworkInfo
+                    {...framework}
+                    handleClick={this.handleClick}
+                />
             </div>
-
         ));
         return (
             <div className='flex_container'>
-
                 <div className='header'>
                     <NavBar>
                         Frameworks

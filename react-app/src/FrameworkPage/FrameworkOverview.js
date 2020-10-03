@@ -192,7 +192,7 @@ function FrameworkOverview({history}) {
         var state = history.location.state;
         if (state.session === undefined) {
             state.session = [];
-        }
+     }
         const index = state.session.indexOf(section_id);
         if (index > -1) {
             state.session.splice(index, 1);

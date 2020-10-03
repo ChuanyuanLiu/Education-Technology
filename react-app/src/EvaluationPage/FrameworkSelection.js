@@ -2,7 +2,7 @@ import React from "react";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
-import FrameworkComponent from "../FrameworkPage/FrameworkComponent";
+import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
 
 class FrameworkSelection extends React.Component {
     constructor() {
@@ -40,9 +40,9 @@ class FrameworkSelection extends React.Component {
 
     render() {
         const frameworkList = this.state.frameworks.map((framework, i) => (
-            <FrameworkComponent
+            <FrameworkInfo
                 key={i}
-                item={framework}
+                {...framework}
                 handleClick={this.handleClick}
             />
         ));
