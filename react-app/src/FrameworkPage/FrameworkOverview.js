@@ -41,10 +41,11 @@ function FrameworkOverview({history}) {
     const [expandedSections, setExpandedSections] = useState([]);
 
     function initializeFramework(data) {
+        console.log(data);
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
-        setPublished(data.framework_finalised_status);
+        setPublished(data.framework_finalised);
         setFramework(data);
         if (history.location.state.session === undefined) {
             var state = history.location.state;
