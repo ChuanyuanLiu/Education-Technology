@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var sqlAdapter = require('../utils/sqlAdapter');   
+var sqlAdapter = require('../utils/sqlAdapter');
 var jsonUtils = require('../utils/jsonUtils');
 
 const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
@@ -93,8 +93,8 @@ router.get('/', function (req, res, next) {
             // 2. Return detailed information about evaluation's responses.
             const respSql = "SELECT *, q.question_id AS defined_question_id "
                 + "FROM (framework_section s JOIN framework_section_question q "
-                    + "ON s.section_id = q.section_id "
-                    + "AND s.framework_id = " + fid + ") "
+                + "ON s.section_id = q.section_id "
+                + "AND s.framework_id = " + fid + ") "
                 + "LEFT JOIN evaluation_response r "
                 + "ON q.question_id = r.question_id "
                 + "AND r.evaluation_id = " + req.query.evaluation_id;
@@ -110,24 +110,20 @@ router.get('/', function (req, res, next) {
                 cleanRes.sections = jsonUtils.formatSectionHierarchy(respRes, true);
 
                 // Update the completed status to 1(true) if all sections are completed
-                if(cleanRes.evaluation_completed == 0)
-                {
+                if (cleanRes.evaluation_completed == 0) {
                     let evaluation_completed = 1;
-                    for (let i = 0; i < cleanRes.sections.length; i++)
-                    {
-                        if (cleanRes.sections[i].section_completed == 0)
-                        {
+                    for (let i = 0; i < cleanRes.sections.length; i++) {
+                        if (cleanRes.sections[i].section_completed == 0) {
                             evaluation_completed = 0;
                             break;
                         }
                     }
 
                     cleanRes.evaluation_completed = evaluation_completed;
-                    
+
                     // Update the database if all sections are completed
-                    if (evaluation_completed == 1)
-                    {
-                        
+                    if (evaluation_completed == 1) {
+
                         const updateCompletedSql = "UPDATE evaluation SET evaluation_completed = 1 WHERE evaluation_id = " + req.query.evaluation_id;
                         sqlAdapter.sqlCall(updateCompletedSql, function (updateCompletedRes) {
 
@@ -138,15 +134,14 @@ router.get('/', function (req, res, next) {
                         });
                     }
                 }
-            
+
                 res.send(cleanRes);
             });
         });
 
     }
     //Evaluation Home page
-    else 
-    {
+    else {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
@@ -172,15 +167,15 @@ router.get('/new', function (req, res, next) {
 
         // 1. Create a new evaluation, Insert a new evaluation_id
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
-        // 2. Return the evaluation_id of newly created evaluation
+            // 2. Return the evaluation_id of newly created evaluation
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
-        // 3. Return general information of the newly created evaluation
+            // 3. Return general information of the newly created evaluation
             + "SELECT * FROM evaluation e WHERE e.evaluation_id = (SELECT LAST_INSERT_ID());"
-        // 4. Return detailed information about newly created evaluation's responses.
+            // 4. Return detailed information about newly created evaluation's responses.
             + "SELECT *, q.question_id AS defined_question_id "
             + "FROM (framework_section s JOIN framework_section_question q "
-                + "ON s.section_id = q.section_id "
-                + "AND s.framework_id = " + req.query.framework_id + ") "
+            + "ON s.section_id = q.section_id "
+            + "AND s.framework_id = " + req.query.framework_id + ") "
             + "LEFT JOIN evaluation_response r "
             + "ON q.question_id = r.question_id "
             + "AND r.evaluation_id = LAST_INSERT_ID()";
