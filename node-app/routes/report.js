@@ -11,9 +11,10 @@ router.get('/', function (req, res, next) {
     {
         // Example: http://localhost:3001/report?report_id=1
         // Returns all details about a report
-        const sql = "SELECT * "
-            + "FROM report "
-            + "WHERE report_id = " + req.query.report_id;
+        
+        const sql = "SELECT r.*, e.evaluation_title "
+            + "FROM report r, evaluation e "
+            + "WHERE r.report_id = " + req.query.report_id + " AND r.evaluation_id = e.evaluation_id";
 
         sqlAdapter.sqlCall(sql, function (reportRes) {
             if (reportRes == null || JSON.stringify(reportRes) == '[]') {
@@ -27,7 +28,7 @@ router.get('/', function (req, res, next) {
     // Default; return all frameworks
     else
     {
-        const sql = "SELECT * FROM report";
+        const sql = "SELECT r.*, e.evaluation_title FROM report r, evaluation e WHERE r.evaluation_id = e.evaluation_id";
         sqlAdapter.sqlCall(sql, function (sqlRes) {
             if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
                 res.send(UNSUCCESSFUL);
