@@ -3,11 +3,13 @@ import "./FrameworkPage.css";
 // import {UserOutlined} from "@ant-design/icons";
 import FrameworkInfo from "./FrameworkInfo";
 import NavBar from "../Utils/NavBar";
-import SearchBar from "../Utils/SearchBar";
+import CardList from "../Utils/CardList";
 import BigButton from "../Utils/BigButton";
 import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkPage extends Component {
+    SEARCH_FIELD = "framework_title";
+
     constructor() {
         super();
         this.state = {
@@ -44,23 +46,20 @@ class FrameworkPage extends Component {
     }
 
     render() {
-        const frameworkList = this.state.frameworks.map((framework, i) => (
-            <div className='clickable' key={i}>
-                <FrameworkInfo
-                    data={new FrameworkInfoData(framework)}
-                    handleClick={this.handleClick}
-                />
-            </div>
-        ));
         return (
             <div className='flex_container'>
                 <div className='header'>
-                    <NavBar>
-                        Frameworks
-                        <SearchBar />
-                    </NavBar>
+                    <NavBar>Frameworks</NavBar>
                 </div>
-                <div className='content scrollable'>{frameworkList}</div>
+                <div className='content scrollable'>
+                    <CardList
+                        searchField={this.SEARCH_FIELD}
+                        list={this.state.frameworks}
+                        CardReactComponent={FrameworkInfo}
+                        dataClass={FrameworkInfoData}
+                        onClick={this.handleClick}
+                    />
+                </div>
                 <div className='footer'>
                     <BigButton onClick={this.createNew}>
                         New Framework

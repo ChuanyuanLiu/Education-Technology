@@ -1,7 +1,6 @@
 import React from "react";
 import {UserOutlined} from "@ant-design/icons";
 import {resolveTime} from "../Utils/Helper";
-import {useHistory} from "react-router-dom";
 import {FrameworkInfoData} from "../Utils/DataClass";
 import InfoCard from "../Utils/InfoCard";
 
@@ -9,7 +8,7 @@ import InfoCard from "../Utils/InfoCard";
  * Route from FrameworkSelect or FrameworkPage
  * A card that display following information of a framework
  * @param {FrameworkInfoData} data
- * @param {function} handleClick
+ * @param {function} handleClick(data.id)
  */
 function FrameworkInfo({data, handleClick}) {
 

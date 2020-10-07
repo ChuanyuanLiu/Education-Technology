@@ -30,10 +30,19 @@ function EvaluationPage() {
             .catch(console.error);
     }, []);
 
-    if (evaluationList == null )
-        return <h1> Loading ... </h1>;
+    const handleClick = (id) => {
+        history.push({
+            pathname: "/evaluation_overview",
+            state: {
+                evaluation_id: id,
+            },
+        });
+    };
 
     const goToNewEvaluation = () => history.push("./new_evaluation");
+
+    if (evaluationList == null )
+        return <h1> Loading ... </h1>;
 
     return (
         <div className='flex_container'>
@@ -48,6 +57,7 @@ function EvaluationPage() {
                     list={evaluationList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
+                    onClick={handleClick}
                 />
             </div>
             <div className='footer'>
