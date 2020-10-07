@@ -2,6 +2,7 @@ import React from "react";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
+import InfoCard from "../Utils/InfoCard";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
 
@@ -27,7 +28,7 @@ class EvaluationPage extends React.Component {
     }
     render() {
         const evaluationlist = this.state.evaluationInfos.map((data) => (
-            <EvaluationInfo key={data.evaluation_id} item={data} />
+            <InfoCard title={data.evaluation_title} leftContent={data.evaluation_title} rightContent="Right" />
         ));
         return (
             <div className='flex_container'>

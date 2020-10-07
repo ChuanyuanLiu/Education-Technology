@@ -9,6 +9,7 @@ variables must begin with -- and is case sensitive
  --focus_color: #dddfff;
  --header_height: 90px;
  --footer_height: 60px;
+ --desktop_view_min_width: 600px;
 }
 
 .section_header {
@@ -191,11 +192,39 @@ body,
     font-weight: bold;
     top: 6px;
 }
-/* present element in a list, element includes evaluation/framework/report */
-.elementInfo  {
-    border:1px  solid  black;
-    position: relative;
+/* Divider (Override antd's default) ************************************/
+.ant-divider-horizontal {
+    margin: 3px;
 }
+
+/* InfoCard *************************************************************/
+/* present element in a list, element includes evaluation/framework/report */
+.InfoCard {
+    border:1px  solid  black;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    padding: 0px 4px;
+}
+
+.breakWord {
+    word-wrap: break-word;
+}
+
+@media screen and (min-width: 600px) {
+    .leftContent {
+        width: 70%; 
+        float: left;
+        text-align: left;
+        border-right: 1px solid grey;
+    }
+    .rightContent {
+        width: 30%; 
+        float: left;
+        text-align: right;
+    }
+}
+
 /* The status of an element(Evaluation/Framework/Report */
 .elementStatus{
     top:0px;
@@ -214,10 +243,6 @@ body,
 }
 
 .elementDate{
-    margin-left: 5px;
-}
-
-.elementTitle{
     margin-left: 5px;
 }
 
@@ -244,6 +269,8 @@ body,
    right: 20px;
    top: 8px;
 }
+
+/* TextArea **********************************************/
 
 .TextArea .container {
     position: relative;
