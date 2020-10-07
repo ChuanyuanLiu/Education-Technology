@@ -73,7 +73,6 @@ class EvaluationInfoData extends Data {
     constructor(backendData) {
         super(backendData, EvaluationInfoData.#propertyToFieldName, "EvaluationInfoData");
     }
-
     id() {
         return this.get("id");
     }
@@ -106,4 +105,38 @@ class EvaluationInfoData extends Data {
     }
 }
 
-export {EvaluationInfoData};
+class FrameworkInfoData extends Data {
+
+    static #propertyToFieldName = {
+        id          : "framework_id",
+        author      : "framework_author",
+        title       : "framework_title",
+        creationTime: "framework_creation_time",
+        isActive    : "framework_active_status",
+        wasFinalised: "framework_finalised",
+    };
+
+    constructor(backendData) {
+        super(backendData, FrameworkInfoData.#propertyToFieldName, "FrameworkInfoData");
+    }
+    id() {
+        return this.get("id");
+    }
+    author() {
+        return this.get("author");
+    }
+    title() {
+        return this.get("title");
+    }
+    creationTime() {
+        return this.get("creationTime");
+    }
+    isActive() {
+        return this.get("isActive");
+    }
+    wasFinalised() {
+        return this.get("wasFinalised");
+    }
+}
+
+export {EvaluationInfoData, FrameworkInfoData};

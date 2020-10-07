@@ -6,6 +6,11 @@ import {resolveTime} from "../Utils/Helper";
 import {EvaluationInfoData} from "../Utils/DataClass";
 import InfoCard from "../Utils/InfoCard";
 
+/**
+ * Route from evaluationPage
+ * Route to EvaluationOverviewPage
+ * @param {EvaluationInfoData} data
+ */
 function EvaluationInfo({data}) {
     if (!(data instanceof EvaluationInfoData)) {
         console.error(
@@ -25,23 +30,21 @@ function EvaluationInfo({data}) {
         });
     };
     return (
-        <div className='elementInfo clickable' onClick={handleClick}>
-            <InfoCard title={data.title()} onClick={handleClick}>
-                <div className='leftContent'>
-                    <UserOutlined style={{fontSize: "20px"}} />
-                    {data.author()}
-                    <br/>
-                    Based on framework: {data.frameworkTitle()}
-                </div>
-                <div className='rightContent'>
-                    {data.wasCompleted() ? <CheckOutlined /> : null}
-                    {data.wasCompleted() ? "Completed" : "Active"}
-                    <br/>
-                    Last modified: &nbsp;
-                    {resolveTime(data.modifiedTime())}
-                </div>
-            </InfoCard>
-        </div>
+        <InfoCard title={data.title()} onClick={handleClick}>
+            <div className='leftContent'>
+                <UserOutlined style={{fontSize: "20px"}} />
+                {data.author()}
+                <br/>
+                Based on framework: {data.frameworkTitle()}
+            </div>
+            <div className='rightContent'>
+                {data.wasCompleted() ? <CheckOutlined /> : null}
+                {data.wasCompleted() ? "Completed" : "Active"}
+                <br/>
+                Last modified: &nbsp;
+                {resolveTime(data.modifiedTime())}
+            </div>
+        </InfoCard>
     );
 }
 export default EvaluationInfo;

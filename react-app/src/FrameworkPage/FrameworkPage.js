@@ -5,6 +5,7 @@ import FrameworkInfo from "./FrameworkInfo";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
 import BigButton from "../Utils/BigButton";
+import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkPage extends Component {
     constructor() {
@@ -46,7 +47,7 @@ class FrameworkPage extends Component {
         const frameworkList = this.state.frameworks.map((framework, i) => (
             <div className='clickable' key={i}>
                 <FrameworkInfo
-                    {...framework}
+                    data={new FrameworkInfoData(framework)}
                     handleClick={this.handleClick}
                 />
             </div>
