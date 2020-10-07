@@ -28,11 +28,11 @@ class FrameworkPage extends Component {
     }
 
     // go directly to the framework
-    handleClick(framework_id) {
+    handleClick(id) {
         this.props.history.push({
             pathname: "/framework_overview",
             state: {
-                framework_id,
+                framework_id: id
             },
         });
     }
@@ -46,6 +46,7 @@ class FrameworkPage extends Component {
     }
 
     render() {
+        if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
         return (
             <div className='flex_container'>
                 <div className='header'>

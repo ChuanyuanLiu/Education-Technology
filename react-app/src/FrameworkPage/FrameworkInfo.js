@@ -10,7 +10,7 @@ import InfoCard from "../Utils/InfoCard";
  * @param {FrameworkInfoData} data
  * @param {function} handleClick(data.id)
  */
-function FrameworkInfo({data, handleClick}) {
+function FrameworkInfo({data, onClick}) {
 
     if (!(data instanceof FrameworkInfoData)) {
         console.error(
@@ -19,7 +19,7 @@ function FrameworkInfo({data, handleClick}) {
     }
 
     return (
-        <InfoCard title={data.title()} onClick={()=>handleClick(data.id())}>
+        <InfoCard title={data.title()} onClick={()=>onClick(data.id())}>
             <div className='leftContent'>
                 <UserOutlined style={{fontSize: "20px"}} />
                 {data.author()}
