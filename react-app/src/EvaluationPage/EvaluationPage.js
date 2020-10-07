@@ -2,9 +2,9 @@ import React from "react";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import SearchBar from "../Utils/SearchBar";
-import InfoCard from "../Utils/InfoCard";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
+import {EvaluationInfoData} from "../Utils/DataClass.js";
 
 class EvaluationPage extends React.Component {
     constructor() {
@@ -27,9 +27,9 @@ class EvaluationPage extends React.Component {
         this.props.history.push("/new_evaluation");
     }
     render() {
-        const evaluationlist = this.state.evaluationInfos.map((data) => (
-            <InfoCard title={data.evaluation_title} leftContent={data.evaluation_title} rightContent="Right" />
-        ));
+        const evaluationlist = this.state.evaluationInfos.map((data, i) => {
+            return <EvaluationInfo key={i} data={new EvaluationInfoData(data)}/>;
+        });
         return (
             <div className='flex_container'>
                 <div className='header'>

@@ -2,37 +2,45 @@ import React from "react";
 import "./EvaluationPage.css";
 import {useHistory} from "react-router-dom";
 import {CheckOutlined, UserOutlined} from "@ant-design/icons";
-import {resolveTime} from "../Utils/Helper"
-function EvaluationInfo(props) {
+import {resolveTime} from "../Utils/Helper";
+import {EvaluationInfoData} from "../Utils/DataClass";
+import InfoCard from "../Utils/InfoCard";
+
+function EvaluationInfo({data}) {
+    if (!(data instanceof EvaluationInfoData)) {
+        console.error(
+            "EvaluationInfo requires EvaluationInfoData as the first argument"
+        );
+    }
     const history = useHistory();
     // This function takes in evaluation_id and returns  a function
     // that can point to a specific evaluation
-    const handleClick = ({evaluation_id, framework_id}) => () => {
+    const handleClick = () => {
         history.push({
             pathname: "/evaluation_overview",
             state: {
-                evaluation_id,
-                framework_id,
+                evaluation_id: data.id(),
+                framework_id: data.frameworkId(),
             },
         });
     };
     return (
-        <div className='elementInfo clickable' onClick={handleClick(props.item)}>
-            <div className='elementTitle'>{props.item.evaluation_title}</div>
-            <div className='elementStatus'>
-                {props.item.evaluation_completed ? <CheckOutlined /> : null}
-                {props.item.evaluation_completed ? "Completed" : "Active"}
-            </div>
-            <div className='elementAuthor'>
-                <UserOutlined style={{fontSize: "20px"}} />{" "}
-                {props.item.evaluation_author}
-            </div>
-            <div>
-                <div className='elementOrigin'>{props.item.framework_title}</div>
-                <div className='elementDate'>
-                    {resolveTime(props.item.evaluation_modified_time)}
+        <div className='elementInfo clickable' onClick={handleClick}>
+            <InfoCard title={data.title()} onClick={handleClick}>
+                <div className='leftContent'>
+                    <UserOutlined style={{fontSize: "20px"}} />
+                    {data.author()}
+                    <br/>
+                    Based on framework: {data.frameworkTitle()}
                 </div>
-            </div>
+                <div className='rightContent'>
+                    {data.wasCompleted() ? <CheckOutlined /> : null}
+                    {data.wasCompleted() ? "Completed" : "Active"}
+                    <br/>
+                    Last modified: &nbsp;
+                    {resolveTime(data.modifiedTime())}
+                </div>
+            </InfoCard>
         </div>
     );
 }

@@ -216,8 +216,7 @@ body,
         width: 70%; 
         float: left;
         text-align: left;
-        border-right: 1px solid grey;
-    }
+}
     .rightContent {
         width: 30%; 
         float: left;
