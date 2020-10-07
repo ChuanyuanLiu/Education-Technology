@@ -10,7 +10,7 @@ const SUCCESSFUL = "The call to the SQL database was successful."
 
 router.get('/', function (req, res, next) {
 
-    if (req.query.framework_id != null) {
+    if (req.query.evaluation_id != null) {
         // Example: http://localhost:3001/framework?framework_id=1
         // Returns single framework with sections and questions
         // Execute 2 sql statements.

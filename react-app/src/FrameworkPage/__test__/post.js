@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-
+// Test post requests
 const url = "http://localhost:3001/framework/section/question/rate/update?question_id=1";
 data = {
     rate_1_criterion: "1",
