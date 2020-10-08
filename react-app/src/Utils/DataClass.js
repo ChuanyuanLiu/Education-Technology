@@ -140,3 +140,4 @@ class FrameworkInfoData extends Data {
 }
 
 export {EvaluationInfoData, FrameworkInfoData};
+export default Data;

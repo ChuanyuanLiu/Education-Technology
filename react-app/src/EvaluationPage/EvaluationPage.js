@@ -16,7 +16,7 @@ import CardList from "../Utils/CardList";
  *  |-- BigButton (route to /new_evaluation)
  */
 function EvaluationPage() {
-    const SEARCH_FIELD = "evaluation_title";
+    const SEARCH_PROPERTY = "title";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
 
@@ -25,7 +25,7 @@ function EvaluationPage() {
         fetch("http://localhost:3001/evaluation")
             .then((response) => response.json())
             .then((data) => {
-                setEvaluationList(data);
+                setEvaluationList(convertToDataClass(data));
             })
             .catch(console.error);
     }, []);
@@ -41,6 +41,10 @@ function EvaluationPage() {
 
     const goToNewEvaluation = () => history.push("./new_evaluation");
 
+    function convertToDataClass(data) {
+        return data.map(data=>new EvaluationInfoData(data));
+    }
+
     if (evaluationList == null )
         return <h1> Loading ... </h1>;
 
@@ -53,7 +57,7 @@ function EvaluationPage() {
             </div>
             <div className='content scrollable'>
                 <CardList 
-                    searchField={SEARCH_FIELD} 
+                    searchProperty={SEARCH_PROPERTY} 
                     list={evaluationList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}

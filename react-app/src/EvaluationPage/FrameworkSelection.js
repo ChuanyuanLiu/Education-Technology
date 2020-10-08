@@ -3,10 +3,10 @@ import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
-import { FrameworkInfoData } from "../Utils/DataClass";
+import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkSelection extends React.Component {
-    SEARCH_FIELD = "framework_title";
+    SEARCH_PROPERTY = "title";
     constructor() {
         super();
         this.state = {
@@ -15,12 +15,23 @@ class FrameworkSelection extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    // Filter out only active frameworks
     componentDidMount() {
-        fetch("http://localhost:3001/evaluation/new")
+        fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({frameworks: data});
+                let frameworks = [];
+                for (const frameworkData of this.convertToDataClass(data)) {
+                    if (frameworkData.isActive()) {
+                        frameworks.push(frameworkData);
+                    }
+                }
+                this.setState({frameworks});
             });
+    }
+
+    convertToDataClass(data) {
+        return data.map((data) => new FrameworkInfoData(data));
     }
 
     // go directly to the new evaluation
@@ -41,7 +52,6 @@ class FrameworkSelection extends React.Component {
     }
 
     render() {
-
         if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
         return (
             <div className='flex_container'>
@@ -50,10 +60,9 @@ class FrameworkSelection extends React.Component {
                 </div>
                 <div className='content scrollable'>
                     <CardList
-                        searchField={this.SEARCH_FIELD}
+                        searchProperty={this.SEARCH_PROPERTY}
                         list={this.state.frameworks}
                         CardReactComponent={FrameworkInfo}
-                        dataClass={FrameworkInfoData}
                         onClick={this.handleClick}
                     />
                 </div>

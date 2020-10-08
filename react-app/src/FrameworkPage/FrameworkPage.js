@@ -8,7 +8,7 @@ import BigButton from "../Utils/BigButton";
 import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkPage extends Component {
-    SEARCH_FIELD = "framework_title";
+    SEARCH_PROPERTY = "title";
 
     constructor() {
         super();
@@ -23,8 +23,12 @@ class FrameworkPage extends Component {
         fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({frameworks: data});
+                this.setState({frameworks: this.convertToDataClass(data)});
             });
+    }
+    
+    convertToDataClass(data) {
+        return data.map(data=>new FrameworkInfoData(data));
     }
 
     // go directly to the framework
@@ -54,10 +58,9 @@ class FrameworkPage extends Component {
                 </div>
                 <div className='content scrollable'>
                     <CardList
-                        searchField={this.SEARCH_FIELD}
+                        searchProperty={this.SEARCH_PROPERTY}
                         list={this.state.frameworks}
                         CardReactComponent={FrameworkInfo}
-                        dataClass={FrameworkInfoData}
                         onClick={this.handleClick}
                     />
                 </div>
