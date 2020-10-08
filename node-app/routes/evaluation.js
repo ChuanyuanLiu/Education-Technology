@@ -146,7 +146,7 @@ router.get('/', function (req, res, next) {
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
         sqlAdapter.sqlCall(sql, function (sqlRes) {
-            if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
+            if (sqlRes == null) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
