@@ -2,9 +2,10 @@ import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
-import SearchBar, {sentence_contains} from "../Utils/SearchBar";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
+import {EvaluationInfoData} from "../Utils/DataClass.js";
+import CardList from "../Utils/CardList";
 
 /**
  * Route from Homepage
@@ -15,9 +16,8 @@ import BigButton from "./../Utils/BigButton";
  *  |-- BigButton (route to /new_evaluation)
  */
 function EvaluationPage() {
-    const SEARCH_FIELD = "evaluation_title";
+    const SEARCH_PROPERTY = "title";
     const history = useHistory();
-    const [evaluationListAll, setEvaluationListAll] = useState(null);
     const [evaluationList, setEvaluationList] = useState(null);
 
     // initalize data
@@ -25,35 +25,44 @@ function EvaluationPage() {
         fetch("http://localhost:3001/evaluation")
             .then((response) => response.json())
             .then((data) => {
-                setEvaluationListAll(data);
-                setEvaluationList(data);
+                setEvaluationList(convertToDataClass(data));
             })
             .catch(console.error);
     }, []);
 
-    if (evaluationList == null || evaluationList == null)
-        return <h1> Loading ... </h1>;
+    const handleClick = (id) => {
+        history.push({
+            pathname: "/evaluation_overview",
+            state: {
+                evaluation_id: id,
+            },
+        });
+    };
 
     const goToNewEvaluation = () => history.push("./new_evaluation");
 
-    const filterEvaluationList = (text) => {
-        setEvaluationList(
-            evaluationListAll.filter((evaluation) =>
-                sentence_contains(evaluation[SEARCH_FIELD], text)
-            )
-        );
-    };
+    function convertToDataClass(data) {
+        return data.map(data=>new EvaluationInfoData(data));
+    }
+
+    if (evaluationList == null )
+        return <h1> Loading ... </h1>;
 
     return (
         <div className='flex_container'>
             <div className='header'>
                 <NavBar>
                     Evaluations
-                    <SearchBar onSearch={filterEvaluationList} />
                 </NavBar>
             </div>
             <div className='content scrollable'>
-                <EvaluationList list={evaluationList} />
+                <CardList 
+                    searchProperty={SEARCH_PROPERTY} 
+                    list={evaluationList}
+                    CardReactComponent={EvaluationInfo}
+                    dataClass={EvaluationInfoData}
+                    onClick={handleClick}
+                />
             </div>
             <div className='footer'>
                 <BigButton onClick={goToNewEvaluation}>
@@ -64,14 +73,5 @@ function EvaluationPage() {
     );
 }
 
-function EvaluationList({list}) {
-    return (
-        <div className='EvaluationList'>
-            {list.map((data, i) => (
-                <EvaluationInfo key={i} item={data} />
-            ))}
-        </div>
-    );
-}
 
 export default EvaluationPage;

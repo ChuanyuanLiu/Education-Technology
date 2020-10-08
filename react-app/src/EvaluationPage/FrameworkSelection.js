@@ -1,10 +1,12 @@
 import React from "react";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
-import SearchBar from "../Utils/SearchBar";
+import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
+import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkSelection extends React.Component {
+    SEARCH_PROPERTY = "title";
     constructor() {
         super();
         this.state = {
@@ -13,18 +15,29 @@ class FrameworkSelection extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    // Filter out only active frameworks
     componentDidMount() {
-        fetch("http://localhost:3001/evaluation/new")
+        fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({frameworks: data});
+                let frameworks = [];
+                for (const frameworkData of this.convertToDataClass(data)) {
+                    if (frameworkData.isActive()) {
+                        frameworks.push(frameworkData);
+                    }
+                }
+                this.setState({frameworks});
             });
     }
 
+    convertToDataClass(data) {
+        return data.map((data) => new FrameworkInfoData(data));
+    }
+
     // go directly to the new evaluation
-    handleClick(framework_id) {
+    handleClick(id) {
         const requestURL =
-            "http://localhost:3001/evaluation/new?framework_id=" + framework_id;
+            "http://localhost:3001/evaluation/new?framework_id=" + id;
         fetch(requestURL)
             .then((response) => response.json())
             .then(({evaluation_id}) =>
@@ -32,29 +45,27 @@ class FrameworkSelection extends React.Component {
                     pathname: "/evaluation_overview",
                     state: {
                         evaluation_id,
-                        framework_id,
+                        framework_id: id,
                     },
                 })
             );
     }
 
     render() {
-        const frameworkList = this.state.frameworks.map((framework, i) => (
-            <FrameworkInfo
-                key={i}
-                {...framework}
-                handleClick={this.handleClick}
-            />
-        ));
+        if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
         return (
             <div className='flex_container'>
                 <div className='header'>
-                    <NavBar>
-                        Choose Framework
-                        <SearchBar />
-                    </NavBar>
+                    <NavBar>Frameworks</NavBar>
                 </div>
-                <div className='content'>{frameworkList}</div>
+                <div className='content scrollable'>
+                    <CardList
+                        searchProperty={this.SEARCH_PROPERTY}
+                        list={this.state.frameworks}
+                        CardReactComponent={FrameworkInfo}
+                        onClick={this.handleClick}
+                    />
+                </div>
             </div>
         );
     }
