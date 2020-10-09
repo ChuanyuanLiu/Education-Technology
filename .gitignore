@@ -61,4 +61,4 @@ typings/
 .env
 
 # Report file directory
-reports/
+node-app/reports/
