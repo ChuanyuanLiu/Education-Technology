@@ -132,7 +132,7 @@ router.get('/finalise', function (req, res, next) {
             csvContent += 'Evaluation part'
 
             // The .csv file is stored in '$REPORTS_FILEPATH'
-            // Current filepath of .csv file is './reports/$report_id-'
+            // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
             var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
             const REPORTS_DIR = './reports';
             const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_id + '-' + time + '.csv';
