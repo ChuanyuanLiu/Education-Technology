@@ -8,6 +8,7 @@ const SUCCESSFUL = "The call to the SQL database was successful."
 
 const fs = require('fs');
 var sd = require('silly-datetime');
+var nodemailer  = require('nodemailer');
 
 router.get('/', function (req, res, next) {
     if(req.query.report_id != null)
@@ -201,6 +202,80 @@ router.get('/download', function (req, res, next) {
         });
     }
 });
+
+// Send report to an email
+router.get('/sendemail', function (req, res, next) {
+    // Example: http://localhost:3001/report/sendemail?emailaddress=xxxxxx@gmail.com&report_id=1
+    if(req.query.emailaddress != null && req.query.report_id != null)
+    {
+        let emailaddress = req.query.emailaddress;
+        let report_id = req.query.report_id;
+        
+        var mailTransport = nodemailer.createTransport({
+            service: 'Gmail',
+            secureConnection: true, // Use SSL to login
+            auth : {
+                user : 'edtechofficial@gmail.com',
+                pass : 'edtech2020'
+            },
+        });
+
+        const sql = "SELECT report_csv, report_title "
+            + "FROM report "
+            + "WHERE report_id = " + report_id;
+
+        sqlAdapter.sqlCall(sql, function (sendEmailRes) 
+        {
+            if (sendEmailRes == null) {
+                res.send(UNSUCCESSFUL);
+                return;
+            }
+
+            let report_csv = sendEmailRes[0].report_csv;
+            let report_title = sendEmailRes[0].report_title;
+
+            var options = {
+                from        : '"EdTech" <edtechofficial@gmail.com>',
+                // If multiple emails
+                // to          : '"Username1" <EmailAddress1>, "Username2" <EmailAddress2>',
+                to          : '"YUYAO" <' + emailaddress + '>',
+                // cc         : ''  
+                // bcc      : ''    
+                subject        : 'Edtech-report',
+                text          : 'Edtech-report',
+                // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                attachments : 
+                            [
+                                {
+                                    filename: report_title + '.csv', // Attachment name
+                                    path: report_csv, // Attachment file path
+                                    cid : '00000001' // Can be used by email      
+                                },
+                                // If need another attachement :file2
+                                // {
+                                //     filename: 'img2.png',            
+                                //     path: 'public/images/img2.png',  
+                                //     cid : '00000002'                 
+                                // },
+                            ]
+            };
+            
+            mailTransport.sendMail(options, function(err, msg){
+                if(err){
+                    console.log(err);
+                    res.send("Failed!");
+                    res.render('index', { title: err });
+                }
+                else {
+                    console.log(msg);
+                    res.send("Successful!");
+                    res.render('index', { title: "Received："+msg.accepted});   
+                }
+            });
+        });
+    }
+});
+
 
 // Update the title of the report
 router.post('/update/title', function (req, res, next) {
