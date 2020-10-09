@@ -169,6 +169,7 @@ router.get('/finalise', function (req, res, next) {
     }
 });
 
+// Download function 
 router.get('/download', function (req, res, next) {
     if(req.query.report_id != null)
     {
@@ -189,7 +190,7 @@ router.get('/download', function (req, res, next) {
             //Set the response header
             res.writeHead(200, {
                 'Content-Type': 'application/octet-stream', // Tell the browser this is a binary file 
-                'Content-Disposition': 'attachment; filename=' + encodeURI(report_csv), // Tell the browser that this is a file to download
+                'Content-Disposition': 'attachment; filename=' + encodeURI(report_csv.substring(10)), // Tell the browser that this is a file to download
             });
             var readStream = fs.createReadStream(report_csv); // Get file input stream
             debugger
