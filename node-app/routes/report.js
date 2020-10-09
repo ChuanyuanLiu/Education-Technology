@@ -6,6 +6,9 @@ const { response } = require('express');
 const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
 const SUCCESSFUL = "The call to the SQL database was successful."
 
+const fs = require('fs');
+var sd = require('silly-datetime');
+
 router.get('/', function (req, res, next) {
     if(req.query.report_id != null)
     {
@@ -76,6 +79,100 @@ router.get('/new', function (req, res, next) {
                 return;
             }
             res.send(evaluationRes);
+        });
+    }
+});
+
+//Finalise report page
+router.get('/finalise', function (req, res, next) {
+    if(req.query.report_id != null)
+    {
+        // Example: http://localhost:3001/report/finalise?report_id=1
+
+        const sql = "SELECT r.*, e.evaluation_title "
+            + "FROM report r, evaluation e "
+            + "WHERE r.report_id = " + req.query.report_id + " AND r.evaluation_id = e.evaluation_id";
+
+        sqlAdapter.sqlCall(sql, function (reportRes) 
+        {
+            if (reportRes == null) {
+                res.send(UNSUCCESSFUL);
+                return;
+            }
+
+            let report_id = reportRes[0].report_id;
+            let report_author = reportRes[0].report_author;
+            let report_title = reportRes[0].report_title;
+            let report_creation_time = reportRes[0].report_creation_time;
+            let report_modified_time = reportRes[0].report_modified_time;
+            let report_recommendation = reportRes[0].report_recommendation;
+            let evaluation_id = reportRes[0].evaluation_id;         
+            let evaluation_title = reportRes[0].evaluation_title;       
+
+            // TODO: We need to generate the report content, the following part is a sample content.
+            // Generate the content ( \ufeff --> to avoid Garbled characters )
+            var csvContent = '\ufeffreport_id,';
+            csvContent += 'report_author,';
+            csvContent += 'report_title,';
+            csvContent += 'report_creation_time,';
+            csvContent += 'report_modified_time,';
+            csvContent += 'report_recommendation,';
+            csvContent += 'evaluation_id,';
+            csvContent += 'evaluation_title\n';
+            csvContent += report_id + ',';
+            csvContent += report_author + ',';
+            csvContent += report_title + ',';
+            csvContent += report_creation_time + ',';
+            csvContent += report_modified_time + ',';
+            csvContent += report_recommendation + ',';
+            csvContent += evaluation_id + ',';
+            csvContent += evaluation_title + '\n';
+            csvContent += 'Evaluation part'
+
+            // The .csv file is stored in '$REPORTS_FILEPATH'
+            // Current filepath of .csv file is './reports/$report_id-'
+            var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
+            const REPORTS_DIR = 'reports';
+            const REPORTS_FILEPATH = './' + REPORTS_DIR + '/' + report_id + '-' + time + '.csv';
+            
+            // Check whether the directory exists
+            var stat = fs.statSync('./' + REPORTS_DIR);
+            // True -- exists; False -- does not exist
+            if (stat.isDirectory())
+            {
+                console.log("Dir Exists");
+            }
+            else
+            {
+                // Generate the directory
+                fs.mkdir(REPORTS_DIR, (err) => {
+                    if (err) 
+                    {
+                        return console.log(err, '--->mkdir<---')
+                    }
+                })
+            }
+
+            // Generate the .csv file
+            fs.writeFile(REPORTS_FILEPATH, csvContent, function(err){
+              if (err) 
+              {
+                  console.log(err, '---->csv<---')
+              }
+            })
+            
+            // If file generated successfully, save the filepath in 'report_csv' field.
+            const sql_updatecsv = "UPDATE report "
+                    + "SET report_csv = " + REPORTS_FILEPATH
+                    + "' WHERE report_id = " + req.query.report_id;
+            
+            sqlAdapter.sqlCall(sql_updatecsv, function (updatecsvRes) {
+                if (updatecsvRes == null) {
+                    res.send(UNSUCCESSFUL);
+                    return;
+                }
+                res.send(SUCCESSFUL);
+            });
         });
     }
 });
