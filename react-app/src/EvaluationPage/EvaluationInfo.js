@@ -19,7 +19,7 @@ function EvaluationInfo({data, onClick}) {
     }
 
     return (
-        <InfoCard title={data.title()} onClick={()=>onClick(data.id)}>
+        <InfoCard title={data.title()} onClick={()=>onClick(data.id())}>
             <div className='leftContent'>
                 <UserOutlined style={{fontSize: "20px"}} />
                 {data.author()}

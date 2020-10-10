@@ -20,7 +20,7 @@ import {useHistory} from "react-router-dom";
 function EvaluationOverviewPage({history}) {
     //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
-    const {evaluation_id, framework_id} = history.location.state;
+    const {evaluation_id} = history.location.state;
     const [expandedSections, setExpandedSections] = useState([])
 
     // fetch data every time evaluation or framework ID changes
@@ -36,9 +36,9 @@ function EvaluationOverviewPage({history}) {
             history.replace({...history.location, state})
         }
         setExpandedSections(history.location.state.session)
-    }, [evaluation_id, framework_id]);
+    }, [evaluation_id]);
 
-    if (evaluation_id == null || framework_id == null) {
+    if (evaluation_id == null) {
         return (
             <div className='EvaluationPage'>
                 <NavBar title={"Invalid Evaluation"} />

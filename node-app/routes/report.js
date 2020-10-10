@@ -146,7 +146,7 @@ router.get('/finalise', function (req, res, next) {
             fs.writeFile(REPORTS_FILEPATH, csvContent, function(err){
               if (err) 
               {
-                  console.log(err, '---->csv<---')
+                  console.log(err, '--->csv generation failed<---')
               }
             })
             
@@ -206,10 +206,14 @@ router.get('/download', function (req, res, next) {
 
 // Send report to an email
 router.get('/sendemail', function (req, res, next) {
-    // Example: http://localhost:3001/report/sendemail?emailaddress=xxxxxx@gmail.com&report_id=1
+    // Example: http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
+    // Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
+    // For example: 2 email addresses:
+    // http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
     if(req.query.emailaddress != null && req.query.report_id != null)
     {
         let emailaddress = req.query.emailaddress;
+        // console.log(emailaddress);
         let report_id = req.query.report_id;
         
         var mailTransport = nodemailer.createTransport({
@@ -234,45 +238,47 @@ router.get('/sendemail', function (req, res, next) {
 
             let report_csv = sendEmailRes[0].report_csv;
             let report_title = sendEmailRes[0].report_title;
-
-            var options = {
-                from        : '"EdTech" <edtechofficial@gmail.com>',
-                // If multiple emails
-                // to          : '"Username1" <EmailAddress1>, "Username2" <EmailAddress2>',
-                to          : '"YUYAO" <' + emailaddress + '>',
-                // cc         : ''  
-                // bcc      : ''    
-                subject        : 'Edtech-report',
-                text          : 'Edtech-report',
-                // html           : '<h1>Hello! This is a Email from EdTech</h1>',
-                attachments : 
-                            [
-                                {
-                                    filename: report_title + '.csv', // Attachment name
-                                    path: report_csv, // Attachment file path
-                                    cid : '00000001' // Can be used by email      
-                                },
-                                // If need another attachement :file2
-                                // {
-                                //     filename: 'img2.png',            
-                                //     path: 'public/images/img2.png',  
-                                //     cid : '00000002'                 
-                                // },
-                            ]
-            };
             
-            mailTransport.sendMail(options, function(err, msg){
-                if(err){
-                    console.log(err);
-                    res.send("Failed!");
-                    res.render('index', { title: err });
-                }
-                else {
-                    console.log(msg);
-                    res.send("Successful!");
-                    res.render('index', { title: "Received："+msg.accepted});   
-                }
-            });
+            for (let i = 0; i < emailaddress.length; i++) {
+                var options = {
+                    from        : '"EdTech" <edtechofficial@gmail.com>',
+                    // If multiple emails
+                    // to          : '"Username1" <EmailAddress1>, "Username2" <EmailAddress2>',
+                    to          : emailaddress[i].split("@", 1) + ' <' + emailaddress[i] + '>',
+                    // cc         : ''  
+                    // bcc      : ''    
+                    subject        : 'Edtech-report',
+                    text          : 'Edtech-report',
+                    // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                    attachments : 
+                                [
+                                    {
+                                        filename: report_title + '.csv', // Attachment name
+                                        path: report_csv, // Attachment file path
+                                        cid : '00000001' // Can be used by email      
+                                    },
+                                    // If need another attachement :file2
+                                    // {
+                                    //     filename: 'img2.png',            
+                                    //     path: 'public/images/img2.png',  
+                                    //     cid : '00000002'                 
+                                    // },
+                                ]
+                };
+                
+                mailTransport.sendMail(options, function(err, msg){
+                    if(err){
+                        console.log(err);
+                        res.send("Failed!");
+                        res.render('index', { title: err });
+                    }
+                    else {
+                        console.log(msg);
+                        res.send("Successful!");
+                        res.render('index', { title: "Received："+msg.accepted});   
+                    }
+                });
+            }
         });
     }
 });

@@ -60,5 +60,5 @@ typings/
 # dotenv environment variables file
 .env
 
-# report files
+# Report file directory
 node-app/reports/
