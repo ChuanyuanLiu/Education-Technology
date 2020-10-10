@@ -38,6 +38,7 @@ function TextArea({
         setActive(!getActive);
     };
 
+    //Store previous input and rollback if user cancels the change
     const toggleRollBack = () => {
         if(getActive){
             setText(getPrevText)

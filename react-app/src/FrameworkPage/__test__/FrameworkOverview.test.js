@@ -22,13 +22,13 @@ const SECTION_ID = 1;
 const PUBLISHED_FRAMEWORK_DATA = {
         ...get_data,
         "framework_id": 1,
-        "framework_published": 1,
+        "framework_finalised_status": 1,
         "framework_active_status": 0,
 }
 const UNPUBLISHED_FRAMEWORK_DATA = {
         ...get_data,
         "framework_id": 1,
-        "framework_published": 0,
+        "framework_finalised_status": 0,
         "framework_active_status": 0,
 }
 const UNPUBLISHED_FRAMEWORK_DATA_NEW = {
@@ -124,7 +124,7 @@ describe("AC 2.3", () => {
     });
 
     test("Mark as published", async () => {
-        const publish_url = `${SERVER_ADDRESS}/framework/publishstatus/update?framework_id=${FRAMEWORK_ID}`;
+        const publish_url = `${SERVER_ADDRESS}/framework/finalisedstatus/update?framework_id=${FRAMEWORK_ID}`;
         global.fetch = mock_fetch(true, {
             json: () => Promise.resolve(UNPUBLISHED_FRAMEWORK_DATA),
         });
@@ -137,7 +137,7 @@ describe("AC 2.3", () => {
         global.fetch = mock_fetch(true, {
             text: () => Promise.resolve("success"),
         });
-        const publish_button = screen.getByRole("button", {name: /publish/i});
+        const publish_button = screen.getByRole("button", {name: /finalize/i});
         fireEvent.click(publish_button);
         expect(fetch.mock.calls[0][0]).toBe(publish_url);
         const param = fetch.mock.calls[0][1];

@@ -4,8 +4,8 @@ var router = express.Router();
 var sqlAdapter = require('../utils/sqlAdapter');
 var jsonUtils = require('../utils/jsonUtils');
 
-const unsuccessful = "The call to the SQL database was unsuccessful.";
-const successful = "The call to the SQL database was successful."
+const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
+const SUCCESSFUL = "The call to the SQL database was successful."
 
 //Evaluation Home page & edit previous evaluation
 router.get('/', function (req, res, next) {
@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
             if (rateRes == null || JSON.stringify(rateRes) == '[[],[]]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
             // Format output into hierarchies
@@ -84,7 +84,7 @@ router.get('/', function (req, res, next) {
         sqlAdapter.sqlCall(evalSql, function (evalRes) {
 
             if (evalRes == null || JSON.stringify(evalRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -93,8 +93,8 @@ router.get('/', function (req, res, next) {
             // 2. Return detailed information about evaluation's responses.
             const respSql = "SELECT *, q.question_id AS defined_question_id "
                 + "FROM (framework_section s JOIN framework_section_question q "
-                    + "ON s.section_id = q.section_id "
-                    + "AND s.framework_id = " + fid + ") "
+                + "ON s.section_id = q.section_id "
+                + "AND s.framework_id = " + fid + ") "
                 + "LEFT JOIN evaluation_response r "
                 + "ON q.question_id = r.question_id "
                 + "AND r.evaluation_id = " + req.query.evaluation_id;
@@ -102,7 +102,7 @@ router.get('/', function (req, res, next) {
             sqlAdapter.sqlCall(respSql, function (respRes) {
 
                 if (respRes == null || JSON.stringify(respRes) == '[]') {
-                    res.send(unsuccessful);
+                    res.send(UNSUCCESSFUL);
                     return;
                 }
 
@@ -110,49 +110,44 @@ router.get('/', function (req, res, next) {
                 cleanRes.sections = jsonUtils.formatSectionHierarchy(respRes, true);
 
                 // Update the completed status to 1(true) if all sections are completed
-                if(cleanRes.evaluation_completed == 0)
-                {
+                if (cleanRes.evaluation_completed == 0) {
                     let evaluation_completed = 1;
-                    for (let i = 0; i < cleanRes.sections.length; i++)
-                    {
-                        if (cleanRes.sections[i].section_completed == 0)
-                        {
+                    for (let i = 0; i < cleanRes.sections.length; i++) {
+                        if (cleanRes.sections[i].section_completed == 0) {
                             evaluation_completed = 0;
                             break;
                         }
                     }
 
                     cleanRes.evaluation_completed = evaluation_completed;
-                    
+
                     // Update the database if all sections are completed
-                    if (evaluation_completed == 1)
-                    {
-                        
+                    if (evaluation_completed == 1) {
+
                         const updateCompletedSql = "UPDATE evaluation SET evaluation_completed = 1 WHERE evaluation_id = " + req.query.evaluation_id;
                         sqlAdapter.sqlCall(updateCompletedSql, function (updateCompletedRes) {
 
                             if (updateCompletedRes == null || JSON.stringify(updateCompletedRes) == '[]') {
-                                res.send(unsuccessful);
+                                res.send(UNSUCCESSFUL);
                                 return;
                             }
                         });
                     }
                 }
-            
+
                 res.send(cleanRes);
             });
         });
 
     }
     //Evaluation Home page
-    else 
-    {
+    else {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
         sqlAdapter.sqlCall(sql, function (sqlRes) {
-            if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
-                res.send(unsuccessful);
+            if (sqlRes == null) {
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -165,22 +160,22 @@ router.get('/', function (req, res, next) {
 //New evaluation page
 router.get('/new', function (req, res, next) {
 
-    // Select an active and published framework to generate evaluation
+    // Select an active and finalised framework to generate evaluation
     // Example: http://localhost:3001/evaluation/new?framework_id=1
     // Excute 4 SQL statements:
     if (req.query.framework_id != null) {
 
         // 1. Create a new evaluation, Insert a new evaluation_id
         const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
-        // 2. Return the evaluation_id of newly created evaluation
+            // 2. Return the evaluation_id of newly created evaluation
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
-        // 3. Return general information of the newly created evaluation
+            // 3. Return general information of the newly created evaluation
             + "SELECT * FROM evaluation e WHERE e.evaluation_id = (SELECT LAST_INSERT_ID());"
-        // 4. Return detailed information about newly created evaluation's responses.
+            // 4. Return detailed information about newly created evaluation's responses.
             + "SELECT *, q.question_id AS defined_question_id "
             + "FROM (framework_section s JOIN framework_section_question q "
-                + "ON s.section_id = q.section_id "
-                + "AND s.framework_id = " + req.query.framework_id + ") "
+            + "ON s.section_id = q.section_id "
+            + "AND s.framework_id = " + req.query.framework_id + ") "
             + "LEFT JOIN evaluation_response r "
             + "ON q.question_id = r.question_id "
             + "AND r.evaluation_id = LAST_INSERT_ID()";
@@ -188,7 +183,7 @@ router.get('/new', function (req, res, next) {
         sqlAdapter.sqlCall(sql, function (sqlRes) {
 
             if (sqlRes == null || JSON.stringify(sqlRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -201,11 +196,11 @@ router.get('/new', function (req, res, next) {
 
     } else {
 
-        // Default; return all active and published frameworks.
-        const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_published = 1";
+        // Default; return all active and finalised frameworks.
+        const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_finalised = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
             if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
@@ -228,11 +223,11 @@ router.post('/update/title', function (req, res, next) {
 
     sqlAdapter.sqlCall(sql, function (updateRes) {
         if (updateRes == null || JSON.stringify(updateRes) == '[]') {
-            res.send(unsuccessful);
+            res.send(UNSUCCESSFUL);
             return;
         }
 
-        res.send(successful);
+        res.send(SUCCESSFUL);
     });
 });
 
@@ -251,11 +246,11 @@ router.post('/update/response', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (updateResponse) {
             if (updateResponse == null || JSON.stringify(updateResponse) == '[]') {
-                res.send(unsuccessful);
+                res.send(UNSUCCESSFUL);
                 return;
             }
 
-            res.send(successful);
+            res.send(SUCCESSFUL);
         });
 
     }

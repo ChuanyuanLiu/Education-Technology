@@ -5,19 +5,26 @@ import Button3D from "../Utils/Button3D";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
-import {RightOutlined, DownOutlined} from "@ant-design/icons"
+import {
+    RightOutlined,
+    DownOutlined,
+    EditOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    PlusOutlined,
+} from "@ant-design/icons";
 /*
-(Route from EvaluationInfo)
-Evaluation Overview Page
-    |-- NavBar
-    |-- Summary
-    |-- SectionList
-            |-- Section
-                    |-- Question (rout to questionContainer)
-    |-- Footer
-*/
-
-// Entry point for the Evaluation Overview Page
+ * (Route from EvaluationInfo)
+ * Evaluation Overview Page
+ *    |-- NavBar
+ *    |-- Summary
+ *    |-- SectionList
+ *            |-- Section
+ *                    |-- Question (rout to questionContainer)
+ *    |-- Footer
+ * @param {number} history.location.state.evaluation_id 
+ * @param {number} history.location.state.framework_id 
+ */
 function EvaluationOverviewPage({history}) {
     //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);

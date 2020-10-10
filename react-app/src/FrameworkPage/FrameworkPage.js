@@ -1,12 +1,15 @@
 import React, {Component} from "react";
 import "./FrameworkPage.css";
 // import {UserOutlined} from "@ant-design/icons";
-import FrameworkComponent from "./FrameworkComponent";
+import FrameworkInfo from "./FrameworkInfo";
 import NavBar from "../Utils/NavBar";
-import SearchBar from "../Utils/SearchBar";
+import CardList from "../Utils/CardList";
 import BigButton from "../Utils/BigButton";
+import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkPage extends Component {
+    SEARCH_PROPERTY = "title";
+
     constructor() {
         super();
         this.state = {
@@ -20,49 +23,46 @@ class FrameworkPage extends Component {
         fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({frameworks: data});
+                this.setState({frameworks: this.convertToDataClass(data)});
             });
+    }
+    
+    convertToDataClass(data) {
+        return data.map(data=>new FrameworkInfoData(data));
     }
 
     // go directly to the framework
-    handleClick(framework_id) {
+    handleClick(id) {
         this.props.history.push({
             pathname: "/framework_overview",
             state: {
-                framework_id,
+                framework_id: id
             },
         });
     }
 
-    createNew(){
+    createNew() {
         fetch("http://localhost:3001/framework/new")
-        .then((response) => response.json())
-        .then((data) => {
-            this.handleClick(data.framework_id)
-        })
-        
+            .then((response) => response.json())
+            .then((data) => {
+                this.handleClick(data.framework_id);
+            });
     }
 
     render() {
-        const frameworkList = this.state.frameworks.map((framework, i) => (
-            <div className="clickable" key={i}>
-                <FrameworkComponent
-                item={framework}
-                handleClick={this.handleClick}
-                />              
-            </div>
-
-        ));
+        if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
         return (
             <div className='flex_container'>
                 <div className='header'>
-                    <NavBar>
-                        Frameworks
-                        <SearchBar />
-                    </NavBar>
+                    <NavBar>Frameworks</NavBar>
                 </div>
                 <div className='content scrollable'>
-                    {frameworkList}
+                    <CardList
+                        searchProperty={this.SEARCH_PROPERTY}
+                        list={this.state.frameworks}
+                        CardReactComponent={FrameworkInfo}
+                        onClick={this.handleClick}
+                    />
                 </div>
                 <div className='footer'>
                     <BigButton onClick={this.createNew}>

@@ -1,53 +1,77 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import {useHistory} from "react-router-dom";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
-import SearchBar from "../Utils/SearchBar";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
+import {EvaluationInfoData} from "../Utils/DataClass.js";
+import CardList from "../Utils/CardList";
 
-class EvaluationPage extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            evaluationInfos: [],
-        };
-        this.handleClick = this.handleClick.bind(this);
-    }
+/**
+ * Route from Homepage
+ * Evaluation Page /evaluation
+ *  |-- NavBar
+ *      |-- SearchBar
+ *  |-- EvaluationList
+ *  |-- BigButton (route to /new_evaluation)
+ */
+function EvaluationPage() {
+    const SEARCH_PROPERTY = "title";
+    const history = useHistory();
+    const [evaluationList, setEvaluationList] = useState(null);
 
-    componentDidMount() {
+    // initalize data
+    useEffect(() => {
         fetch("http://localhost:3001/evaluation")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({evaluationInfos: data});
-            });
+                setEvaluationList(convertToDataClass(data));
+            })
+            .catch(console.error);
+    }, []);
+
+    const handleClick = (id) => {
+        history.push({
+            pathname: "/evaluation_overview",
+            state: {
+                evaluation_id: id,
+            },
+        });
+    };
+
+    const goToNewEvaluation = () => history.push("./new_evaluation");
+
+    function convertToDataClass(data) {
+        return data.map(data=>new EvaluationInfoData(data));
     }
 
-    handleClick() {
-        this.props.history.push("/new_evaluation");
-    }
-    render() {
-        const evaluationlist = this.state.evaluationInfos.map((data) => (
-            <EvaluationInfo key={data.evaluation_id} item={data} />
-        ));
-        return (
-            <div className='flex_container'>
-                <div className='header'>
-                    <NavBar>
-                        Evaluations
-                        <SearchBar />
-                    </NavBar>
-                </div>
-                <div className='content scrollable'>
-                    {evaluationlist} 
-                </div>
-                <div className='footer'>
-                    <BigButton onClick={this.handleClick}>
-                        New Evaluation
-                    </BigButton>
-                </div>
+    if (evaluationList == null )
+        return <h1> Loading ... </h1>;
+
+    return (
+        <div className='flex_container'>
+            <div className='header'>
+                <NavBar>
+                    Evaluations
+                </NavBar>
             </div>
-        );
-    }
+            <div className='content scrollable'>
+                <CardList 
+                    searchProperty={SEARCH_PROPERTY} 
+                    list={evaluationList}
+                    CardReactComponent={EvaluationInfo}
+                    dataClass={EvaluationInfoData}
+                    onClick={handleClick}
+                />
+            </div>
+            <div className='footer'>
+                <BigButton onClick={goToNewEvaluation}>
+                    New Evaluation
+                </BigButton>
+            </div>
+        </div>
+    );
 }
+
 
 export default EvaluationPage;

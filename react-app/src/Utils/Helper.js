@@ -6,3 +6,13 @@ export function resolveTime(time){
     var day = splittedTime[2].split(' ')[0]
     return year + '/'+ month + '/' + day
 }
+
+/** 
+ * Return positive number if d1 > d2
+ */
+function compareDateTime(d1, d2) {
+    const result = Date.parse(d1) - Date.parse(d2);
+    return result;
+}
+
+export {compareDateTime};
