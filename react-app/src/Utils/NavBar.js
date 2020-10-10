@@ -1,6 +1,7 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { LogoutOutlined } from "@ant-design/icons";
 
 /**
  * A navigation bar with a go back button 
@@ -25,7 +26,7 @@ function NavBar({children}) {
             <span className="right clickable" onClick={()=>logout({
                 returnTo: window.location.origin
             })}>
-            {"Log out"}
+            <LogoutOutlined/>
             </span>
         </div>
     );
