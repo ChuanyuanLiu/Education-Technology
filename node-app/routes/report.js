@@ -207,13 +207,15 @@ router.get('/download', function (req, res, next) {
 // Send report to an email
 router.get('/sendemail', function (req, res, next) {
     // Example: http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
+    // http://localhost:3001/report/sendemail?emailaddress=antyaoyao@gmail.com&report_id=1
+    // http://localhost:3001/report/sendemail?emailaddress=antyaoyao@gmail.com&emailaddress=antyaoyao@gmail.com&report_id=1
     // Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
     // For example: 2 email addresses:
     // http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
     if(req.query.emailaddress != null && req.query.report_id != null)
     {
         let emailaddress = req.query.emailaddress;
-        // console.log(emailaddress);
+        console.log(getCount(emailaddress));
         let report_id = req.query.report_id;
         
         var mailTransport = nodemailer.createTransport({
@@ -240,6 +242,7 @@ router.get('/sendemail', function (req, res, next) {
             let report_title = sendEmailRes[0].report_title;
             
             for (let i = 0; i < emailaddress.length; i++) {
+                // console.log("email:" + emailaddress[i]);
                 var options = {
                     from        : '"EdTech" <edtechofficial@gmail.com>',
                     // If multiple emails
@@ -269,13 +272,13 @@ router.get('/sendemail', function (req, res, next) {
                 mailTransport.sendMail(options, function(err, msg){
                     if(err){
                         console.log(err);
-                        res.send("Failed!");
-                        res.render('index', { title: err });
+                        // res.send("Failed!");
+                        // res.render('index', { title: err });
                     }
                     else {
                         console.log(msg);
-                        res.send("Successful!");
-                        res.render('index', { title: "Received："+msg.accepted});   
+                        // res.send("Successful!");
+                        // res.render('index', { title: "Received："+msg.accepted});   
                     }
                 });
             }
@@ -315,5 +318,23 @@ router.post('/update/recommendation', function (req, res, next) {
         res.send(SUCCESSFUL);
     });
 });
+
+// 判断数组维度
+function getCount(arr) {
+	var list = [];
+	var num = 0;
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] instanceof Array) {
+			for (var j = 0; j < arr[i].length; j++) {
+				list.push(arr[i][j]);
+			}
+		}
+	}
+	if (list.length) {
+		num = 1
+		num += getCount(list)
+	}
+    return num;
+}
 
 module.exports = router;
