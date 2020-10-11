@@ -207,15 +207,24 @@ router.get('/download', function (req, res, next) {
 // Send report to an email
 router.get('/sendemail', function (req, res, next) {
     // Example: http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
-    // http://localhost:3001/report/sendemail?emailaddress=antyaoyao@gmail.com&report_id=1
-    // http://localhost:3001/report/sendemail?emailaddress=antyaoyao@gmail.com&emailaddress=antyaoyao@gmail.com&report_id=1
     // Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
     // For example: 2 email addresses:
     // http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
     if(req.query.emailaddress != null && req.query.report_id != null)
     {
         let emailaddress = req.query.emailaddress;
-        console.log(getCount(emailaddress));
+        let emailaddresscount;
+        // emailaddress[0].indexOf("@") != -1 means that there are many email addresses
+        if(emailaddress[0].indexOf("@") != -1)
+        {
+            emailaddresscount = emailaddress.length;
+        }
+        // emailaddress[0].indexOf("@") == -1 means that there are only 1 email addresses
+        else
+        {
+            emailaddresscount = 1;
+        }
+
         let report_id = req.query.report_id;
         
         var mailTransport = nodemailer.createTransport({
@@ -241,44 +250,72 @@ router.get('/sendemail', function (req, res, next) {
             let report_csv = sendEmailRes[0].report_csv;
             let report_title = sendEmailRes[0].report_title;
             
-            for (let i = 0; i < emailaddress.length; i++) {
-                // console.log("email:" + emailaddress[i]);
-                var options = {
-                    from        : '"EdTech" <edtechofficial@gmail.com>',
-                    // If multiple emails
-                    // to          : '"Username1" <EmailAddress1>, "Username2" <EmailAddress2>',
-                    to          : emailaddress[i].split("@", 1) + ' <' + emailaddress[i] + '>',
-                    // cc         : ''  
-                    // bcc      : ''    
-                    subject        : 'Edtech-report',
-                    text          : 'Edtech-report',
-                    // html           : '<h1>Hello! This is a Email from EdTech</h1>',
-                    attachments : 
-                                [
-                                    {
-                                        filename: report_title + '.csv', // Attachment name
-                                        path: report_csv, // Attachment file path
-                                        cid : '00000001' // Can be used by email      
-                                    },
-                                    // If need another attachement :file2
-                                    // {
-                                    //     filename: 'img2.png',            
-                                    //     path: 'public/images/img2.png',  
-                                    //     cid : '00000002'                 
-                                    // },
-                                ]
-                };
-                
+            for (let i = 0; i < emailaddresscount; i++) {
+                // Only 1 email address
+                if(emailaddresscount == 1)
+                {
+                    var options = {
+                        from        : '"EdTech" <edtechofficial@gmail.com>',
+                        to          : emailaddress.split("@", 1) + ' <' + emailaddress + '>',
+                        // cc         : ''  
+                        // bcc      : ''    
+                        subject        : 'Edtech-report',
+                        text          : 'Edtech-report',
+                        // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                        attachments : 
+                                    [
+                                        {
+                                            filename: report_title + '.csv', // Attachment name
+                                            path: report_csv, // Attachment file path
+                                            cid : '00000001' // Can be used by email      
+                                        },
+                                        // If need another attachement :file2
+                                        // {
+                                        //     filename: 'img2.png',            
+                                        //     path: 'public/images/img2.png',  
+                                        //     cid : '00000002'                 
+                                        // },
+                                    ]
+                    };
+                }
+                // Many email addresses
+                else
+                {
+                    var options = {
+                        from        : '"EdTech" <edtechofficial@gmail.com>',
+                        to          : emailaddress[i].split("@", 1) + ' <' + emailaddress[i] + '>',
+                        // cc         : ''  
+                        // bcc      : ''    
+                        subject        : 'Edtech-report',
+                        text          : 'Edtech-report',
+                        // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                        attachments : 
+                                    [
+                                        {
+                                            filename: report_title + '.csv', // Attachment name
+                                            path: report_csv, // Attachment file path
+                                            cid : '00000001' // Can be used by email      
+                                        },
+                                        // If need another attachement :file2
+                                        // {
+                                        //     filename: 'img2.png',            
+                                        //     path: 'public/images/img2.png',  
+                                        //     cid : '00000002'                 
+                                        // },
+                                    ]
+                    };
+                }
+
                 mailTransport.sendMail(options, function(err, msg){
                     if(err){
                         console.log(err);
-                        // res.send("Failed!");
-                        // res.render('index', { title: err });
+                        res.send("Failed!");
+                        res.render('index', { title: err });
                     }
                     else {
                         console.log(msg);
-                        // res.send("Successful!");
-                        // res.render('index', { title: "Received："+msg.accepted});   
+                        res.send("Successful!");
+                        res.render('index', { title: "Received："+msg.accepted});   
                     }
                 });
             }
@@ -318,23 +355,5 @@ router.post('/update/recommendation', function (req, res, next) {
         res.send(SUCCESSFUL);
     });
 });
-
-// 判断数组维度
-function getCount(arr) {
-	var list = [];
-	var num = 0;
-	for (var i = 0; i < arr.length; i++) {
-		if (arr[i] instanceof Array) {
-			for (var j = 0; j < arr[i].length; j++) {
-				list.push(arr[i][j]);
-			}
-		}
-	}
-	if (list.length) {
-		num = 1
-		num += getCount(list)
-	}
-    return num;
-}
 
 module.exports = router;
