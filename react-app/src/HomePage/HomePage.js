@@ -3,10 +3,11 @@ import NavBar from "../Utils/NavBar";
 import {Layout} from "antd"
 import "./HomePage.css";
 import {useHistory} from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 const {Content} = Layout;
 
 function PageOptionList(props) {
-    const history = new useHistory()
+    const history = new useHistory();
     const list_names = [
         "Evaluations",
         "Reports",
@@ -43,15 +44,23 @@ function PageOptionList(props) {
 }
 
 function HomePage(props) {
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+    
     return (
-        <div className='HomePage'>
-            <Layout>
-                <NavBar> Home </NavBar>
-                <Content >
-                    <PageOptionList />
-                </Content>
-            </Layout>
-        </div>
+        isAuthenticated && (
+            <div className='HomePage'>
+                <Layout>
+                    <NavBar> Welcome back, {user.name}! </NavBar>
+                    <Content >
+                        <PageOptionList />
+                    </Content>
+                </Layout>
+            </div>
+        )
     );
 }
 

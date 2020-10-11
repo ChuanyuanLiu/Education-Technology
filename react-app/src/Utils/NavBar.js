@@ -14,9 +14,7 @@ function NavBar({children}) {
     return (
         <div className='NavBar'>
             <span className="left clickable" onClick={()=> {
-                if (window.location.pathname === "/home_page") {
-                    history.block("Logout to return to login page.");
-                } else {
+                if (window.location.pathname !== "/home_page") {
                     history.goBack();
                 }
             }}>
