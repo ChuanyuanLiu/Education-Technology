@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import SearchBar, {sentence_contains} from "./SearchBar";
 import {compareDateTime} from "./Helper";
-import Button3D from "../Utils/Button3D";
+import {FilterOutlined} from "@ant-design/icons"
 
 function CardList({searchProperty, sortByProperty="creationTime", list, CardReactComponent, onClick}) {
 
@@ -11,6 +11,7 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
     const [filteredList, setFilteredList] = useState(listAll);
     const [queryText, setQueryText] = useState("");
     const [isAscending, setAscending] = useState(false);
+
 
     // Filter then sort
     useEffect(()=>{
@@ -45,10 +46,11 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
     return (
         <div className='CardList'>
             <SearchBar onSearch={filterList} />
-            <div>
-                We found {filteredList.length} result searching <em>{queryText}</em>.
-                <Button3D on={isAscending} on_text="Oldest" off_text="Latest" onClick={toggleAscending}
-                />
+            <div className="search_result_control">
+                <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
+                <span className="right clickable" onClick={toggleAscending}>
+                    <strong><em>{isAscending? "New to Old": "Old to New"} <FilterOutlined></FilterOutlined></em></strong>
+                </span>
             </div>
             {filteredList.map((data, i) => (
                 <CardReactComponent
