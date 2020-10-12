@@ -59,7 +59,7 @@ function QuestionPage({history}) {
             <div className='header'>
                 <NavBar> {question_data.question_title} </NavBar>
             </div>
-            <div className='content'>
+            <div className='content scrollable'>
                 <RateList 
                     {...question_data} 
                     onChange={post_rate_request(url, question_data.response_comment)} 
