@@ -19,6 +19,9 @@ function compareList(l1in, l2in) {
 }
 
 // All fields are private to ensure nothing gets deleted or modified
+// backendData: a json object
+// propertyToFieldName: {property used by frontend: fieldName in the backend}
+// subclassName: name of the subclass used for print out more useful error messages
 class Data {
     #propertyToFieldName;
     #subclassName;
