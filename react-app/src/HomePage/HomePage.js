@@ -51,16 +51,6 @@ function HomePage(props) {
     }
     
     return (
-<<<<<<< HEAD
-        <div className='HomePage'>
-
-                <NavBar> Home </NavBar>
-                <Content >
-                    <PageOptionList />
-                </Content>
-
-        </div>
-=======
         isAuthenticated && (
             <div className='HomePage'>
                 <Layout>
@@ -71,7 +61,6 @@ function HomePage(props) {
                 </Layout>
             </div>
         )
->>>>>>> 6df0abc98d4a469b493b51df6d236da562f6520d
     );
 }
 
