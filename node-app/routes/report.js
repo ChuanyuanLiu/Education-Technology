@@ -92,8 +92,8 @@ router.get('/finalise', function (req, res, next) {
     {
         // Example: http://localhost:3001/report/finalise?report_id=1
         let report_id = req.query.report_id;
-        const sql = "SELECT r.*, e.evaluation_id, e.evaluation_title "
-        +"f.framework_id, f.framework_title, s.section_title. q.question_title, er.rate_chosen, er.response_comment"
+        const sql = "SELECT r.*, e.evaluation_id, e.evaluation_title, "
+        +"f.framework_id, f.framework_title, s.section_title, q.question_title, er.rate_chosen, er.response_comment "
         +"FROM report AS r INNER JOIN evaluation AS e USING (evaluation_id) "
         +"INNER JOIN framework AS f USING (framework_id) "
         +"INNER JOIN framework_section AS s using (framework_id) "
@@ -132,27 +132,27 @@ router.get('/finalise', function (req, res, next) {
             csvContent += 'report_title,';
             csvContent += 'report_creation_time,';
             csvContent += 'report_modified_time,';
-            csvContent += 'report_recommendation\n,';
+            csvContent += 'report_recommendation\n';
             csvContent += report_id + ',';
             csvContent += report_author + ',';
             csvContent += report_title + ',';
             csvContent += report_creation_time + ',';
             csvContent += report_modified_time + ',';
             csvContent += report_recommendation + '\n';
-            csvContent += 'Evaluation Details'
+            csvContent += 'Evaluation Details\n'
             csvContent += 'evaluation_id,';
             csvContent += 'evaluation_title\n';
             csvContent += evaluation_id + ',';
             csvContent += evaluation_title + '\n';
-            csvContent += 'Framework Details'
-            csvContent += 'framework_id';
-            csvContent += 'framework_title';
+            csvContent += 'Framework Details\n'
+            csvContent += 'framework_id,';
+            csvContent += 'framework_title\n';
             csvContent += framework_id + ',';
             csvContent += framework_title + '\n';
-            csvContent += 'Framework'
-            csvContent += 'section_title';
-            csvContent += 'question_title';
-            csvContent += 'rate_chosen';
+            csvContent += 'Framework\n'
+            csvContent += 'section_title,';
+            csvContent += 'question_title,';
+            csvContent += 'rate_chosen,';
             csvContent += 'response_comment\n';
             csvContent += section_title + ',';
             csvContent += question_title + ',';
@@ -241,7 +241,17 @@ router.get('/sendemail', function (req, res, next) {
     if(req.query.emailaddress != null && req.query.report_id != null)
     {
         let emailaddress = req.query.emailaddress;
-        // console.log(emailaddress);
+        let emailaddresscount;
+        // emailaddress[0].indexOf("@") != -1 means that there are many email addresses
+        if(emailaddress[0].indexOf("@") != -1)
+        {
+            emailaddresscount = emailaddress.length;
+        }
+        // emailaddress[0].indexOf("@") == -1 means that there are only 1 email addresses
+        else
+        {
+            emailaddresscount = 1;
+        }
         let report_id = req.query.report_id;
         
         var mailTransport = nodemailer.createTransport({
@@ -252,48 +262,73 @@ router.get('/sendemail', function (req, res, next) {
                 pass : 'edtech2020'
             },
         });
-
         const sql = "SELECT report_csv, report_title "
             + "FROM report "
             + "WHERE report_id = " + report_id;
-
         sqlAdapter.sqlCall(sql, function (sendEmailRes) 
         {
             if (sendEmailRes == null) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
-
             let report_csv = sendEmailRes[0].report_csv;
             let report_title = sendEmailRes[0].report_title;
             
-            for (let i = 0; i < emailaddress.length; i++) {
-                var options = {
-                    from        : '"EdTech" <edtechofficial@gmail.com>',
-                    // If multiple emails
-                    // to          : '"Username1" <EmailAddress1>, "Username2" <EmailAddress2>',
-                    to          : emailaddress[i].split("@", 1) + ' <' + emailaddress[i] + '>',
-                    // cc         : ''  
-                    // bcc      : ''    
-                    subject        : 'Edtech-report',
-                    text          : 'Edtech-report',
-                    // html           : '<h1>Hello! This is a Email from EdTech</h1>',
-                    attachments : 
-                                [
-                                    {
-                                        filename: report_title + '.csv', // Attachment name
-                                        path: report_csv, // Attachment file path
-                                        cid : '00000001' // Can be used by email      
-                                    },
-                                    // If need another attachement :file2
-                                    // {
-                                    //     filename: 'img2.png',            
-                                    //     path: 'public/images/img2.png',  
-                                    //     cid : '00000002'                 
-                                    // },
-                                ]
-                };
-                
+            for (let i = 0; i < emailaddresscount; i++) {
+                // Only 1 email address
+                if(emailaddresscount == 1)
+                {
+                    var options = {
+                        from        : '"EdTech" <edtechofficial@gmail.com>',
+                        to          : emailaddress.split("@", 1) + ' <' + emailaddress + '>',
+                        // cc         : ''  
+                        // bcc      : ''    
+                        subject        : 'Edtech-report',
+                        text          : 'Edtech-report',
+                        // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                        attachments : 
+                                    [
+                                        {
+                                            filename: report_title + '.csv', // Attachment name
+                                            path: report_csv, // Attachment file path
+                                            cid : '00000001' // Can be used by email      
+                                        },
+                                        // If need another attachement :file2
+                                        // {
+                                        //     filename: 'img2.png',            
+                                        //     path: 'public/images/img2.png',  
+                                        //     cid : '00000002'                 
+                                        // },
+                                    ]
+                    };
+                }
+                // Many email addresses
+                else
+                {
+                    var options = {
+                        from        : '"EdTech" <edtechofficial@gmail.com>',
+                        to          : emailaddress[i].split("@", 1) + ' <' + emailaddress[i] + '>',
+                        // cc         : ''  
+                        // bcc      : ''    
+                        subject        : 'Edtech-report',
+                        text          : 'Edtech-report',
+                        // html           : '<h1>Hello! This is a Email from EdTech</h1>',
+                        attachments : 
+                                    [
+                                        {
+                                            filename: report_title + '.csv', // Attachment name
+                                            path: report_csv, // Attachment file path
+                                            cid : '00000001' // Can be used by email      
+                                        },
+                                        // If need another attachement :file2
+                                        // {
+                                        //     filename: 'img2.png',            
+                                        //     path: 'public/images/img2.png',  
+                                        //     cid : '00000002'                 
+                                        // },
+                                    ]
+                    };
+                }
                 mailTransport.sendMail(options, function(err, msg){
                     if(err){
                         console.log(err);
@@ -310,7 +345,6 @@ router.get('/sendemail', function (req, res, next) {
         });
     }
 });
-
 
 // Update the title of the report
 router.post('/update/title', function (req, res, next) {
