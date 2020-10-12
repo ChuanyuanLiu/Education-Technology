@@ -26,6 +26,12 @@ class FrameworkPage extends Component {
                 this.setState({frameworks: this.convertToDataClass(data)});
             });
     }
+
+    // async componentDidMount() {
+    //     const response = await fetch("http://localhost:3001/framework");
+    //     const data = await response.json()
+    //     this.setState({frameworks: this.convertToDataClass(data)});
+    // }
     
     convertToDataClass(data) {
         return data.map(data=>new FrameworkInfoData(data));

@@ -35,7 +35,7 @@ function FrameworkOverview({history}) {
     const {framework_id} = history.location.state;
     const [framework_data, setFramework] = useState(null);
     const [activeStatus, setActiveStatus] = useState(0);
-    const [published, setPublished] = useState(0);
+    const [published, setFinalized] = useState(0);
     const [frameworkTitle, setFrameworkTitle] = useState("");
     const [sections, setSections] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
@@ -45,7 +45,7 @@ function FrameworkOverview({history}) {
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
-        setPublished(data.framework_finalised);
+        setFinalized(data.framework_finalised);
         setFramework(data);
         if (history.location.state.session === undefined) {
             var state = history.location.state;
@@ -119,7 +119,7 @@ function FrameworkOverview({history}) {
         });
     };
 
-    const handlePublish = () => {
+    const hadnleFinalize = () => {
         const url = `http://localhost:3001/framework/finalisedstatus/update?framework_id=${framework_data.framework_id}`;
         const newPublishStatus = {
             framework_finalised_status: 1,
@@ -135,7 +135,7 @@ function FrameworkOverview({history}) {
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
-                    setPublished(1);
+                    setFinalized(1);
                 }
             })
             .catch(console.err);
@@ -207,12 +207,15 @@ function FrameworkOverview({history}) {
     return (
         <div className='flex_container '>
             <NavBar>
+                <div className="middle">
                 <TextInput
                     text={frameworkTitle}
                     title={"Framework Title"}
                     onSave={postTitle(framework_id)}
                     disabled={published}
                 />
+                </div>
+
             </NavBar>
 
             <div className='content scrollable'>
@@ -247,7 +250,7 @@ function FrameworkOverview({history}) {
                 <ButtomButton
                     hasPublished={published}
                     isActive={activeStatus}
-                    handlePublish={handlePublish}
+                    hadnleFinalize={hadnleFinalize}
                     handleNewVersion={handleNewVersion}
                 />
             </div>
@@ -454,7 +457,7 @@ function Question(props) {
     );
 }
 
-function ButtomButton({hasPublished, handlePublish, handleNewVersion}) {
+function ButtomButton({hasPublished, hadnleFinalize, handleNewVersion}) {
     return (
         <div>
             {hasPublished ? (
@@ -462,7 +465,7 @@ function ButtomButton({hasPublished, handlePublish, handleNewVersion}) {
                     <div>Save As New</div>
                 </BigButton>
             ) : (
-                <BigButton onClick={handlePublish}>
+                <BigButton onClick={hadnleFinalize}>
                     Finalize
                 </BigButton>
             )}

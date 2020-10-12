@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Sign In with Auth0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+  <style>
+    /* cyrillic-ext */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Montserrat Regular'), local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459WRhyyTh89ZNpQ.woff2) format('woff2');
+      unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+    /* cyrillic */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Montserrat Regular'), local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459W1hyyTh89ZNpQ.woff2) format('woff2');
+      unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    /* vietnamese */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Montserrat Regular'), local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459WZhyyTh89ZNpQ.woff2) format('woff2');
+      unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+    }
+    /* latin-ext */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Montserrat Regular'), local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459WdhyyTh89ZNpQ.woff2) format('woff2');
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Montserrat Regular'), local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+    }
+    
+    /* Positional class */
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    }
+
+    html,
+    body, 
+    #root{
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+    
+    .Login{
+      background-color:#e8e8f0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      overflow: auto;
+    }
+
+    .logo{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+      max-width:300px;
+    }
+
+    .login_form{
+      width:80%;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 600px;
+    }
+    
+    /* Button */
+    .clickable {
+      cursor: pointer;
+    }
+
+    .clickable:hover{
+    	font-weight: bold; 
+    }
+
+    .no_bold:hover {
+      font-weight: normal;
+    }
+
+    .on {
+     	font-weight: 600; 
+    }
+
+    button {
+      font-size: 12px;
+      background-color: rgb(222,222,222);
+      color: black;
+      border: 1px solid black;
+      border-radius: 4px;
+      box-shadow: 0px 2px black;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #dddfff;
+    }
+
+    button.on{
+      box-shadow: inset 0px 1px black;
+    }
+
+    button:focus {
+      outline: none;
+    }
+    
+    input {
+      margin-bottom: 24px;
+      padding: 6.5px 11px;
+			font-size: 16px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      font-variant: tabular-nums;
+      list-style: none;
+      -webkit-font-feature-settings: 'tnum';
+      font-feature-settings: 'tnum', "tnum";
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      min-width: 0;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 1.5715;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #d9d9d9;
+      border-radius: 2px;
+      -webkit-transition: border 0.3s;
+      transition: border 0.3s;
+    }
+    
+    input:hover {
+  		border: 1px solid #1890ff;
+		}
+    
+    input:focus {
+      border: 1px solid #1890ff;
+    }
+    
+    /*input:invalid {
+ 		 	border: 1px solid red;
+      -webkit-transition: border 0.3s;
+      transition: border 0.3s;
+		}
+    
+    input:invalid:focus {
+ 		 	border: 1px solid #1890ff;
+		}*/
+    
+    /* To make big button look consistent, a minimum width is set */
+    #big_button {
+      padding: 5px 100px 5px 100px;
+      min-width: 300px;
+      border-radius: 10px;
+      color: white;
+      background-color: #8C8FB8;
+      font-size: medium;
+      box-shadow: 2px 8px black, -2px 8px black;
+      display: block;
+      margin: auto;
+    }
+
+    #big_button:hover {
+      box-shadow: 0px 2px black;
+      position: relative;
+      font-weight: bold;
+      top: 6px;
+    }
+    
+    .error {
+      display: none;
+      color: red;
+      min-height: 24px;
+      transition: all 0s;
+    }
+    
+    #error-message {
+      
+    }
+  </style>
+<body>
+  <div class="Login">
+    <img src="https://i.imgur.com/o0B20LB.png" class="logo" alt="Logo" />
+    <div class="login_form">
+      <form>
+        <div id="error-message" class="error"></div>
+        <input type="text"
+               id="username"
+               placeholder="Please enter your username"
+               required>
+        <br>
+        <div id="error-username" class="error"></div>
+        <input type="password"
+               id="password"
+               placeholder="Please enter your password"
+               required>
+        <br>
+        <div id="error-password" class="error"></div>
+        <div class="captcha-container"></div>
+        <button id="big_button">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/auth0/9.14/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+
+      var config = JSON.parse(
+        decodeURIComponent(escape(window.atob('@@config@@')))
+      );
+
+      var params = Object.assign({
+        overrides: {
+          __tenant: config.auth0Tenant,
+          __token_issuer: config.authorizationServer.issuer
+        },
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code'
+      }, config.internalOptions);
+
+      var webAuth = new auth0.WebAuth(params);
+      var databaseConnection = 'Username-Password-Authentication';
+      var captcha = webAuth.renderCaptcha(
+        document.querySelector('.captcha-container')
+      );
+
+      function login(e) {
+        e.preventDefault();
+        var button = this;
+        var username = document.getElementById('username');
+        var password = document.getElementById('password');
+        if (username.value === "" || password.value === "") {
+          console.log("Empty Strings!");
+         	displayIncomplete();
+          return;
+        }
+        button.disabled = true;
+        webAuth.login({
+          realm: databaseConnection,
+          username: username.value,
+          password: password.value,
+          captcha: captcha.getValue()
+        }, function(err) {
+          if (err) displayError(err);
+          button.disabled = false;
+        });
+      }
+      
+      function displayIncomplete() {
+        if (username.value === "") {
+          //username.setAttribute('required', true);
+          username.style.marginBottom = "0px";
+          var errorUsername = document.getElementById('error-username');
+          errorUsername.innerHTML = "Please input your username!";
+          errorUsername.style.display = 'block';
+        }
+        if (password.value === "") {
+          //password.setAttribute('required', true);
+          password.style.marginBottom = "0px";
+          var errorPassword = document.getElementById('error-password');
+          errorPassword.innerHTML = "Please input your password!";
+          errorPassword.style.display = 'block';
+        }
+      }
+
+      function displayError(err) {
+        captcha.reload();
+        var errorMessage = document.getElementById('error-message');
+        errorMessage.innerHTML = err.description;
+        errorMessage.style.display = 'block';
+      }
+      
+      function hideUsernameError() {
+        document.getElementById('username').style.marginBottom = "24px";
+        var errorUsername = document.getElementById('error-username');
+        errorUsername.innerHTML = "";
+        errorUsername.style.display = "none";
+      }
+      
+      function hidePasswordError() {
+        document.getElementById('password').style.marginBottom = "24px";
+        var errorPassword = document.getElementById('error-password');
+        errorPassword.innerHTML = "";
+        errorPassword.style.display = "none";
+      }
+
+      document.getElementById('big_button').addEventListener('click', login);
+      document.getElementById('username').addEventListener('input', hideUsernameError);
+      document.getElementById('password').addEventListener('input', hidePasswordError);
+    });
+  </script>
+</body>
+</html>     

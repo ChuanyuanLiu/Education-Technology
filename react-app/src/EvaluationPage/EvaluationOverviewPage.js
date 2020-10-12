@@ -8,10 +8,6 @@ import {useHistory} from "react-router-dom";
 import {
     RightOutlined,
     DownOutlined,
-    EditOutlined,
-    CheckOutlined,
-    CloseOutlined,
-    PlusOutlined,
 } from "@ant-design/icons";
 /*
  * (Route from EvaluationInfo)
@@ -115,17 +111,15 @@ function EvaluationOverviewPage({history}) {
     }
     return (
         <div className='EvaluationPage flex_container'>
-            <div className='header'>
-                <NavBar>
-                    <TextInput
-                        text={evaluation_data.evaluation_title}
-                        onSave={post_title_request(
-                            post_url,
-                            evaluation_data.evaluation_summary
-                        )}
-                    />
-                </NavBar>
-            </div>
+            <NavBar>
+                <TextInput
+                    text={evaluation_data.evaluation_title}
+                    onSave={post_title_request(
+                        post_url,
+                        evaluation_data.evaluation_summary
+                    )}
+                />
+            </NavBar>
             <div className='content scrollable '>
                 <div>
                     <TextArea

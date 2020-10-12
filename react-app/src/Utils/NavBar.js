@@ -7,25 +7,28 @@ import { LogoutOutlined } from "@ant-design/icons";
  * A navigation bar with a go back button 
  * @param children: child elements
  */
-function NavBar({children}) {
+function NavBar({children, disableBack} ) {
     const history = useHistory();
     const { logout } = useAuth0();
     console.log(history.length);
     return (
         <div className='NavBar'>
-            <span className="left clickable" onClick={()=> {
-                if (window.location.pathname !== "/home_page") {
-                    history.goBack();
-                }
-            }}>
-            {"<"}
-            </span>
-            {children}
+            {disableBack === "true" ?
+                null:
+                <span className="left clickable" onClick={()=> {
+                    if (window.location.pathname !== "/home_page") {
+                        history.goBack();
+                    }
+                }}>
+                {"<"}
+                </span> 
+            }
             <span className="right clickable" onClick={()=>logout({
                 returnTo: window.location.origin
             })}>
-            <LogoutOutlined/>
+                <LogoutOutlined/>
             </span>
+            <div className="middle">{children}</div>
         </div>
     );
 }
