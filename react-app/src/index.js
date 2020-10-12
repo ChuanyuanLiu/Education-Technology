@@ -14,6 +14,8 @@ ReactDOM.render(
         domain="edtechevaluation.au.auth0.com"
         clientId="f7XkkPm5SPP79RC22KdVMTvyHddTR3p6"
         redirectUri={window.location.origin + "/home_page"}
+        useRefreshTokens={true}
+        cacheLocation="localstorage"
     >
         <App />
     </Auth0Provider>,
