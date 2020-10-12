@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
-import Button3D from "../Utils/Button3D";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
+import {CheckOutlined, UserOutlined} from "@ant-design/icons";
 import {
     RightOutlined,
     DownOutlined,
@@ -178,7 +178,7 @@ function SectionsList({evaluation_id, sections, registerExpand,
 
 // Display a list of questions
 function Section({evaluation_id, section_title, section_index, questions,
-                  registerExpand, section_id, registerUnexpand, defaultExpand}) {
+                  registerExpand, section_id, section_completed,registerUnexpand, defaultExpand}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -203,6 +203,11 @@ function Section({evaluation_id, section_title, section_index, questions,
                                 <RightOutlined onClick={toggleExpand}/>}                    
                 </div>
                 {`Section ${section_index + 1} ${section_title}`}
+                <span className="right">
+                    {section_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {section_completed? "Completed" : null}
+                </span>
             </div>
             <ul>
                 {getExpand
@@ -228,6 +233,7 @@ function Question({
     section_index,
     question_index,
     question_title,
+    question_completed
 }) {
     const history = useHistory();
     function handleClick() {
@@ -242,6 +248,11 @@ function Question({
     return (
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
+            <span className="right">
+                    {question_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {question_completed? "Completed" : null}
+            </span>
         </li>
     );
 }

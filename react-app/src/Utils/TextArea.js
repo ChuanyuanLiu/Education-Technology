@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import Button3D from "./Button3D";
 import { EditOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons"
 
 
@@ -76,18 +75,6 @@ function TextArea({
         </form>
         
     );
-}
-
-// Convert text to html by converting \n to <br/>
-function text_to_html(text) {
-    var html = [];
-    var i = 0;
-    for (var line of text.split("\n")) {
-        html.push(<span key={i * 2}>{line}</span>);
-        html.push(<br key={i * 2 + 1} />);
-        i += 1;
-    }
-    return html;
 }
 
 export default TextArea;
