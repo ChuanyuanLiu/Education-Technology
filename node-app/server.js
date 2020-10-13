@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var frameworkRouter = require('./routes/framework');
 var evaluationRouter = require('./routes/evaluation');
 var reportRouter = require('./routes/report');
+var userRouter = require('./routes/user');
 
 var app = express();
 
@@ -24,7 +25,7 @@ app.use(bodyParser.json());
 app.use('/framework', frameworkRouter);
 app.use('/evaluation', evaluationRouter);
 app.use('/report', reportRouter);
-
+app.use('/user', userRouter);
 
 
 var port = normalizePort(process.env.PORT || '3001');
