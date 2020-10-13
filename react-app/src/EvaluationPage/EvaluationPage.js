@@ -49,7 +49,7 @@ function EvaluationPage() {
         return data.map(data=>new EvaluationInfoData(data));
     }
 
-    if (evaluationList == null )
+    if (evaluationList == null)
         return <h1> Loading ... </h1>;
 
     return (

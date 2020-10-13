@@ -46,7 +46,7 @@ function FrameworkPage() {
             });
     });
 
-    if (frameworks.length === 0) return <h1>Loading .. </h1>;
+    if (frameworks.length === 0 || user.name === null) return <h1>Loading .. </h1>;
 
     return (
         <div className='flex_container'>
