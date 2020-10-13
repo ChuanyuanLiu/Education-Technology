@@ -58,8 +58,8 @@ function HomePage(props) {
         isAuthenticated && (
             <div className='HomePage'>
                 <Layout>
-                    {/* <NavBar> Welcome back, {roles[0].name} {user.name}! </NavBar> */}
-                    <NavBar> Welcome back, {user.name}! </NavBar>
+                    {/* <NavBar disableBack="true"> Welcome back, {roles[0].name} {user.name}! </NavBar> */}
+                    <NavBar disableBack="true"> Welcome back, {user.name}! </NavBar>
                     <Content >
                         <PageOptionList />
                     </Content>

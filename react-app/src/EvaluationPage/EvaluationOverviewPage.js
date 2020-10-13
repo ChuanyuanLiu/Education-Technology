@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
-import Button3D from "../Utils/Button3D";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
-/**
+import {CheckOutlined} from "@ant-design/icons";
+import {
+    RightOutlined,
+    DownOutlined,
+} from "@ant-design/icons";
+
+/*
  * (Route from EvaluationInfo)
  * Evaluation Overview Page
  *    |-- NavBar
@@ -107,26 +112,27 @@ function EvaluationOverviewPage({history}) {
     }
     return (
         <div className='EvaluationPage flex_container'>
-            <div className='header'>
-                <NavBar>
-                    <TextInput
-                        text={evaluation_data.evaluation_title}
-                        onSave={post_title_request(
-                            post_url,
-                            evaluation_data.evaluation_summary
-                        )}
-                    />
-                </NavBar>
-            </div>
-            <div className='content'>
-                <TextArea
-                    title='Summary'
-                    text={evaluation_data.evaluation_summary}
-                    onSave={post_summary_request(
+            <NavBar>
+                <TextInput
+                    text={evaluation_data.evaluation_title}
+                    onSave={post_title_request(
                         post_url,
-                        evaluation_data.evaluation_title
+                        evaluation_data.evaluation_summary
                     )}
                 />
+            </NavBar>
+            <div className='content scrollable '>
+                <div>
+                    <TextArea
+                        title='Summary'
+                        text={evaluation_data.evaluation_summary}
+                        onSave={post_summary_request(
+                            post_url,
+                            evaluation_data.evaluation_title
+                        )}
+                    />
+                </div>
+
                 <SectionsList
                     evaluation_id={evaluation_id}
                     {...evaluation_data}
@@ -173,7 +179,7 @@ function SectionsList({evaluation_id, sections, registerExpand,
 
 // Display a list of questions
 function Section({evaluation_id, section_title, section_index, questions,
-                  registerExpand, section_id, registerUnexpand, defaultExpand}) {
+                  registerExpand, section_id, section_completed,registerUnexpand, defaultExpand}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -188,19 +194,21 @@ function Section({evaluation_id, section_title, section_index, questions,
     useEffect(() => setExpand(defaultExpand),[defaultExpand])
     return (
         <>
+
             <div
                 onClick={toggleExpand}
                 className={"sub_header clickable " + (getExpand ? "on" : "")}
             >
-                {`Section ${section_index + 1} ${section_title}`}
-                <div className='right'>
-                    <Button3D
-                        on={getExpand}
-                        onClick={toggleExpand}
-                        on_text='collapse'
-                        off_text='expand'
-                    />
+                <div className="left_button">
+                    {getExpand? <DownOutlined onClick={toggleExpand}/> : 
+                                <RightOutlined onClick={toggleExpand}/>}                    
                 </div>
+                {`Section ${section_index + 1} ${section_title}`}
+                <span className="right">
+                    {section_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {section_completed? "Completed" : null}
+                </span>
             </div>
             <ul>
                 {getExpand
@@ -226,6 +234,7 @@ function Question({
     section_index,
     question_index,
     question_title,
+    question_completed
 }) {
     const history = useHistory();
     function handleClick() {
@@ -240,6 +249,11 @@ function Question({
     return (
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
+            <span className="right">
+                    {question_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {question_completed? "Completed" : null}
+            </span>
         </li>
     );
 }

@@ -1,77 +1,77 @@
 import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
-import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
-import EvaluationInfo from "./EvaluationInfo";
+import ReportInfo from "./ReportInfo";
 import BigButton from "./../Utils/BigButton";
-import {EvaluationInfoData} from "../Utils/DataClass.js";
+import {ReportInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
-
 
 /**
  * Route from Homepage
- * Evaluation Page /evaluation
+ * Report Page /report
  *  |-- NavBar
  *      |-- SearchBar
- *  |-- EvaluationList
- *  |-- BigButton (route to /new_evaluation)
+ *  |-- ReportList
+ *  |-- BigButton (create a new report)
  */
-function EvaluationPage() {
+function ReportPage() {
     const SEARCH_PROPERTY = "title";
     const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
-    const [evaluationList, setEvaluationList] = useState(null);
+    const [reportList, setReportList] = useState(null);
 
-
-
-    // initalize data
+    // initalize data by getting the data and wrap response in DataClass
     useEffect(() => {
-        fetch("http://localhost:3001/evaluation")
+        fetch("http://localhost:3001/report")
             .then((response) => response.json())
             .then((data) => {
-                setEvaluationList(convertToDataClass(data));
+                setReportList(convertToDataClass(data));
             })
             .catch(console.error);
     }, []);
 
-    const goToEvaluationOverivew = (id) => {
+    function convertToDataClass(data) {
+        return data.map(element=>new ReportInfoData(element));
+    }
+
+    function goToReportOverview(id) {
         history.push({
-            pathname: "/evaluation_overview",
+            pathname: "/report_overview",
             state: {
-                evaluation_id: id,
+                report_id: id,
             },
         });
     };
 
-    const goToNewEvaluation = () => history.push("./new_evaluation");
-
-    function convertToDataClass(data) {
-        return data.map(data=>new EvaluationInfoData(data));
+    async function goToEvaluationSelection() {
+        history.push({
+            pathname: "/new_report",
+        });
     }
 
-    if (evaluationList == null)
+    if (reportList == null )
         return <h1> Loading ... </h1>;
 
     return (
         <div className='flex_container'>
             <div className='header'>
                 <NavBar>
-                    Evaluations
+                    Reports
                 </NavBar>
             </div>
             <div className='content scrollable'>
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 
                     sortByProperty={SORTBY_PROPERTY}
-                    list={evaluationList}
-                    CardReactComponent={EvaluationInfo}
-                    dataClass={EvaluationInfoData}
-                    onClick={goToEvaluationOverivew}
+                    list={reportList}
+                    CardReactComponent={ReportInfo}
+                    dataClass={ReportInfoData}
+                    onClick={goToReportOverview}
                 />
             </div>
             <div className='footer'>
-                <BigButton onClick={goToNewEvaluation}>
-                    New Evaluation
+                <BigButton onClick={goToEvaluationSelection}>
+                    New Report
                 </BigButton>
             </div>
         </div>
@@ -79,4 +79,4 @@ function EvaluationPage() {
 }
 
 
-export default EvaluationPage;
+export default ReportPage;
