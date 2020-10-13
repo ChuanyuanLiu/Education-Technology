@@ -39,12 +39,18 @@ function FrameworkPage() {
     };
 
     useEffect(() => {
+        let isCancelled = false
         fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
-                setFrameworks(convertToDataClass(data));
+                if(!isCancelled){
+                    setFrameworks(convertToDataClass(data));
+                }
             });
-    });
+        return ()=>{
+            isCancelled = true
+        }
+    }, []);
 
     if (frameworks.length === 0 || user.name === null) return <h1>Loading .. </h1>;
 

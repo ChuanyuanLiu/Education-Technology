@@ -41,7 +41,7 @@ function FrameworkOverview({history}) {
     const [expandedSections, setExpandedSections] = useState([]);
 
     function initializeFramework(data) {
-        console.log(data);
+        // console.log(data);
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
@@ -55,18 +55,7 @@ function FrameworkOverview({history}) {
         setExpandedSections(history.location.state.session);
     }
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/framework?framework_id=${framework_id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                initializeFramework(data);
-            })
-            .catch(console.err);
-    }, [framework_id]);
 
-    if (framework_data === null || expandedSections === []) {
-        return <h1>Loading...</h1>;
-    }
     //Add section to framework, called from SectionList
     const addSection = () => {
         const url = `http://localhost:3001/framework/section/new?framework_id=${framework_id}`;
@@ -204,6 +193,25 @@ function FrameworkOverview({history}) {
     const checkExpand = (section_id) => {
         return expandedSections.includes(section_id);
     };
+
+    useEffect(() => {
+        let isCancelled = false;
+        fetch(`http://localhost:3001/framework?framework_id=${framework_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if(!isCancelled){
+                    initializeFramework(data);
+                }
+            })
+            .catch(console.err);
+        return () => {
+            isCancelled = true;
+            };
+        }, []);
+
+    if (framework_data === null || expandedSections === []) {
+        return <h1>Loading...</h1>;
+    }
     return (
         <div className='flex_container '>
             <NavBar>
