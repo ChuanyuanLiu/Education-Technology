@@ -161,12 +161,13 @@ router.get('/', function (req, res, next) {
 router.get('/new', function (req, res, next) {
 
     // Select an active and finalised framework to generate evaluation
-    // Example: http://localhost:3001/evaluation/new?framework_id=1
+    // API: /evaluation/new?framework_id={id}&author_name={author_name}
+    // Example: http://localhost:3001/evaluation/new?framework_id=1&author_name=Tony
     // Excute 4 SQL statements:
-    if (req.query.framework_id != null) {
+    if (req.query.framework_id != null && req.query.author_name != null) {
 
         // 1. Create a new evaluation, Insert a new evaluation_id
-        const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
+        const sql = "INSERT INTO evaluation ( framework_id, evaluation_author ) VALUES ( " + req.query.framework_id + ", '" + req.query.author_name + "' );"
             // 2. Return the evaluation_id of newly created evaluation
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             // 3. Return general information of the newly created evaluation
