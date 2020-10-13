@@ -161,12 +161,13 @@ router.get('/', function (req, res, next) {
 router.get('/new', function (req, res, next) {
 
     // Select an active and finalised framework to generate evaluation
-    // Example: http://localhost:3001/evaluation/new?framework_id=1
+    // API: /evaluation/new?framework_id={id}&author_name={author_name}
+    // Example: http://localhost:3001/evaluation/new?framework_id=1&author_name=Tony
     // Excute 4 SQL statements:
-    if (req.query.framework_id != null) {
+    if (req.query.framework_id != null && req.query.author_name != null) {
 
         // 1. Create a new evaluation, Insert a new evaluation_id
-        const sql = "INSERT INTO evaluation ( framework_id ) VALUES ( " + req.query.framework_id + " );"
+        const sql = "INSERT INTO evaluation ( framework_id, evaluation_author ) VALUES ( " + req.query.framework_id + ", '" + req.query.author_name + "' );"
             // 2. Return the evaluation_id of newly created evaluation
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             // 3. Return general information of the newly created evaluation
@@ -256,5 +257,26 @@ router.post('/update/response', function (req, res, next) {
     }
 });
 
+// Update the finalised status
+router.post('/finalised/update', function (req, res, next) {
+
+    // Example: http://localhost:3001/evaluation/finalised/update?evaluation_id={eid}
+    if (req.query.evaluation_id != null) {
+        let evaluation_finalised = req.body.evaluation_finalised;
+        const sql = "UPDATE evaluation "
+            + "SET evaluation_finalised = " + evaluation_finalised
+            + " WHERE evaluation_id = " + req.query.evaluation_id
+            + " AND evaluation_finalised = 0";
+
+        sqlAdapter.sqlCall(sql, function (updateFinalise) {
+            if (updateFinalise == null || JSON.stringify(updateFinalise) == '[]') {
+                res.send(UNSUCCESSFUL);
+                return;
+            }
+
+            res.send(SUCCESSFUL);
+        });
+    }
+});
 
 module.exports = router;
