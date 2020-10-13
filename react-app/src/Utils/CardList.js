@@ -60,7 +60,7 @@ function CardList({list, searchProperty, sortByProperty, CardReactComponent, onC
             <div className="search_result_control">
                 <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
                 <span className="right clickable" onClick={toggleAscending}>
-                    <strong><em>{isAscending? "New to Old": "Old to New"} <FilterOutlined></FilterOutlined></em></strong>
+                    <strong><em>{isAscending? "Old to New": "New to Old"} <FilterOutlined></FilterOutlined></em></strong>
                 </span>
             </div>
             {filteredList.map((data, i) => (

@@ -4,11 +4,12 @@ import TextArea from "../Utils/TextArea";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
-import {CheckOutlined, UserOutlined} from "@ant-design/icons";
+import {CheckOutlined} from "@ant-design/icons";
 import {
     RightOutlined,
     DownOutlined,
 } from "@ant-design/icons";
+
 /*
  * (Route from EvaluationInfo)
  * Evaluation Overview Page

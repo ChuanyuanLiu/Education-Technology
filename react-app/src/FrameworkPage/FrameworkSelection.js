@@ -1,47 +1,44 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import {useHistory} from "react-router-dom";
 import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
 import {FrameworkInfoData} from "../Utils/DataClass";
+import {useAuth0} from "@auth0/auth0-react";
 
-class FrameworkSelection extends React.Component {
-    #SEARCH_PROPERTY = "title";
-    #SORTBY_PROPERTY = "creationTime";
-    constructor() {
-        super();
-        this.state = {
-            frameworks: [],
-        };
-        this.handleClick = this.handleClick.bind(this);
-    }
+function FrameworkSelection() {
+    const SEARCH_PROPERTY = "title";
+    const SORTBY_PROPERTY = "creationTime";
+    const [frameworks, setFrameworks] = useState([]);
+    const history = useHistory();
+    const {user, isAuthenticated, isLoading} = useAuth0();
 
-    // Filter out only active frameworks
-    componentDidMount() {
+    const convertToDataClass = (data) => {
+        return data.map((data) => new FrameworkInfoData(data));
+    };
+
+    useEffect(() => {
         fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 let frameworks = [];
-                for (const frameworkData of this.convertToDataClass(data)) {
+                for (const frameworkData of convertToDataClass(data)) {
                     if (frameworkData.isActive()) {
                         frameworks.push(frameworkData);
                     }
                 }
-                this.setState({frameworks});
+                console.log(data);
+                setFrameworks(frameworks);
             });
-    }
+    }, []);
 
-    convertToDataClass(data) {
-        return data.map((data) => new FrameworkInfoData(data));
-    }
-
-    // go directly to the new evaluation
-    handleClick(id) {
-        const requestURL =
-            "http://localhost:3001/evaluation/new?framework_id=" + id;
+    const createNewEvaluation = (id) => {
+        const requestURL = `http://localhost:3001/evaluation/new?framework_id=${id}&author_name=${user.name}`;
+        console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())
             .then(({evaluation_id}) =>
-                this.props.history.replace({
+                history.replace({
                     pathname: "/evaluation_overview",
                     state: {
                         evaluation_id,
@@ -49,27 +46,28 @@ class FrameworkSelection extends React.Component {
                     },
                 })
             );
+    };
+
+    if (frameworks.length === 0) {
+        return <h1>Loading .. </h1>;
     }
 
-    render() {
-        if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
-        return (
-            <div className='flex_container'>
-                <div className='header'>
-                    <NavBar>Frameworks</NavBar>
-                </div>
-                <div className='content scrollable'>
-                    <CardList
-                        list={this.state.frameworks}
-                        searchProperty={this.#SEARCH_PROPERTY}
-                        sortByProperty={this.#SORTBY_PROPERTY}                        
-                        CardReactComponent={FrameworkInfo}
-                        onClick={this.handleClick}
-                    />
-                </div>
+    return (
+        <div className='flex_container'>
+            <div className='header'>
+                <NavBar>Select a framework to base your evaluation</NavBar>
             </div>
-        );
-    }
+            <div className='content scrollable'>
+                <CardList
+                    list={frameworks}
+                    searchProperty={SEARCH_PROPERTY}
+                    sortByProperty={SORTBY_PROPERTY}
+                    CardReactComponent={FrameworkInfo}
+                    onClick={createNewEvaluation}
+                />
+            </div>
+        </div>
+    );
 }
 
 export default FrameworkSelection;
