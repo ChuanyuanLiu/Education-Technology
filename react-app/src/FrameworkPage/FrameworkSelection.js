@@ -5,7 +5,8 @@ import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
 import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkSelection extends React.Component {
-    SEARCH_PROPERTY = "title";
+    #SEARCH_PROPERTY = "title";
+    #SORTBY_PROPERTY = "creationTime";
     constructor() {
         super();
         this.state = {
@@ -59,8 +60,9 @@ class FrameworkSelection extends React.Component {
                 </div>
                 <div className='content scrollable'>
                     <CardList
-                        searchProperty={this.SEARCH_PROPERTY}
                         list={this.state.frameworks}
+                        searchProperty={this.#SEARCH_PROPERTY}
+                        sortByProperty={this.#SORTBY_PROPERTY}                        
                         CardReactComponent={FrameworkInfo}
                         onClick={this.handleClick}
                     />

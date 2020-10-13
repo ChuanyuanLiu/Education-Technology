@@ -33,8 +33,8 @@ function ReportInfo({data, onClick}) {
                         : "Inactive"
                     : "Not Finalized"}
                 <br />
-                Created: &nbsp;
-                {resolveTime(data.creationTime())}
+                Last modified: &nbsp;
+                {resolveTime(data.modifiedTime())}
             </div>
         </InfoCard>
     );

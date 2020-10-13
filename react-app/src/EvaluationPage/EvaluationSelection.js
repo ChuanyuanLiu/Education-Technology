@@ -16,6 +16,7 @@ import CardList from "../Utils/CardList";
  */
 function EvaluationSelection() {
     const SEARCH_PROPERTY = "title";
+    const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
 
@@ -49,8 +50,9 @@ function EvaluationSelection() {
             </div>
             <div className='content scrollable'>
                 <CardList 
-                    searchProperty={SEARCH_PROPERTY} 
                     list={evaluationList}
+                    searchProperty={SEARCH_PROPERTY} 
+                    sortByProperty={SORTBY_PROPERTY}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
                     onClick={selectEvaluation}

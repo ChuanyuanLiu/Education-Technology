@@ -16,6 +16,7 @@ import CardList from "../Utils/CardList";
  */
 function ReportPage() {
     const SEARCH_PROPERTY = "title";
+    const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [reportList, setReportList] = useState(null);
 
@@ -61,6 +62,7 @@ function ReportPage() {
             <div className='content scrollable'>
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 
+                    sortByProperty={SORTBY_PROPERTY}
                     list={reportList}
                     CardReactComponent={ReportInfo}
                     dataClass={ReportInfoData}

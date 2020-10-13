@@ -8,7 +8,8 @@ import BigButton from "../Utils/BigButton";
 import {FrameworkInfoData} from "../Utils/DataClass";
 
 class FrameworkPage extends Component {
-    SEARCH_PROPERTY = "title";
+    #SEARCH_PROPERTY = "title"    
+    #SORTBY_PROPERTY = "createdTime";
 
     constructor() {
         super();
@@ -64,7 +65,8 @@ class FrameworkPage extends Component {
                 </div>
                 <div className='content scrollable'>
                     <CardList
-                        searchProperty={this.SEARCH_PROPERTY}
+                        searchProperty={this.#SEARCH_PROPERTY}
+                        sortByProperty={this.#SORTBY_PROPERTY}
                         list={this.state.frameworks}
                         CardReactComponent={FrameworkInfo}
                         onClick={this.handleClick}
