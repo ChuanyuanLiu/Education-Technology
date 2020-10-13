@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
-            res.send(reportRes);
+            res.send(reportRes[0]);
         });
 
     }
