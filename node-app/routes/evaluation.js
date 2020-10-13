@@ -256,5 +256,26 @@ router.post('/update/response', function (req, res, next) {
     }
 });
 
+// Update the finalised status
+router.post('/finalised/update', function (req, res, next) {
+
+    // Example: http://localhost:3001/evaluation/finalised/update?evaluation_id={eid}
+    if (req.query.evaluation_id != null) {
+        let evaluation_finalised = req.body.evaluation_finalised;
+        const sql = "UPDATE evaluation "
+            + "SET evaluation_finalised = " + evaluation_finalised
+            + " WHERE evaluation_id = " + req.query.evaluation_id
+            + " AND evaluation_finalised = 0";
+
+        sqlAdapter.sqlCall(sql, function (updateFinalise) {
+            if (updateFinalise == null || JSON.stringify(updateFinalise) == '[]') {
+                res.send(UNSUCCESSFUL);
+                return;
+            }
+
+            res.send(SUCCESSFUL);
+        });
+    }
+});
 
 module.exports = router;
