@@ -310,8 +310,6 @@ function EditableSection(props) {
         }
         setExpand(!getExpand);
     };
-
-    useEffect(() => setExpand(props.defaultExpand), [props.defaultExpand]);
     // Save the changes to section title
     const toggleSave = (event) => {
         event.preventDefault();
@@ -355,7 +353,16 @@ function EditableSection(props) {
         border: getActive ? "1px black solid" : "0px black solid",
         widthMin: "30px",
     };
-
+    useEffect(() => {
+        let isCancelled = false
+        if (!isCancelled) {
+            setExpand(props.defaultExpand)
+        }  
+        return () => {
+            isCancelled = true;
+            }
+        }
+    )
     return (
         <div>
             <div className='editable_section'>
