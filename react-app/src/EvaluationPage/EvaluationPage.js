@@ -7,6 +7,7 @@ import BigButton from "./../Utils/BigButton";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
 
+
 /**
  * Route from Homepage
  * Evaluation Page /evaluation
@@ -19,6 +20,8 @@ function EvaluationPage() {
     const SEARCH_PROPERTY = "title";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
+
+
 
     // initalize data
     useEffect(() => {

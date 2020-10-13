@@ -11,7 +11,7 @@ function NavBar({children, disableBack} ) {
     const history = useHistory();
     const { logout } = useAuth0();
     const [canGoback, setCanGoBack] = useState(true)
-    console.log(history.length);
+    // console.log(history.length);
     useEffect(() =>{
         if(disableBack === "true"){
             setCanGoBack(false);
