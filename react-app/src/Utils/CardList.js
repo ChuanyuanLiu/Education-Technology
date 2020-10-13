@@ -24,7 +24,7 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
         setFilteredList(
             filteredList.sort(comparisionFunction)
         )
-    }, [filterList, isAscending]);
+    }, [filteredList, isAscending]);
 
     function compareCards(e1, e2) {
         return compareDateTime(e1.get(SORTBY_PROPERTY), e2.get(SORTBY_PROPERTY));

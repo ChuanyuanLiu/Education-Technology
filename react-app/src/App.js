@@ -12,6 +12,7 @@ import FrameworkSelection from "./EvaluationPage/FrameworkSelection";
 import FrameworkPage from "./FrameworkPage/FrameworkPage";
 import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview";
 import FrameworkQuestionPage from "./FrameworkPage/FrameworkQuestionPage";
+import ReportPage from "./ReportPage/ReportPage";
 function App(){
     return (
         <div className='element_container'>
@@ -26,6 +27,7 @@ function App(){
                     <Route path='/framework' component={FrameworkPage} />
                     <Route path='/framework_overview' component={FrameworkOverviewPage} />
                     <Route path='/framework_question' component={FrameworkQuestionPage} />
+                    <Route path='/report' component={ReportPage} />
                 </Router>
             </React.StrictMode>
 
