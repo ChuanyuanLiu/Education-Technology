@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
-import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
-
 
 /**
  * Route from Homepage
@@ -16,17 +14,15 @@ import CardList from "../Utils/CardList";
  *  |-- EvaluationList
  *  |-- BigButton (route to /new_evaluation)
  */
-function EvaluationPage() {
+function EvaluationSelection() {
     const SEARCH_PROPERTY = "title";
     const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
 
-
-
     // initalize data
     useEffect(() => {
-        fetch("http://localhost:3001/evaluation")
+        fetch("http://localhost:3001/report/new")
             .then((response) => response.json())
             .then((data) => {
                 setEvaluationList(convertToDataClass(data));
@@ -34,16 +30,9 @@ function EvaluationPage() {
             .catch(console.error);
     }, []);
 
-    const goToEvaluationOverivew = (id) => {
-        history.push({
-            pathname: "/evaluation_overview",
-            state: {
-                evaluation_id: id,
-            },
-        });
+    function selectEvaluation(id) {
+        // TODO
     };
-
-    const goToNewEvaluation = () => history.push("./new_evaluation");
 
     function convertToDataClass(data) {
         return data.map(data=>new EvaluationInfoData(data));
@@ -56,27 +45,22 @@ function EvaluationPage() {
         <div className='flex_container'>
             <div className='header'>
                 <NavBar>
-                    Evaluations
+                    Select an evaluation to base your evaluation
                 </NavBar>
             </div>
             <div className='content scrollable'>
                 <CardList 
+                    list={evaluationList}
                     searchProperty={SEARCH_PROPERTY} 
                     sortByProperty={SORTBY_PROPERTY}
-                    list={evaluationList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
-                    onClick={goToEvaluationOverivew}
+                    onClick={selectEvaluation}
                 />
-            </div>
-            <div className='footer'>
-                <BigButton onClick={goToNewEvaluation}>
-                    New Evaluation
-                </BigButton>
             </div>
         </div>
     );
 }
 
 
-export default EvaluationPage;
+export default EvaluationSelection;

@@ -7,63 +7,63 @@ import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import BigButton from "../Utils/BigButton";
 import {FrameworkInfoData} from "../Utils/DataClass";
-import { useAuth0 } from '@auth0/auth0-react';
+import {useAuth0} from "@auth0/auth0-react";
 
-
-function FrameworkPage (){
+function FrameworkPage() {
     const SEARCH_PROPERTY = "title";
-    const [frameworks, setFrameworks] = useState([])
+    const SORTBY_PROPERTY = "creationTime";
+    const [frameworks, setFrameworks] = useState([]);
     const history = useHistory();
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const {user, isAuthenticated, isLoading} = useAuth0();
 
     const convertToDataClass = (data) => {
-        return data.map(data=>new FrameworkInfoData(data));
-    }
+        return data.map((data) => new FrameworkInfoData(data));
+    };
 
     // go directly to the framework
-    const handleClick = (id) => {
+    const goToFrameworkOverview = (id) => {
         history.push({
             pathname: "/framework_overview",
             state: {
-                framework_id: id
+                framework_id: id,
             },
         });
-    }
+    };
 
-    const createNew = ()=> {
+    const createNew = () => {
         fetch(`http://localhost:3001/framework/new?author_name=${user.name}`)
             .then((response) => response.json())
             .then((data) => {
-                handleClick(data.framework_id);
+                goToFrameworkOverview(data.framework_id);
             });
-    }
+    };
+
     useEffect(() => {
         fetch("http://localhost:3001/framework")
-        .then((response) => response.json())
-        .then((data) => {
-            setFrameworks(convertToDataClass(data));
-        });
-    })
+            .then((response) => response.json())
+            .then((data) => {
+                setFrameworks(convertToDataClass(data));
+            });
+    });
 
     if (frameworks.length === 0) return <h1>Loading .. </h1>;
 
     return (
         <div className='flex_container'>
             <div className='header'>
-                <NavBar>Frameworks</NavBar>
+                <NavBar>Framework</NavBar>
             </div>
             <div className='content scrollable'>
                 <CardList
                     searchProperty={SEARCH_PROPERTY}
+                    sortByProperty={SORTBY_PROPERTY}
                     list={frameworks}
                     CardReactComponent={FrameworkInfo}
-                    onClick={handleClick}
+                    onClick={goToFrameworkOverview}
                 />
             </div>
             <div className='footer'>
-                <BigButton onClick={createNew}>
-                    New Framework
-                </BigButton>
+                <BigButton onClick={createNew}>New Framework</BigButton>
             </div>
         </div>
     );

@@ -3,7 +3,18 @@ import SearchBar, {sentence_contains} from "./SearchBar";
 import {compareDateTime} from "./Helper";
 import {FilterOutlined} from "@ant-design/icons"
 
-function CardList({searchProperty, sortByProperty="creationTime", list, CardReactComponent, onClick}) {
+/**
+ * CardList renders each element in the list using CardReactComponent,
+ * CardList
+ *  |-- SearchBar
+ *  |-- CardReactComponent (FrameworkInfo, EvaluationInfo, or ReportInfo)
+ * @param {array of class} list a list of data in the form of data.
+ * @param {string} searchProperty 
+ * @param {string} sortByProperty
+ * @param {CardReactComponent} CardReactComponent defines how each row will be rendered
+ * @param {function} onClick to be triggered when a row of the list is clicked
+ */
+function CardList({list, searchProperty, sortByProperty, CardReactComponent, onClick}) {
 
     const SEARCH_PROPERTY = searchProperty;
     const SORTBY_PROPERTY = sortByProperty;
@@ -24,7 +35,7 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
         setFilteredList(
             filteredList.sort(comparisionFunction)
         )
-    }, [filterList, isAscending]);
+    }, [filteredList, isAscending]);
 
     function compareCards(e1, e2) {
         return compareDateTime(e1.get(SORTBY_PROPERTY), e2.get(SORTBY_PROPERTY));
