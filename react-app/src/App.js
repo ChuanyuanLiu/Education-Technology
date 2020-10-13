@@ -2,13 +2,14 @@ import React from "react"
 import Login from "./LoginPage/Login";
 import EvaluationOverviewPage from "./EvaluationPage/EvaluationOverviewPage";
 import Evaluation from "./EvaluationPage/EvaluationPage";
+import EvaluationSelection from "./EvaluationPage/EvaluationSelection";
 import HomePage from "./HomePage/HomePage";
 import QuestionPage from "./EvaluationPage/QuestionPage"
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import "antd/dist/antd.css";
 import "./core.css";
 import "./googleFont.css";
-import FrameworkSelection from "./EvaluationPage/FrameworkSelection";
+import FrameworkSelection from "./FrameworkPage/FrameworkSelection";
 import FrameworkPage from "./FrameworkPage/FrameworkPage";
 import FrameworkOverviewPage from "./FrameworkPage/FrameworkOverview";
 import FrameworkQuestionPage from "./FrameworkPage/FrameworkQuestionPage";
@@ -28,6 +29,7 @@ function App(){
                     <Route path='/framework_overview' component={FrameworkOverviewPage} />
                     <Route path='/framework_question' component={FrameworkQuestionPage} />
                     <Route path='/report' component={ReportPage} />
+                    <Route path='/new_report' component={EvaluationSelection} />
                 </Router>
             </React.StrictMode>
 

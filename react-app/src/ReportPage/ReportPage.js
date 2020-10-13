@@ -42,11 +42,10 @@ function ReportPage() {
         });
     };
 
-    async function createNewReport() {
-        const response = await fetch("http://localhost:30001/report/new");
-        const jsonBody = await response.json();
-        const newReport = new ReportInfoData(jsonBody);
-        goToReportOverview(newReport.id());
+    async function goToEvaluationSelection() {
+        history.push({
+            pathname: "/new_report",
+        });
     }
 
     if (reportList == null )
@@ -69,7 +68,7 @@ function ReportPage() {
                 />
             </div>
             <div className='footer'>
-                <BigButton onClick={createNewReport}>
+                <BigButton onClick={goToEvaluationSelection}>
                     New Report
                 </BigButton>
             </div>
