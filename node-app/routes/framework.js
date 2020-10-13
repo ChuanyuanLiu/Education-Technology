@@ -104,26 +104,24 @@ router.get('/', function (req, res, next) {
 
 //Create a new framework page
 router.get('/new', function (req, res, next) {
-
-        // Example: http://localhost:3001/framework/new
+    if (req.query.author_name != null) {
+        // Example: http://localhost:3001/framework/new?author_name=Tony 
         // 1. Create a new framework that has all default values
-        const sqlFramework = "INSERT INTO framework VALUES ();"
+        const sqlFramework = "INSERT INTO framework (framework_author) VALUES ('" + req.query.author_name + "');"
         // 2. Return the framework_id of newly created framework
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
         // 3. Return general information of the newly created framework
-            + "SELECT f.framework_title FROM framework f WHERE f.framework_id = (SELECT LAST_INSERT_ID());"
+            + "SELECT * FROM framework WHERE framework_id = (SELECT LAST_INSERT_ID());"
 
-            sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
+        sqlAdapter.sqlCall(sqlFramework, function (sqlRes) {
 
-                if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
-                    res.send(UNSUCCESSFUL);
-                    return;
-                }
-                let cleanRes = {};
-                cleanRes.framework_id = sqlRes[1][0].LAST_INSERT_ID;
-                cleanRes.framework_title = sqlRes[2][0].framework_title;
-                res.send(cleanRes);
-            });
+            if (sqlRes == null || JSON.stringify(sqlRes) == '[[],[],[]]') {
+                res.send(UNSUCCESSFUL);
+                return;
+            }
+            res.send(sqlRes[2][0]);
+        });
+    }
 });
     
 
