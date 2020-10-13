@@ -45,7 +45,7 @@ function EvaluationSelection() {
         <div className='flex_container'>
             <div className='header'>
                 <NavBar>
-                    Evaluations
+                    Select an evaluation to base your evaluation
                 </NavBar>
             </div>
             <div className='content scrollable'>
