@@ -1,5 +1,4 @@
 import React from "react";
-import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
