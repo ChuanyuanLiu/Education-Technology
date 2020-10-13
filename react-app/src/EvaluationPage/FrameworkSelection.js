@@ -1,47 +1,48 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import "./EvaluationPage.css";
 import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
 import {FrameworkInfoData} from "../Utils/DataClass";
+import { useAuth0 } from '@auth0/auth0-react';
 
-class FrameworkSelection extends React.Component {
-    SEARCH_PROPERTY = "title";
-    constructor() {
-        super();
-        this.state = {
-            frameworks: [],
-        };
-        this.handleClick = this.handleClick.bind(this);
+
+function FrameworkSelection(){
+    const SEARCH_PROPERTY = "title";
+    const [frameworks, setFrameworks] = useState([])
+    const history = useHistory();
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
+    const convertToDataClass = (data) => {
+        return data.map((data) => new FrameworkInfoData(data));
     }
-
-    // Filter out only active frameworks
-    componentDidMount() {
+    useEffect(()=>{
         fetch("http://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 let frameworks = [];
-                for (const frameworkData of this.convertToDataClass(data)) {
+                for (const frameworkData of convertToDataClass(data)) {
                     if (frameworkData.isActive()) {
                         frameworks.push(frameworkData);
                     }
                 }
-                this.setState({frameworks});
+                console.log(data)
+                setFrameworks(frameworks);
             });
+    }, [])
+    if (frameworks.length === 0){
+        return <h1>Loading .. </h1>;
     }
+    const handleClick = (id) => {
 
-    convertToDataClass(data) {
-        return data.map((data) => new FrameworkInfoData(data));
-    }
-
-    // go directly to the new evaluation
-    handleClick(id) {
         const requestURL =
-            "http://localhost:3001/evaluation/new?framework_id=" + id;
+            `http://localhost:3001/evaluation/new?framework_id=${id}&author_name=${user.name}`;
+        console.log(requestURL)
         fetch(requestURL)
             .then((response) => response.json())
             .then(({evaluation_id}) =>
-                this.props.history.replace({
+                history.replace({
                     pathname: "/evaluation_overview",
                     state: {
                         evaluation_id,
@@ -50,25 +51,21 @@ class FrameworkSelection extends React.Component {
                 })
             );
     }
-
-    render() {
-        if (this.state.frameworks.length === 0) return <h1>Loading .. </h1>;
-        return (
-            <div className='flex_container'>
-                <div className='header'>
-                    <NavBar>Frameworks</NavBar>
-                </div>
-                <div className='content scrollable'>
-                    <CardList
-                        searchProperty={this.SEARCH_PROPERTY}
-                        list={this.state.frameworks}
-                        CardReactComponent={FrameworkInfo}
-                        onClick={this.handleClick}
-                    />
-                </div>
+    return (
+        <div className='flex_container'>
+            <div className='header'>
+                <NavBar>Frameworks</NavBar>
             </div>
-        );
-    }
+            <div className='content scrollable'>
+                <CardList
+                    searchProperty={SEARCH_PROPERTY}
+                    list={frameworks}
+                    CardReactComponent={FrameworkInfo}
+                    onClick={handleClick}
+                />
+            </div>
+        </div>
+    );
 }
 
 export default FrameworkSelection;
