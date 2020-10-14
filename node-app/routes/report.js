@@ -97,11 +97,11 @@ router.get('/finalise', function (req, res, next) {
         +"f.framework_id, f.framework_title "
         +"FROM report AS r INNER JOIN evaluation AS e USING (evaluation_id) "
         +"INNER JOIN framework AS f USING (framework_id) "
-        +"WHERE report_id = " + report_id ; 
+        +"WHERE report_id = " + report_id + ";"
         //2. Returns section details
-        +"SELECT section_id, section_title "
-        +"FROM framework_section "
-        +"GROUP BY section_title ;"
+        +"SELECT MIN(section_id) AS min_section_id, MAX(section_id) AS max_section_id "
+        +"FROM framework_section WHERE framework_id = 1 ;";
+        // + "COUNT ( section_id );";
         //3. Returns question details with respective rate chosen and response comment
       //  +"SELECT q.section_id, q.question_title, er.rate_chosen, er.response_comment "
        // +"FROM framework_section_question AS q "
@@ -115,7 +115,20 @@ router.get('/finalise', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
-            
+            // console.log(reportRes[1]);
+            let min_section_id = reportRes[1][0].min_section_id;
+            let max_section_id = reportRes[1][0].max_section_id;
+            console.log(min_section_id);
+            console.log(max_section_id);
+            for (let i = min_section_id; i <= max_section_id; i++)
+            {
+                const sql2 = "SELECT * FROM framework_section_question WHERE section_id = " + i;
+                sqlAdapter.sqlCall(sql2, function (questionRes) 
+                {
+                    
+                }
+        {
+            }
             let cleanRes = {};
             let sectionRes = reportRes[1];
             let report_id = reportRes[0].report_id;
@@ -128,7 +141,9 @@ router.get('/finalise', function (req, res, next) {
             let evaluation_title = reportRes[0].evaluation_title;       
             let framework_id = reportRes[0].framework_id;
             let framework_title = reportRes[0].framework_title;
-            cleanRes.sections = jsonUtils.formatSectionHierarchy(sectionRes, true);
+
+
+            // cleanRes.sections = jsonUtils.formatSectionHierarchy(sectionRes, true);
 
            // let section_title = sectionRes.section_title;
             cleanRes.report_id = report_id;
