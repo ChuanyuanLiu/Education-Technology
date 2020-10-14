@@ -9,7 +9,7 @@ const SUCCESSFUL = "The call to the SQL database was successful."
 const fs = require('fs');
 var sd = require('silly-datetime');
 var nodemailer  = require('nodemailer');
-//const jsonUtils = require('../utils/jsonUtils');
+const jsonUtils = require('../utils/jsonUtils');
 //const fastcsv = require('fast-csv');
 
 router.get('/', function (req, res, next) {
@@ -92,14 +92,22 @@ router.get('/finalise', function (req, res, next) {
     {
         // Example: http://localhost:3001/report/finalise?report_id=1
         let report_id = req.query.report_id;
+        //1. Returns report, evaluation, framework details
         const sql = "SELECT r.*, e.evaluation_id, e.evaluation_title, "
-        +"f.framework_id, f.framework_title, s.section_title, q.question_title, er.rate_chosen, er.response_comment "
+        +"f.framework_id, f.framework_title "
         +"FROM report AS r INNER JOIN evaluation AS e USING (evaluation_id) "
         +"INNER JOIN framework AS f USING (framework_id) "
-        +"INNER JOIN framework_section AS s using (framework_id) "
-        +"INNER JOIN framework_section_question AS q using (section_id) "
-        +"INNER JOIN evaluation_response AS er USING (question_id) "
         +"WHERE report_id = " + report_id ; 
+        //2. Returns section details
+        +"SELECT section_id, section_title "
+        +"FROM framework_section "
+        +"GROUP BY section_title ;"
+        //3. Returns question details with respective rate chosen and response comment
+      //  +"SELECT q.section_id, q.question_title, er.rate_chosen, er.response_comment "
+       // +"FROM framework_section_question AS q "
+        //+"INNER JOIN evaluation_response AS er USING (question_id) "
+        //+"WHERE "
+
 
         sqlAdapter.sqlCall(sql, function (reportRes) 
         {
@@ -109,6 +117,7 @@ router.get('/finalise', function (req, res, next) {
             }
             
             let cleanRes = {};
+            let sectionRes = reportRes[1];
             let report_id = reportRes[0].report_id;
             let report_author = reportRes[0].report_author;
             let report_title = reportRes[0].report_title;
@@ -119,10 +128,9 @@ router.get('/finalise', function (req, res, next) {
             let evaluation_title = reportRes[0].evaluation_title;       
             let framework_id = reportRes[0].framework_id;
             let framework_title = reportRes[0].framework_title;
-            let section_title = reportRes[0].section_title;
-            let question_title = reportRes[0].question_title;
-            let rate_chosen = reportRes[0].rate_chosen;
-            let response_comment = reportRes[0].response_comment;
+            cleanRes.sections = jsonUtils.formatSectionHierarchy(sectionRes, true);
+
+           // let section_title = sectionRes.section_title;
             cleanRes.report_id = report_id;
 
             // TODO: We need to generate the report content, the following part is a sample content.
@@ -149,16 +157,12 @@ router.get('/finalise', function (req, res, next) {
             csvContent += 'framework_title\n';
             csvContent += framework_id + ',';
             csvContent += framework_title + '\n';
-            csvContent += 'Framework\n'
-            csvContent += 'section_title,';
-            csvContent += 'question_title,';
-            csvContent += 'rate_chosen,';
-            csvContent += 'response_comment\n';
-            csvContent += section_title + ',';
-            csvContent += question_title + ',';
-            csvContent += rate_chosen + ',';
-            csvContent += response_comment + '\n';
-            csvContent += 'End of Report'
+           // csvContent += 'Section Details\n'
+           // csvContent += 'section_id,';
+           // csvContent += 'section_title\n';
+           // csvContent += section_id + ',';
+           // csvContent += section_title + '\n';
+           // csvContent += 'End of Report'
 
             // The .csv file is stored in '$REPORTS_FILEPATH'
             // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
