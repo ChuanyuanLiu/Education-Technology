@@ -14,7 +14,7 @@ function PageOptionList({role}) {
         "Reports",
         "Frameworks",
         "User Management",
-        "Settings",
+        // "Settings",
     ];
 
     const whole_routes = [
@@ -22,19 +22,19 @@ function PageOptionList({role}) {
         "./report",
         "./framework",
         "./user_management",
-        "./setting"
+        // "./setting"
     ];
 
     const guest_fuctions = [
         "Evaluations",
         "Reports",
-        "Settings",
+        // "Settings",
     ];
 
     const guest_routes = [
         "./evaluation",
         "./report",
-        "./setting"
+        // "./setting"
     ];
 
     function handleClick(key){
