@@ -24,3 +24,24 @@
     font-size: medium;
     float: left;
 }
+.addNew {
+    width: 300px;
+    border: dashed 1px black;
+    text-align: center;
+    height: 30px;
+    border-radius: 10px;
+    margin: 0px 0px 10px 0px;
+}
+.mailTo {
+    padding: 10px 10px;
+}
+
+.mailLabel{
+    width: 300px;
+    border-radius: 10px;
+    margin: 0px 0px 10px 0px;
+    outline: none;
+}
+.mailList {
+    padding: 20px;
+}

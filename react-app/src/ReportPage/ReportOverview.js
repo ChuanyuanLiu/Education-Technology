@@ -85,8 +85,15 @@ function ReportOverview ({history}){
     }
 
     const handlePublish = () =>{
-        console.log("publish")
+        history.push({
+            pathname: "/report_publish",
+            state:{
+                report_id: report_id,
+                title: reportData.report_title
+            }
+        })
     }
+
     const viewEvaluation = ()=>{
         history.push({
             pathname: "/evaluation_overview",
@@ -96,6 +103,9 @@ function ReportOverview ({history}){
         });
     }
 
+    const handleDownload = () =>{
+        //TODO
+    }
     return (
         <div className='flex_container'>
             <NavBar>
@@ -132,11 +142,20 @@ function ReportOverview ({history}){
                             Finalize
                         </BigButton>
                         :
-                        <BigButton
-                        onClick={() => handlePublish}
-                        >
-                            Publish
-                        </BigButton>
+                        (<span>
+
+                            <BigButton
+                            onClick={() => handleDownload}
+                            >
+                                Download
+                            </BigButton>
+                            <span> </span>
+                            <BigButton
+                                onClick={handlePublish}
+                            >
+                                Publish
+                            </BigButton>
+                        </span>)
                     }
                 </div>
         </div>
