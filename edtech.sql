@@ -46,7 +46,7 @@ CREATE TABLE `evaluation` (
 --
 
 LOCK TABLES `evaluation` WRITE;
-INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',0,1,0);
+INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',1,1,1);
 INSERT INTO `evaluation` VALUES (2,'Tony','Test Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is used to test for report.',1,1,1);
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
