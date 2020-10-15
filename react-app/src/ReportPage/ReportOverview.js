@@ -124,19 +124,19 @@ function ReportOverview ({history}){
                 </div>
 
                 <div className='footer'>
-                {!reportData.report_finalised?               
-                    <BigButton
-                        onClick={post_finailized_request(post_finailized_url)}
-                    >
-                        Finalize
-                    </BigButton>
-                    :
-                    <BigButton
-                    onClick={handlePublish}
-                    >
-                        Publish
-                    </BigButton>
-                }
+                    {!reportData.report_finalised?               
+                        <BigButton
+                            onClick={post_finailized_request(post_finailized_url)}
+                        >
+                            Finalize
+                        </BigButton>
+                        :
+                        <BigButton
+                        onClick={handlePublish}
+                        >
+                            Publish
+                        </BigButton>
+                    }
                 </div>
             </div>
         </div>
