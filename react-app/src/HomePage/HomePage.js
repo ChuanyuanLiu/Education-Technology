@@ -7,38 +7,59 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useRole } from "../Utils/UseRole";
 const {Content} = Layout;
 
-function PageOptionList(props) {
+function PageOptionList({role}) {
     const history = new useHistory();
-    const list_names = [
+    const whole_fuctions = [
         "Evaluations",
         "Reports",
         "Frameworks",
         "User Management",
-        "Settings",
+        // "Settings",
     ];
 
-    const route_name = [
+    const whole_routes = [
         "./evaluation",
         "./report",
         "./framework",
         "./user_management",
-        "./setting"
+        // "./setting"
+    ];
+
+    const guest_fuctions = [
+        "Evaluations",
+        "Reports",
+        // "Settings",
+    ];
+
+    const guest_routes = [
+        "./evaluation",
+        "./report",
+        // "./setting"
     ];
 
     function handleClick(key){
-        history.push(route_name[key])
+        history.push(whole_routes[key])
     }
 
     return (
         <div className='center'>
         <div className='PageOptionList'>
-            {list_names.map((name,i) => (
+            {role === "Senior Consultant"? 
+                whole_fuctions.map((name,i) => (
                     <div className="Option clickable" key={i} onClick={()=> handleClick(i)}>
                         <div className="Button">
-                    {name}
+                            {name}
+                        </div>
                     </div>
-                    </div>
-            ))}
+                ))
+                :
+                guest_fuctions.map((name,i) => (
+                    <div className="Option clickable" key={i} onClick={()=> handleClick(i)}>
+                        <div className="Button">
+                            {name}
+                        </div>
+                    </div>))
+            }
         </div>
         </div>
     );
@@ -47,10 +68,10 @@ function PageOptionList(props) {
 // Uncomment lines 50, 52, and 61 to use the UseRole hook
 function HomePage(props) {
     const { user, isAuthenticated, isLoading } = useAuth0();
-    // const { error, roles, loading: rolesLoading, refresh } = useRole();
+    const { error, roles, loading: rolesLoading, refresh } = useRole();
 
-    // if (isLoading || rolesLoading) {
-    if (isLoading) {
+    if (isLoading || rolesLoading) {
+    // if (isLoading) {
         return <div>Loading...</div>;
     }
     
@@ -61,7 +82,7 @@ function HomePage(props) {
                     {/* <NavBar disableBack="true"> Welcome back, {roles[0].name} {user.name}! </NavBar> */}
                     <NavBar disableBack="true"> Welcome back, {user.name}! </NavBar>
                     <Content >
-                        <PageOptionList />
+                        <PageOptionList role = {roles[0].name}/>
                     </Content>
                 </Layout>
             </div>
