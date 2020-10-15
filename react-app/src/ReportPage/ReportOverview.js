@@ -75,7 +75,7 @@ function ReportOverview ({history}){
             .then((data) => data.text())
             .then((response) => {
                 if (
-                    response === "Successful!"
+                    response === "The call to the SQL database was successful."
                 ) {
                     setReport({...reportData, report_finalised: 1});
                 }
@@ -83,6 +83,7 @@ function ReportOverview ({history}){
             .catch(console.err);
 
     }
+
     const handlePublish = () =>{
         console.log("publish")
     }
@@ -94,9 +95,9 @@ function ReportOverview ({history}){
             },
         });
     }
-    console.log(reportData)
+
     return (
-        <div className='flex_container '>
+        <div className='flex_container'>
             <NavBar>
                 <div className="middle">
                     <TextInput
@@ -122,23 +123,22 @@ function ReportOverview ({history}){
                         disabled={reportData.report_finalised}
                     />
                 </div>
-
-                <div className='footer'>
+            </div>
+            <div className='footer'>
                     {!reportData.report_finalised?               
                         <BigButton
-                            onClick={post_finailized_request(post_finailized_url)}
+                            onClick={()=> post_finailized_request(post_finailized_url)}
                         >
                             Finalize
                         </BigButton>
                         :
                         <BigButton
-                        onClick={handlePublish}
+                        onClick={() => handlePublish}
                         >
                             Publish
                         </BigButton>
                     }
                 </div>
-            </div>
         </div>
     )
 }

@@ -28,9 +28,7 @@ function ReportInfo({data, onClick, hideTitle=false}) {
             </div>
             <div className='rightContent'>
                 {data.wasFinalised()
-                    ? data.isActive()
-                        ? "Active"
-                        : "Inactive"
+                    ? "Finalized"
                     : "Not Finalized"}
                 <br />
                 Last modified: &nbsp;
