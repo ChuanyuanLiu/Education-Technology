@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import SearchBar, {sentence_contains} from "./SearchBar";
 import {compareDateTime} from "./Helper";
 import {FilterOutlined} from "@ant-design/icons"
+
 /**
  * CardList renders each element in the list using CardReactComponent,
  * CardList
@@ -17,8 +18,7 @@ function CardList({list, searchProperty, sortByProperty, CardReactComponent, onC
 
     const SEARCH_PROPERTY = searchProperty;
     const SORTBY_PROPERTY = sortByProperty;
-    const listAll = list
-    // console.log(listAll[0].author())
+    const listAll = list;
     const [filteredList, setFilteredList] = useState(listAll);
     const [queryText, setQueryText] = useState("");
     const [isAscending, setAscending] = useState(false);
@@ -53,22 +53,23 @@ function CardList({list, searchProperty, sortByProperty, CardReactComponent, onC
     function toggleAscending() {
         setAscending(!isAscending);
     }
+
     return (
         <div className='CardList'>
             <SearchBar onSearch={filterList} />
             <div className="search_result_control">
-                <strong>{listAll.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
+                <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
                 <span className="right clickable" onClick={toggleAscending}>
-                    <strong><em>{isAscending? "Old To New": "New To Old"} <FilterOutlined></FilterOutlined></em></strong>
+                    <strong><em>{isAscending? "Old to New": "New to Old"} <FilterOutlined></FilterOutlined></em></strong>
                 </span>
             </div>
-            {listAll.map((data, i) => {
-                return (<CardReactComponent
+            {filteredList.map((data, i) => (
+                <CardReactComponent
                     key={i}
                     data={data}
                     onClick={onClick}
-                  />)})
-            }
+                />
+            ))}
         </div>
     );
 }
