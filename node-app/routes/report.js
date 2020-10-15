@@ -164,7 +164,7 @@ router.get('/finalise', function (req, res, next) {
                     res.send(UNSUCCESSFUL);
                     return;
                 }
-                res.send(cleanRes);
+                res.send(SUCCESSFUL);
             });
         });
     }
