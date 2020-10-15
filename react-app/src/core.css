@@ -211,6 +211,7 @@ body,
     display: inline-block;
     position: relative;
     padding: 4px 8px;
+    font-size: medium;
 }
 
 .breakWord {

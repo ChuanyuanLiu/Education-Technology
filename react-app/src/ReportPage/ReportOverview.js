@@ -7,6 +7,7 @@ import Reminder from "../Utils/Reminder";
 import ReportInfo from "./ReportInfo";
 import {ReportInfoData} from "../Utils/DataClass.js";
 import TextArea from "../Utils/TextArea";
+import "./ReportPage.css"
 
 function ReportOverview ({history}){
     const [reportData, setReport] = useState(null)
@@ -14,7 +15,7 @@ function ReportOverview ({history}){
 
     const post_title_url = `http://localhost:3001/report/update/title?report_id=${report_id}`
     const post_summary_url = `http://localhost:3001/report/update/recommendation?report_id=${report_id}`
-
+    const post_finailized_url = `http://localhost:3001/report/finalise?report_id=${report_id}`
     useEffect(() => 
         {
             let isCancelled = false;
@@ -67,6 +68,32 @@ function ReportOverview ({history}){
             .catch(console.err);
 
     }
+
+    const post_finailized_request = (url) => {
+        console.log(url)
+        fetch(url)
+            .then((data) => data.text())
+            .then((response) => {
+                if (
+                    response === "Successful!"
+                ) {
+                    setReport({...reportData, report_finalised: 1});
+                }
+            })
+            .catch(console.err);
+
+    }
+    const handlePublish = () =>{
+        console.log("publish")
+    }
+    const viewEvaluation = ()=>{
+        history.push({
+            pathname: "/evaluation_overview",
+            state: {
+                evaluation_id: reportData.evaluation_id,
+            },
+        });
+    }
     console.log(reportData)
     return (
         <div className='flex_container '>
@@ -76,21 +103,40 @@ function ReportOverview ({history}){
                         text={reportData.report_title}
                         title={"Report Title"}
                         onSave={post_title_request(post_title_url)}
-                        disabled={reportData.report_published}
+                        disabled={reportData.report_finalised}
                     />
                 </div>
             </NavBar>
             <ReportInfo data={new ReportInfoData(reportData)} hideTitle={true} onClick={()=>{}}/>
             <div className='content scrollable'>
                 <div className='section_header'>Evaluation Used</div>
-                <div className='evalutionBar'></div>
-                <div>
+                <div className='evaluationBar'>
+                    <span className="evaluation_title">{reportData.evaluation_title}</span>
+                    <button className="viewButton" onClick={viewEvaluation}>View</button>
+                </div>
+                <div style={{display:"block"}}>
                     <TextArea
                         title='Recommendation'
                         text={reportData.report_recommendation}
                         onSave={post_recommendation_request(post_summary_url)}
-                        disabled={reportData.report_published}
+                        disabled={reportData.report_finalised}
                     />
+                </div>
+
+                <div className='footer'>
+                {!reportData.report_finalised?               
+                    <BigButton
+                        onClick={post_finailized_request(post_finailized_url)}
+                    >
+                        Finalize
+                    </BigButton>
+                    :
+                    <BigButton
+                    onClick={handlePublish}
+                    >
+                        Publish
+                    </BigButton>
+                }
                 </div>
             </div>
         </div>

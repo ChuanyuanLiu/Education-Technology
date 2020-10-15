@@ -183,7 +183,7 @@ CREATE TABLE `report` (
   `report_creation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `report_modified_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `report_recommendation` varchar(10000) NOT NULL DEFAULT '',
-  `report_published` tinyint NOT NULL DEFAULT 0,
+  `report_finalised` tinyint NOT NULL DEFAULT 0,
   `evaluation_id` int NOT NULL,
   `report_csv` varchar(200),
   PRIMARY KEY (`report_id`),
