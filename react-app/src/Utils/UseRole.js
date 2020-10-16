@@ -12,7 +12,7 @@ export const useRole = () => {
     useEffect(() => {
         (async () => {
             try {
-                console.log("User: " + user);
+                console.log(user);
                 const url = `http://localhost:3001/user/roles?user_id=${user.sub}`;
                 const res = await fetch(url);
 
@@ -22,11 +22,11 @@ export const useRole = () => {
                     error: null,
                     loading: false,
                 });
-            } catch (error) {
-                console.error(error);
+            } catch (e) {
+                console.error(e);
                 setState({
                     ...state,
-                    error,
+                    error: e,
                     loading: true,
                 });
             }
