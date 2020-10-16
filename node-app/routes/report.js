@@ -151,23 +151,21 @@ router.get('/finalise', function (req, res, next) {
               }
             })
             
-/* ----------------- NOTE: Due to 10.13 meeting, we change the logic, so the following part is not used. Comment just in case we will need it in the future. ------------------ */
-
             // If file generated successfully, save the filepath in 'report_csv' field.
-            // And set 'evaluation_finalised' = 1
-            // const sql_updatecsv = "UPDATE report "
-            //         + "SET report_csv = '" + REPORTS_FILEPATH + "' "
-            //         + "WHERE report_id = " + report_id + ";"
-            //         + "UPDATE evaluation "
-            //         + "SET evaluation_finalised = 1 "
-            //         + "WHERE evaluation_id = " + evaluation_id; 
-            // sqlAdapter.sqlCall(sql_updatecsv, function (updatecsvRes) {
-            //     if (updatecsvRes == null) {
-            //         res.send(UNSUCCESSFUL);
-            //         return;
-            //     }
-            //     res.send(cleanRes);
-            // });
+            // And set 'report_finalised' = 1
+            const sql_updatecsv = "UPDATE report "
+                    + "SET report_csv = '" + REPORTS_FILEPATH + "' "
+                    + "WHERE report_id = " + report_id + ";"
+                    + "UPDATE report "
+                    + "SET report_finalised = 1 "
+                    + "WHERE report_id = " + report_id; 
+            sqlAdapter.sqlCall(sql_updatecsv, function (updatecsvRes) {
+                if (updatecsvRes == null) {
+                    res.send(UNSUCCESSFUL);
+                    return;
+                }
+                res.send(SUCCESSFUL);
+            });
         });
     }
 });
