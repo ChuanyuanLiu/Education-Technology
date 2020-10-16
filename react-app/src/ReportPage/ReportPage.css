@@ -1,0 +1,47 @@
+.evaluationBar {
+    display: flex;
+    position: relative;
+}
+
+.viewButton {
+    height: 35px;
+    width: 100px;
+    border-radius: 10px;
+    color: white;
+    background-color: var(--primary_color);
+    font-size: medium;
+    right: 10px;
+    margin: 10px 10px;
+    float: right;
+    position: absolute;
+}
+
+.viewButton:hover{
+    background-color: var(--primary_color);
+}
+.evaluation_title {
+    margin: 15px 20px;
+    font-size: medium;
+    float: left;
+}
+.addNew {
+    width: 300px;
+    border: dashed 1px black;
+    text-align: center;
+    height: 30px;
+    border-radius: 10px;
+    margin: 0px 0px 10px 0px;
+}
+.mailTo {
+    padding: 10px 10px;
+}
+
+.mailLabel{
+    width: 300px;
+    border-radius: 10px;
+    margin: 0px 0px 10px 0px;
+    outline: none;
+}
+.mailList {
+    padding: 20px;
+}

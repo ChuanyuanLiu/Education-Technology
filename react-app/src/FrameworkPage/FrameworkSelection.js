@@ -34,7 +34,7 @@ function FrameworkSelection() {
 
     const createNewEvaluation = (id) => {
         const requestURL = `http://localhost:3001/evaluation/new?framework_id=${id}&author_name=${user.name}`;
-        console.log(requestURL);
+        // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())
             .then(({evaluation_id}) =>
@@ -48,7 +48,7 @@ function FrameworkSelection() {
             );
     };
 
-    if (frameworks.length === 0 || user.name === null) {
+    if (frameworks.length === 0 || isLoading) {
         return <h1>Loading .. </h1>;
     }
 
