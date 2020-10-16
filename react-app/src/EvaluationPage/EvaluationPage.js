@@ -27,8 +27,6 @@ function EvaluationPage() {
     const { user, isAuthenticated, isLoading } = useAuth0();
     const { error, roles, loading: rolesLoading, refresh } = useRole();
 
-
-
     // initalize data
     useEffect(() => {
         fetch("http://localhost:3001/evaluation")
@@ -37,7 +35,7 @@ function EvaluationPage() {
                 setEvaluationList(convertToDataClass(data));
             })
             .catch(console.error);
-    }, [evaluationList]);
+    }, []);
 
     const goToEvaluationOverivew = (id) => {
         history.push({
