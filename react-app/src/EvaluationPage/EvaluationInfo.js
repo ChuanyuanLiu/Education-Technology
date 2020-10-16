@@ -28,7 +28,7 @@ function EvaluationInfo({data, onClick}) {
             </div>
             <div className='rightContent'>
                 {data.wasCompleted() ? <CheckOutlined /> : null}
-                {data.wasCompleted() ? "Completed" : "Active"}
+                {data.wasCompleted() ? (data.wasFinalised()? "Finalised" :"Completed") : "Not Completed"}
                 <br/>
                 Last modified: &nbsp;
                 {resolveTime(data.modifiedTime())}

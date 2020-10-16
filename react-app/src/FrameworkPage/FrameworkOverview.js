@@ -35,17 +35,17 @@ function FrameworkOverview({history}) {
     const {framework_id} = history.location.state;
     const [framework_data, setFramework] = useState(null);
     const [activeStatus, setActiveStatus] = useState(0);
-    const [published, setPublished] = useState(0);
+    const [published, setFinalized] = useState(0);
     const [frameworkTitle, setFrameworkTitle] = useState("");
     const [sections, setSections] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
 
     function initializeFramework(data) {
-        console.log(data);
+        // console.log(data);
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
-        setPublished(data.framework_finalised);
+        setFinalized(data.framework_finalised);
         setFramework(data);
         if (history.location.state.session === undefined) {
             var state = history.location.state;
@@ -55,18 +55,7 @@ function FrameworkOverview({history}) {
         setExpandedSections(history.location.state.session);
     }
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/framework?framework_id=${framework_id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                initializeFramework(data);
-            })
-            .catch(console.err);
-    }, [framework_id]);
 
-    if (framework_data === null || expandedSections === []) {
-        return <h1>Loading...</h1>;
-    }
     //Add section to framework, called from SectionList
     const addSection = () => {
         const url = `http://localhost:3001/framework/section/new?framework_id=${framework_id}`;
@@ -119,7 +108,7 @@ function FrameworkOverview({history}) {
         });
     };
 
-    const handlePublish = () => {
+    const hadnleFinalize = () => {
         const url = `http://localhost:3001/framework/finalisedstatus/update?framework_id=${framework_data.framework_id}`;
         const newPublishStatus = {
             framework_finalised_status: 1,
@@ -135,7 +124,7 @@ function FrameworkOverview({history}) {
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
-                    setPublished(1);
+                    setFinalized(1);
                 }
             })
             .catch(console.err);
@@ -204,15 +193,37 @@ function FrameworkOverview({history}) {
     const checkExpand = (section_id) => {
         return expandedSections.includes(section_id);
     };
+
+    useEffect(() => {
+        let isCancelled = false;
+        fetch(`http://localhost:3001/framework?framework_id=${framework_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if(!isCancelled){
+                    initializeFramework(data);
+                }
+            })
+            .catch(console.err);
+        return () => {
+            isCancelled = true;
+            };
+        }, []);
+
+    if (framework_data === null || expandedSections === []) {
+        return <h1>Loading...</h1>;
+    }
     return (
         <div className='flex_container '>
             <NavBar>
+                <div className="middle">
                 <TextInput
                     text={frameworkTitle}
                     title={"Framework Title"}
                     onSave={postTitle(framework_id)}
                     disabled={published}
                 />
+                </div>
+
             </NavBar>
 
             <div className='content scrollable'>
@@ -247,7 +258,7 @@ function FrameworkOverview({history}) {
                 <ButtomButton
                     hasPublished={published}
                     isActive={activeStatus}
-                    handlePublish={handlePublish}
+                    hadnleFinalize={hadnleFinalize}
                     handleNewVersion={handleNewVersion}
                 />
             </div>
@@ -307,8 +318,6 @@ function EditableSection(props) {
         }
         setExpand(!getExpand);
     };
-
-    useEffect(() => setExpand(props.defaultExpand), [props.defaultExpand]);
     // Save the changes to section title
     const toggleSave = (event) => {
         event.preventDefault();
@@ -352,7 +361,16 @@ function EditableSection(props) {
         border: getActive ? "1px black solid" : "0px black solid",
         widthMin: "30px",
     };
-
+    useEffect(() => {
+        let isCancelled = false
+        if (!isCancelled) {
+            setExpand(props.defaultExpand)
+        }  
+        return () => {
+            isCancelled = true;
+            }
+        }
+    )
     return (
         <div>
             <div className='editable_section'>
@@ -391,7 +409,7 @@ function EditableSection(props) {
                     )}
                 </div>
                 {/* right button to fold the section */}
-                <div className='right_button'>
+                <div className='left_button'>
                     {getExpand ? (
                         <DownOutlined onClick={toggleExpand} />
                     ) : (
@@ -454,7 +472,7 @@ function Question(props) {
     );
 }
 
-function ButtomButton({hasPublished, handlePublish, handleNewVersion}) {
+function ButtomButton({hasPublished, hadnleFinalize, handleNewVersion}) {
     return (
         <div>
             {hasPublished ? (
@@ -462,7 +480,7 @@ function ButtomButton({hasPublished, handlePublish, handleNewVersion}) {
                     <div>Save As New</div>
                 </BigButton>
             ) : (
-                <BigButton onClick={handlePublish}>
+                <BigButton onClick={hadnleFinalize}>
                     Finalize
                 </BigButton>
             )}

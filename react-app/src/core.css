@@ -103,6 +103,9 @@ button:focus {
 .right {
     float: right;
 }
+.middle{
+   display: inline;
+}
 
 html,
 body, 
@@ -139,10 +142,11 @@ body,
     font-size: 20px;
     max-width: 800px;
     margin: auto;
+    padding: 3px 5px;
 }
 
 .scrollable {
-    overflow: scroll;
+
     overflow-x: hidden;
 }
 
@@ -153,6 +157,7 @@ body,
     background-color: var(--primary_color);
     text-align: center;
     font-size: 20px;
+    display: inline-block;
 }
 
 #webpage_info {
@@ -173,24 +178,25 @@ body,
     border: none;
     width: 30%;
     text-align: left;
+    
 }
 
 /* To make big button look consistent, a minimum width is set */
 #big_button {
     padding: 5px 100px 5px 100px;
     min-width: 300px;
+    height: 50px;
     border-radius: 10px;
     color: white;
-    background-color: var(--tint_color);
+    background-color: var(--primary_color);
     font-size: medium;
-    box-shadow: 2px 8px black, -2px 8px black;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    font-size: large;
 }
 
 #big_button:hover {
-    box-shadow: 0px 2px black;
     position: relative;
-    font-weight: bold;
-    top: 6px;
+    top: 2px;
 }
 /* Divider (Override antd's default) ************************************/
 .ant-divider-horizontal {
@@ -204,7 +210,8 @@ body,
     width: 100%;
     display: inline-block;
     position: relative;
-    padding: 0px 4px;
+    padding: 4px 8px;
+    font-size: medium;
 }
 
 .breakWord {
@@ -219,7 +226,7 @@ body,
 }
     .rightContent {
         width: 30%; 
-        float: left;
+        float: right;
         text-align: right;
     }
 }
@@ -268,21 +275,26 @@ body,
    right: 20px;
    top: 8px;
 }
+.TextArea {
+    display: flex;
+    flex-flow: column;
+}
 
 /* TextArea **********************************************/
 
 .TextArea .container {
-    position: relative;
+    height: 100px;
+    width: 100%;
+    
+    
 }
-
 .TextArea textarea{
     width: 100%;
     height: 100%;
     resize: none;
-    position: absolute;
     padding-left: 10px;
+    flex:1;
 }
-
 .TextArea .hidden {
     padding-left: 10px;
     visibility: hidden;
@@ -297,4 +309,20 @@ body,
     text-align: center;
     background-color: var(--focus_color);
     color: var(--primary_color);
+}
+
+.element_container{
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #f0f2f5;
+    height: 100%;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 8px 16px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* Layout for ordering the searched result */
+.search_result_control {
+    display: inline-block;
+    padding: 5px ;
+    width: 100%;
 }

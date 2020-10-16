@@ -1,9 +1,20 @@
 import React, {useState, useEffect} from "react";
 import SearchBar, {sentence_contains} from "./SearchBar";
 import {compareDateTime} from "./Helper";
-import Button3D from "../Utils/Button3D";
+import {FilterOutlined} from "@ant-design/icons"
 
-function CardList({searchProperty, sortByProperty="creationTime", list, CardReactComponent, onClick}) {
+/**
+ * CardList renders each element in the list using CardReactComponent,
+ * CardList
+ *  |-- SearchBar
+ *  |-- CardReactComponent (FrameworkInfo, EvaluationInfo, or ReportInfo)
+ * @param {array of class} list a list of data in the form of data.
+ * @param {string} searchProperty 
+ * @param {string} sortByProperty
+ * @param {CardReactComponent} CardReactComponent defines how each row will be rendered
+ * @param {function} onClick to be triggered when a row of the list is clicked
+ */
+function CardList({list, searchProperty, sortByProperty, CardReactComponent, onClick}) {
 
     const SEARCH_PROPERTY = searchProperty;
     const SORTBY_PROPERTY = sortByProperty;
@@ -11,6 +22,7 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
     const [filteredList, setFilteredList] = useState(listAll);
     const [queryText, setQueryText] = useState("");
     const [isAscending, setAscending] = useState(false);
+
 
     // Filter then sort
     useEffect(()=>{
@@ -23,7 +35,7 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
         setFilteredList(
             filteredList.sort(comparisionFunction)
         )
-    }, [filterList, isAscending]);
+    }, [filteredList, isAscending]);
 
     function compareCards(e1, e2) {
         return compareDateTime(e1.get(SORTBY_PROPERTY), e2.get(SORTBY_PROPERTY));
@@ -45,10 +57,11 @@ function CardList({searchProperty, sortByProperty="creationTime", list, CardReac
     return (
         <div className='CardList'>
             <SearchBar onSearch={filterList} />
-            <div>
-                We found {filteredList.length} result searching <em>{queryText}</em>.
-                <Button3D on={isAscending} on_text="Oldest" off_text="Latest" onClick={toggleAscending}
-                />
+            <div className="search_result_control">
+                <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
+                <span className="right clickable" onClick={toggleAscending}>
+                    <strong><em>{isAscending? "Old to New": "New to Old"} <FilterOutlined></FilterOutlined></em></strong>
+                </span>
             </div>
             {filteredList.map((data, i) => (
                 <CardReactComponent

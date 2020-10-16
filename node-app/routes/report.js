@@ -27,7 +27,7 @@ router.get('/', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
-            res.send(reportRes);
+            res.send(reportRes[0]);
         });
 
     }
@@ -49,12 +49,13 @@ router.get('/', function (req, res, next) {
 router.get('/new', function (req, res, next) {
 
     // Select a completed evaluation to generate report
-    // Example: http://localhost:3001/report/new?evaluation_id=1
+    // API: /report/new?evaluation_id={eid}&author_name={author_name}
+    // Example: http://localhost:3001/report/new?evaluation_id=1&author_name=Tony
     // Excute 3 SQL statements:
-    if (req.query.evaluation_id != null) {
+    if (req.query.evaluation_id != null && req.query.author_name != null) {
 
         // 1. Create a new report, Insert a new evaluation_id
-        const sql = "INSERT INTO report ( evaluation_id ) VALUES ( " + req.query.evaluation_id + " );"
+        const sql = "INSERT INTO report ( evaluation_id, report_author ) VALUES ( " + req.query.evaluation_id + ", '" + req.query.author_name + "' );"
             // 2. Return the report_id of newly created report
             + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
             // 3. Return general information of the newly created report
@@ -71,11 +72,11 @@ router.get('/new', function (req, res, next) {
     } 
     else 
     {
-        // Default; return all completed evaluations.
+        // Default; return all finalised evaluations.
         // Example: http://localhost:3001/report/new
         const sql = "SELECT e.*, f.framework_title "
         + "FROM evaluation e, framework f "
-        + "WHERE e.evaluation_completed = 1 AND e.framework_id = f.framework_id";
+        + "WHERE e.evaluation_finalised = 1 AND e.framework_id = f.framework_id";
         sqlAdapter.sqlCall(sql, function (evaluationRes) {
             if (evaluationRes == null) {
                 res.send(UNSUCCESSFUL);
@@ -269,7 +270,7 @@ router.get('/finalise', function (req, res, next) {
                                             res.send(UNSUCCESSFUL);
                                             return;
                                         }
-                                        res.send(cleanRes);
+                                       // res.send(cleanRes);
                                     });
 
                                 });

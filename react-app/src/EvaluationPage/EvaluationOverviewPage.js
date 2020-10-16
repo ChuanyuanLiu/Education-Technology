@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
-import Button3D from "../Utils/Button3D";
 import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
-/**
+import {CheckOutlined} from "@ant-design/icons";
+import {
+    RightOutlined,
+    DownOutlined,
+} from "@ant-design/icons";
+
+/*
  * (Route from EvaluationInfo)
  * Evaluation Overview Page
  *    |-- NavBar
@@ -27,7 +32,10 @@ function EvaluationOverviewPage({history}) {
     useEffect(() => {
         fetch(`http://localhost:3001/evaluation?evaluation_id=${evaluation_id}`)
             .then((response) => response.json())
-            .then(setEvaluation)
+            .then((data) => {
+                setEvaluation(data)
+                // setFinalised(data.evaluation_finalised)
+            })
             .catch(console.error);
         //TODO, Why is session included in useEffect?
         if(history.location.state.session === undefined){
@@ -50,11 +58,12 @@ function EvaluationOverviewPage({history}) {
         );
     }
 
-    if (evaluation_data == null) {
+    if (evaluation_data == null ) {
         return <h1>Loading...</h1>;
     }
 
     const post_url = `http://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
+    const finalize_url = `http://localhost:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
     const post_request = (url, title, summary) => {
         const param = {
             headers: {
@@ -76,6 +85,22 @@ function EvaluationOverviewPage({history}) {
     const post_summary_request = (url, title) => (text) => {
         post_request(url, title, text);
     };
+    const post_finailized_request = (url) => {
+        const param = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                evaluation_finalised: 1,
+            }),
+            method: "POST",
+        };
+        fetch(url, param)
+            .then(data=>console.log(data))
+            .then(setEvaluation({...evaluation_data, evaluation_finalised: 1}))
+            .catch((error) => console.log(error));
+        
+    }
 
     const saveExpand = (section_id) => {
         var state = history.location.state
@@ -105,28 +130,34 @@ function EvaluationOverviewPage({history}) {
     const checkExpand = (section_id) =>{
         return expandedSections.includes(section_id)
     }
+    const handleClick = ()=>{
+        history.goBack();
+    }
     return (
         <div className='EvaluationPage flex_container'>
-            <div className='header'>
-                <NavBar>
-                    <TextInput
-                        text={evaluation_data.evaluation_title}
-                        onSave={post_title_request(
-                            post_url,
-                            evaluation_data.evaluation_summary
-                        )}
-                    />
-                </NavBar>
-            </div>
-            <div className='content'>
-                <TextArea
-                    title='Summary'
-                    text={evaluation_data.evaluation_summary}
-                    onSave={post_summary_request(
+            <NavBar>
+                <TextInput
+                    text={evaluation_data.evaluation_title}
+                    onSave={post_title_request(
                         post_url,
-                        evaluation_data.evaluation_title
+                        evaluation_data.evaluation_summary
                     )}
+                    disabled={evaluation_data.evaluation_finalised}
                 />
+            </NavBar>
+            <div className='content scrollable '>
+                <div>
+                    <TextArea
+                        title='Summary'
+                        text={evaluation_data.evaluation_summary}
+                        onSave={post_summary_request(
+                            post_url,
+                            evaluation_data.evaluation_title
+                        )}
+                        disabled={evaluation_data.evaluation_finalised}
+                    />
+                </div>
+
                 <SectionsList
                     evaluation_id={evaluation_id}
                     {...evaluation_data}
@@ -137,6 +168,16 @@ function EvaluationOverviewPage({history}) {
                 />
             </div>
             <div className='footer'>
+                {evaluation_data.evaluation_completed && !evaluation_data.evaluation_finalised?                 
+                    <BigButton
+                        onClick={()=> post_finailized_request(finalize_url)}
+                    >
+                        Finalize
+                    </BigButton>
+                    :
+                    null
+                }
+                <span> </span>
                 <BigButton
                     onClick={() => {
                         history.goBack();
@@ -149,9 +190,18 @@ function EvaluationOverviewPage({history}) {
     );
 }
 
-// Display a list of sections
-function SectionsList({evaluation_id, sections, registerExpand,
-                    registerUnexpand,checkExpand,expandedSections}) 
+/*
+ * Evaluation List component
+ * @param {evaluation_id} the evaluation id that the sections belongs to
+ * @param {evaluation_finalised} whether the evaluation is allowed to edited
+ * @param {sections} all sections info of evaluation
+ * @param {registerExpand} register expanded sections for last editing
+ * @param {registerUnexpand} unregister expanded sections for laste editing 
+ * @param {checkExpand} check which section is expanded
+ */
+
+function SectionsList({evaluation_id, evaluation_finalised, sections, registerExpand,
+                    registerUnexpand,checkExpand}) 
 {
     return (
         <>
@@ -162,6 +212,7 @@ function SectionsList({evaluation_id, sections, registerExpand,
                     evaluation_id={evaluation_id}
                     section_index={i}
                     {...section}
+                    evaluation_finalised={evaluation_finalised}
                     defaultExpand={checkExpand(section.section_id)}
                     registerExpand={registerExpand}
                     registerUnexpand={registerUnexpand}
@@ -172,8 +223,9 @@ function SectionsList({evaluation_id, sections, registerExpand,
 }
 
 // Display a list of questions
-function Section({evaluation_id, section_title, section_index, questions,
-                  registerExpand, section_id, registerUnexpand, defaultExpand}) {
+function Section({evaluation_id, section_title, section_index, 
+                  questions, registerExpand, section_id, section_completed,
+                  evaluation_finalised, registerUnexpand, defaultExpand}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -188,19 +240,21 @@ function Section({evaluation_id, section_title, section_index, questions,
     useEffect(() => setExpand(defaultExpand),[defaultExpand])
     return (
         <>
+
             <div
                 onClick={toggleExpand}
                 className={"sub_header clickable " + (getExpand ? "on" : "")}
             >
-                {`Section ${section_index + 1} ${section_title}`}
-                <div className='right'>
-                    <Button3D
-                        on={getExpand}
-                        onClick={toggleExpand}
-                        on_text='collapse'
-                        off_text='expand'
-                    />
+                <div className="left_button">
+                    {getExpand? <DownOutlined onClick={toggleExpand}/> : 
+                                <RightOutlined onClick={toggleExpand}/>}                    
                 </div>
+                {`Section ${section_index + 1} ${section_title}`}
+                <span className="right">
+                    {section_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {section_completed? "Completed" : null}
+                </span>
             </div>
             <ul>
                 {getExpand
@@ -210,6 +264,7 @@ function Section({evaluation_id, section_title, section_index, questions,
                               evaluation_id={evaluation_id}
                               section_index={section_index}
                               question_index={i}
+                              finalized={evaluation_finalised}
                               key={i}
                           />
                       ))
@@ -226,6 +281,8 @@ function Question({
     section_index,
     question_index,
     question_title,
+    question_completed,
+    finalized
 }) {
     const history = useHistory();
     function handleClick() {
@@ -234,12 +291,18 @@ function Question({
             state: {
                 evaluation_id,
                 question_id,
+                finalized
             },
         });
     }
     return (
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
+            <span className="right">
+                    {question_completed? <CheckOutlined></CheckOutlined>: null}
+
+                    {question_completed? "Completed" : null}
+            </span>
         </li>
     );
 }

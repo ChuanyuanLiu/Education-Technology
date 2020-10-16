@@ -46,7 +46,10 @@ CREATE TABLE `evaluation` (
 --
 
 LOCK TABLES `evaluation` WRITE;
-INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',0,1,0);
+INSERT INTO `evaluation` VALUES (1,'Gerald','St.Arthur Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is good.',1,1,1);
+INSERT INTO `evaluation` VALUES (2,'Tony','Test Evaluation','2020-08-28 10:00:45','2020-08-28 10:00:45','This evaluation is used to test for report.',1,1,1);
+INSERT INTO `evaluation` VALUES (3,'John','High School Evaluation','2020-09-28 10:00:45','2020-10-15 17:05:02','This evaluation is for high school.',0,1,0);
+INSERT INTO `evaluation` VALUES (4,'Jeramy','E-Tech Learning Evaluation','2020-10-16 17:00:45','2020-10-16 17:15:01','This evaluation is used to identify the usefulness of e-learning.',0,1,0);
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -182,7 +185,7 @@ CREATE TABLE `report` (
   `report_creation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `report_modified_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `report_recommendation` varchar(10000) NOT NULL DEFAULT '',
-  `report_published` tinyint NOT NULL DEFAULT 0,
+  `report_finalised` tinyint NOT NULL DEFAULT 0,
   `evaluation_id` int NOT NULL,
   `report_csv` varchar(200),
   PRIMARY KEY (`report_id`),

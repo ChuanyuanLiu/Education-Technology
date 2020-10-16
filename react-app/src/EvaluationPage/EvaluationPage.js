@@ -6,6 +6,9 @@ import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useRole } from "../Utils/UseRole";
+
 
 /**
  * Route from Homepage
@@ -17,8 +20,12 @@ import CardList from "../Utils/CardList";
  */
 function EvaluationPage() {
     const SEARCH_PROPERTY = "title";
+    const SORTBY_PROPERTY = "modifiedTime";
+    const AUTH_ROLE = "Senior Consultant"
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { error, roles, loading: rolesLoading, refresh } = useRole();
 
     // initalize data
     useEffect(() => {
@@ -30,7 +37,7 @@ function EvaluationPage() {
             .catch(console.error);
     }, []);
 
-    const handleClick = (id) => {
+    const goToEvaluationOverivew = (id) => {
         history.push({
             pathname: "/evaluation_overview",
             state: {
@@ -42,12 +49,22 @@ function EvaluationPage() {
     const goToNewEvaluation = () => history.push("./new_evaluation");
 
     function convertToDataClass(data) {
-        return data.map(data=>new EvaluationInfoData(data));
+        return data.map(data => new EvaluationInfoData(data));
     }
 
-    if (evaluationList == null )
+    if (evaluationList == null|| isLoading || rolesLoading)
         return <h1> Loading ... </h1>;
+    
+        
 
+    // console.log(newList)
+    // const useList = newList
+
+    const renderList = evaluationList.filter((data) => {
+        if(data.author() === user.name || roles[0].name === "Senior Consultant"){
+            return data
+        }
+    })
     return (
         <div className='flex_container'>
             <div className='header'>
@@ -55,13 +72,16 @@ function EvaluationPage() {
                     Evaluations
                 </NavBar>
             </div>
-            <div className='content scrollable'>
+            <div className='content scrollable'>                   
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 
-                    list={evaluationList}
+                    sortByProperty={SORTBY_PROPERTY}
+                    list={renderList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
-                    onClick={handleClick}
+                    onClick={goToEvaluationOverivew}
+                    role={roles[0].name}
+                    user={user.name}
                 />
             </div>
             <div className='footer'>

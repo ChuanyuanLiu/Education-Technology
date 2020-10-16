@@ -19,6 +19,9 @@ function compareList(l1in, l2in) {
 }
 
 // All fields are private to ensure nothing gets deleted or modified
+// backendData: a json object
+// propertyToFieldName: {property used by frontend: fieldName in the backend}
+// subclassName: name of the subclass used for print out more useful error messages
 class Data {
     #propertyToFieldName;
     #subclassName;
@@ -139,5 +142,55 @@ class FrameworkInfoData extends Data {
     }
 }
 
-export {EvaluationInfoData, FrameworkInfoData};
+class ReportInfoData extends Data {
+
+    static #propertyToFieldName = {
+        id             : "report_id",
+        author         : "report_author",
+        title          : "report_title",
+        creationTime   : "report_creation_time",
+        modifiedTime   : "report_modified_time",
+        recommendation : "report_recommendation",
+        wasFinalised   : "report_finalised",
+        evaluationId   : "evaluation_id",
+        csv            : "report_csv",
+        evaluationTitle: "evaluation_title"
+    };
+
+    constructor(backendData) {
+        super(backendData, ReportInfoData.#propertyToFieldName, "ReportInfoData");
+    }
+    id() {
+        return this.get("id");
+    }
+    author() {
+        return this.get("author");
+    }
+    title() {
+        return this.get("title");
+    }
+    creationTime() {
+        return this.get("creationTime");
+    }
+    modifiedTime() {
+        return this.get("modifiedTime");
+    }
+    recommendation() {
+        return this.get("recommendation");
+    }
+    wasFinalised() {
+        return this.get("wasFinalised");
+    }
+    evaluationId() {
+        return this.get("evaluationId");
+    }
+    csv() {
+        return this.get("csv");
+    }
+    evaluationTitle() {
+        return this.get("evaluationTitle");
+    }
+}
+
+export {EvaluationInfoData, FrameworkInfoData, ReportInfoData};
 export default Data;
