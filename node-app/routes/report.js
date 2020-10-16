@@ -88,19 +88,17 @@ router.get('/new', function (req, res, next) {
 
 //Finalise report page
 router.get('/finalise', function (req, res, next) {
-    if(req.query.report_id != null)
-    {
+    if (req.query.report_id != null) {
         // Example: http://localhost:3001/report/finalise?report_id=1
         let report_id = req.query.report_id;
         //1. Returns report, evaluation, framework details
         const sql = "SELECT r.*, e.evaluation_id, e.evaluation_title, "
-        +"f.framework_id, f.framework_title "
-        +"FROM report AS r INNER JOIN evaluation AS e USING (evaluation_id) "
-        +"INNER JOIN framework AS f USING (framework_id) "
-        +"WHERE report_id = " + report_id + ";"
+            + "f.framework_id, f.framework_title "
+            + "FROM report AS r INNER JOIN evaluation AS e USING (evaluation_id) "
+            + "INNER JOIN framework AS f USING (framework_id) "
+            + "WHERE report_id = " + report_id + ";"
 
-        sqlAdapter.sqlCall(sql, function (reportRes) 
-        {
+        sqlAdapter.sqlCall(sql, function (reportRes) {
             if (reportRes == null) {
                 res.send(UNSUCCESSFUL);
                 return;
@@ -113,8 +111,8 @@ router.get('/finalise', function (req, res, next) {
             let report_creation_time = reportRes[0].report_creation_time;
             let report_modified_time = reportRes[0].report_modified_time;
             let report_recommendation = reportRes[0].report_recommendation;
-            let evaluation_id = reportRes[0].evaluation_id;         
-            let evaluation_title = reportRes[0].evaluation_title;       
+            let evaluation_id = reportRes[0].evaluation_id;
+            let evaluation_title = reportRes[0].evaluation_title;
             let framework_id = reportRes[0].framework_id;
             let framework_title = reportRes[0].framework_title;
 
@@ -141,150 +139,144 @@ router.get('/finalise', function (req, res, next) {
             csvContent += framework_id + ',';
             csvContent += framework_title + '\n'
 
-            const sql2 ="SELECT MIN(section_id) AS min_section_id, MAX(section_id) AS max_section_id "
-            +"FROM framework_section WHERE framework_id = " + framework_id ;
+            const sql2 = "SELECT MIN(section_id) AS min_section_id, MAX(section_id) AS max_section_id "
+                + "FROM framework_section WHERE framework_id = " + framework_id;
 
-            sqlAdapter.sqlCall(sql2, function (sectionRes)
-            {
-                if(sectionRes == null){
+            sqlAdapter.sqlCall(sql2, function (sectionRes) {
+                if (sectionRes == null) {
                     res.send(UNSUCCESSFUL);
                 }
-                console.log(sectionRes[0]);
+                //console.log(sectionRes[0]);
                 let min_section_id = sectionRes[0].min_section_id;
                 let max_section_id = sectionRes[0].max_section_id;
-               // console.log(min_section_id);
+                // console.log(min_section_id);
                 //console.log(max_section_id);
-                for (let i = min_section_id; i <= max_section_id; i++)
-                {
+                for (let i = min_section_id; i <= max_section_id; i++) {
                     const sql3 = "SELECT section_id, section_title "
-                        +"FROM framework_section WHERE section_id = " + i + ";"
-                        +"SELECT MIN(question_id) AS min_question_id, MAX(question_id) AS max_question_id "
-                        +"FROM framework_section_question WHERE section_id = " + i ;
+                        + "FROM framework_section WHERE section_id = " + i + ";"
+                        + "SELECT MIN(question_id) AS min_question_id, MAX(question_id) AS max_question_id "
+                        + "FROM framework_section_question WHERE section_id = " + i;
 
-                        sqlAdapter.sqlCall(sql3, function(question1Res)
-                        {
-                            if(question1Res == null){
-                                res.send(UNSUCCESSFUL);
-                            }
-                            let section_id = question1Res[0].section_id;
-                            let section_title = question1Res[0].section_title;
-                            
-                            csvContent += 'section_id,';
-                            csvContent += 'section_title\n';
-                            csvContent += section_id + ',';
-                            csvContent += section_title + '\n';
+                    sqlAdapter.sqlCall(sql3, function (question1Res) {
+                        if (question1Res == null) {
+                            res.send(UNSUCCESSFUL);
+                        }
+                        let section_id = question1Res[0][0].section_id;
+                        let section_title = question1Res[0][0].section_title;
 
-                            let min_question_id = question1Res[1].min_question_id;
-                            let max_question_id = question1Res[1].max_question_id;
-                           // console.log(question1Res);
-                            //console.log(min_question_id);
-                            //console.log(max_question_id);
-                            for (let i = min_question_id; i <= max_question_id; i++)
-                            {
-                                const sql4 = "SELECT question_id, question_title, rate_1_criterion, rate_2_criterion, "
-                                +"rate_3_criterion, rate_4_criterion, rate_5_criterion "
-                                +"FROM framework_section_question "
-                                +"WHERE question_id = " + i;
+                        csvContent += 'section_id,';
+                        csvContent += 'section_title\n';
+                        csvContent += section_id + ',';
+                        csvContent += section_title + '\n';
 
-                                sqlAdapter.sqlCall(sql4, function (responseRes)
-                                {
-                                    if(responseRes == null){
+                        let min_question_id = question1Res[1][0].min_question_id;
+                        let max_question_id = question1Res[1][0].max_question_id;
+                        // console.log(question1Res);
+                        //console.log(min_question_id);
+                        //console.log(max_question_id);
+                        for (let i = min_question_id; i <= max_question_id; i++) {
+                            const sql4 = "SELECT question_id, question_title, rate_1_criterion, rate_2_criterion, "
+                                + "rate_3_criterion, rate_4_criterion, rate_5_criterion "
+                                + "FROM framework_section_question "
+                                + "WHERE question_id = " + i;
+
+                            sqlAdapter.sqlCall(sql4, function (responseRes) {
+                                if (responseRes == null) {
+                                    res.send(UNSUCCESSFUL);
+                                }
+                                let question_id = responseRes[0].question_id;
+                                let question_title = responseRes[0].question_title;
+                                let rate_1_criterion = responseRes[0].rate_1_criterion;
+                                let rate_2_criterion = responseRes[0].rate_2_criterion;
+                                let rate_3_criterion = responseRes[0].rate_3_criterion;
+                                let rate_4_criterion = responseRes[0].rate_4_criterion;
+                                let rate_5_criterion = responseRes[0].rate_5_criterion;
+
+                                csvContent += 'question_id,';
+                                csvContent += 'question_title,';
+                                csvContent += 'rate_1_criterion,';
+                                csvContent += 'rate_2_criterion,';
+                                csvContent += 'rate_3_criterion,';
+                                csvContent += 'rate_4_criterion,';
+                                csvContent += 'rate_5_criterion\n';
+                                csvContent += question_id + ',';
+                                csvContent += question_title + ',';
+                                csvContent += rate_1_criterion + ',';
+                                csvContent += rate_2_criterion + ',';
+                                csvContent += rate_3_criterion + ',';
+                                csvContent += rate_4_criterion + ',';
+                                csvContent += rate_5_criterion + ',';
+
+                                //console.log(responseRes);
+
+                                const sql5 = "SELECT question_id, rate_chosen, response_comment "
+                                    + "FROM evaluation_response WHERE question_id = " + question_id;
+
+                                sqlAdapter.sqlCall(sql5, function (response1Res) {
+                                    if (response1Res == null) {
                                         res.send(UNSUCCESSFUL);
                                     }
-                                    let question_id = responseRes[0].question_id;
-                                    let question_title = responseRes[0].question_title;
-                                    let rate_1_criterion = responseRes[0].rate_1_criterion;
-                                    let rate_2_criterion = responseRes[0].rate_2_criterion;
-                                    let rate_3_criterion = responseRes[0].rate_3_criterion;
-                                    let rate_4_criterion = responseRes[0].rate_4_criterion;
-                                    let rate_5_criterion = responseRes[0].rate_5_criterion;
+                                    let question_id = response1Res[0].question_id;
+                                    let response_comment = response1Res[0].response_comment;
+                                    let rate_chosen = response1Res[0].rate_chosen;
+                                    console.log(response1Res);
 
                                     csvContent += 'question_id,';
-                                    csvContent += 'question_title,';
-                                    csvContent += 'rate_1_criterion,';
-                                    csvContent += 'rate_2_criterion,';
-                                    csvContent += 'rate_3_criterion,';
-                                    csvContent += 'rate_4_criterion,';
-                                    csvContent += 'rate_5_criterion,';
+                                    csvContent += 'rate_chosen,';
+                                    csvContent += 'response_comment\n';
                                     csvContent += question_id + ',';
-                                    csvContent += question_title + ',';
-                                    csvContent += rate_1_criterion + ',';
-                                    csvContent += rate_2_criterion + ',';
-                                    csvContent += rate_3_criterion + ',';
-                                    csvContent += rate_4_criterion + ',';
-                                    csvContent += rate_5_criterion + ',';
-                                    
-                                    console.log(responseRes);
+                                    csvContent += rate_chosen + ',';
+                                    csvContent += response_comment + '\n';
 
-                                    const sql5 = "SELECT question_id, rate_chosen, response_comment "
-                                    +"FROM evaluation_response WHERE question_id = " + question_id ;
+                                    //console.log(csvContent);
 
-                                    sqlAdapter.sqlCall(sql5, function (response1Res)
-                                    {
-                                        if(response1Res == null){
-                                            res.send(UNSUCCESSFUL);
-                                        }
-                                        let question_id = response1Res[0].question_id;
-                                        let response_comment = response1Res[0].response_comment;
-                                        let rate_chosen = response1Res[0].rate_chosen;
-                                        console.log(response1Res);
-
-                                        csvContent += 'question_id,';
-                                        csvContent += 'rate_chosen,';
-                                        csvContent += 'response_comment\n';
-                                        csvContent += question_id + ',';
-                                        csvContent += rate_chosen + ',';
-                                        csvContent += response_comment + ',';
-                                    
-                                       
-                                        
-                                       
-                                       
-            
-
-                                    
-                                    });
-                                    
                                 });
-                            }
-                        });
 
-                    //});
+                            });
+                        }
+                    });
+
                 }
+                // function csvReport(callback){
+                //     callback(csvContent);
+                // }
+                // csvReport(function(csvContent){
+                //     console.log(csvContent);
+                // });
 
-                                         // The .csv file is stored in '$REPORTS_FILEPATH'
-                                         // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
-                                         var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
-                                         const REPORTS_DIR = './reports';
-                                         const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_id + '-' + time + '.csv';
-                   
-                                        // Generate the directory
-                                        fs.mkdir(REPORTS_DIR, (err) => {
-                                        })
-                                        
-                                        // Generate the .csv file
-                                        fs.writeFile(REPORTS_FILEPATH, csvContent, function(err){
-                                        if (err) 
-                                        {
-                                            console.log(err, '--->csv generation failed<---')
-                                        }
-                                        })
-                                        
-                                        // If file generated successfully, save the filepath in 'report_csv' field.
-                                        // And set 'evaluation_finalised' = 1
-                                        const sql_updatecsv = "UPDATE report "
-                                                + "SET report_csv = '" + REPORTS_FILEPATH + "' "
-                                                + "WHERE report_id = " + report_id + ";"
-                                                + "UPDATE evaluation "
-                                                + "SET evaluation_finalised = 1 "
-                                                + "WHERE evaluation_id = " + evaluation_id; 
-                                        sqlAdapter.sqlCall(sql_updatecsv, function (updatecsvRes) {
-                                            if (updatecsvRes == null) {
-                                                res.send(UNSUCCESSFUL);
-                                                return;
-                                            }
-                                            res.send(cleanRes);
-                                         });
+                // The .csv file is stored in '$REPORTS_FILEPATH'
+                // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
+                var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
+                const REPORTS_DIR = './reports';
+                const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_id + '-' + time + '.csv';
+
+                // Generate the directory
+                fs.mkdir(REPORTS_DIR, (err) => {
+                })
+
+                // Generate the .csv file
+                fs.writeFile(REPORTS_FILEPATH, csvContent, function (err) {
+                    if (err) {
+                        console.log(err, '--->csv generation failed<---')
+                    }
+                })
+
+                // If file generated successfully, save the filepath in 'report_csv' field.
+                // And set 'evaluation_finalised' = 1
+                const sql_updatecsv = "UPDATE report "
+                    + "SET report_csv = '" + REPORTS_FILEPATH + "' "
+                    + "WHERE report_id = " + report_id + ";"
+                    + "UPDATE evaluation "
+                    + "SET evaluation_finalised = 1 "
+                    + "WHERE evaluation_id = " + evaluation_id;
+
+                sqlAdapter.sqlCall(sql_updatecsv, function (updatecsvRes) {
+                    if (updatecsvRes == null) {
+                        res.send(UNSUCCESSFUL);
+                        return;
+                    }
+                    res.send(cleanRes);
+                });
             });
         });
     }
