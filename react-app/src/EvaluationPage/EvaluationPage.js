@@ -21,9 +21,11 @@ import { useRole } from "../Utils/UseRole";
 function EvaluationPage() {
     const SEARCH_PROPERTY = "title";
     const SORTBY_PROPERTY = "modifiedTime";
-    const AUTH_ROLE = "Senior Consultant"
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
+
+    const AUTH_ROLE = "Senior Consultant"
+    const CONSULTANT = "Consultant"
     const { user, isAuthenticated, isLoading } = useAuth0();
     const { error, roles, loading: rolesLoading, refresh } = useRole();
 
@@ -44,11 +46,21 @@ function EvaluationPage() {
             pathname: "/evaluation_overview",
             state: {
                 evaluation_id: id,
+                user: user.name,
+                role: roles[0].name
             },
         });
     };
 
-    const goToNewEvaluation = () => history.push("./new_evaluation");
+    const goToNewEvaluation = () => {
+        history.push({
+            pathname: "./new_evaluation",
+            state: {
+                user: user.name,
+                role: roles[0].name
+            },
+        });
+    };
 
     function convertToDataClass(data) {
         return data.map(data => new EvaluationInfoData(data));
@@ -61,9 +73,9 @@ function EvaluationPage() {
 
     // console.log(newList)
     // const useList = newList
-
+    //Senior Consultant and consultant can access all evaluations
     const renderList = evaluationList.filter((data) => {
-        if(data.author() === user.name || roles[0].name === "Senior Consultant"){
+        if(data.author() === user.name || roles[0].name === AUTH_ROLE || roles[0].name === CONSULTANT){
             return data
         }
     })
