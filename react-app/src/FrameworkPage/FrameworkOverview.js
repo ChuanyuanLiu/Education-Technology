@@ -35,7 +35,7 @@ function FrameworkOverview({history}) {
     const {framework_id} = history.location.state;
     const [framework_data, setFramework] = useState(null);
     const [activeStatus, setActiveStatus] = useState(0);
-    const [published, setFinalized] = useState(0);
+    const [finalised, setFinalized] = useState(0);
     const [frameworkTitle, setFrameworkTitle] = useState("");
     const [sections, setSections] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
@@ -220,15 +220,15 @@ function FrameworkOverview({history}) {
                     text={frameworkTitle}
                     title={"Framework Title"}
                     onSave={postTitle(framework_id)}
-                    disabled={published}
+                    disabled={finalised}
                 />
                 </div>
 
             </NavBar>
 
             <div className='content scrollable'>
-                {published ? (
-                    <Reminder is_hidden={published}>
+                {finalised ? (
+                    <Reminder is_hidden={finalised}>
                         <span>
                             This framework cannot be edited as it has been
                             published, click "Save as New" to generate a new
@@ -241,13 +241,13 @@ function FrameworkOverview({history}) {
                     handleChange={setActive}
                     value={activeStatus}
                     switchName='Active'
-                    disabled={!published}
+                    disabled={!finalised}
                 />
                 <SectionList
                     addSection={addSection}
                     addQuestion={addQuestion}
                     sections={sections}
-                    published={published}
+                    published={finalised}
                     registerExpand={saveExpand}
                     registerUnexpand={deletExpand}
                     checkExpand={checkExpand}
@@ -256,7 +256,7 @@ function FrameworkOverview({history}) {
             </div>
             <div className='footer'>
                 <ButtomButton
-                    hasPublished={published}
+                    hasPublished={finalised}
                     isActive={activeStatus}
                     hadnleFinalize={hadnleFinalize}
                     handleNewVersion={handleNewVersion}

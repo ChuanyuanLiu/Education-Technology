@@ -5,6 +5,7 @@ import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
 import {CheckOutlined} from "@ant-design/icons";
+import Reminder from "../Utils/Reminder";
 import {
     RightOutlined,
     DownOutlined,
@@ -152,7 +153,15 @@ function EvaluationOverviewPage({history}) {
                     disabled={!canBeEdit}
                 />
             </NavBar>
+            {hasEditAuthority? null : 
+                    <Reminder is_hidden={true}>
+                        <span>
+                            This page is read-only since you aren't the author of the evaluation
+                        </span>
+                    </Reminder>
+                } 
             <div className='content scrollable '>
+              
                 <div>
                     <TextArea
                         title='Summary'
