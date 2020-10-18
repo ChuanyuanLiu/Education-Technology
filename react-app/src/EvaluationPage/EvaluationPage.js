@@ -69,8 +69,6 @@ function EvaluationPage() {
     
         
 
-    // console.log(newList)
-    // const useList = newList
     //Senior Consultant and consultant can access all evaluations
     const renderList = evaluationList.filter((data) => {
         if(data.author() === user.name || roles[0].name === AUTH_ROLE || roles[0].name === CONSULTANT){
