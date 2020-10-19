@@ -146,7 +146,6 @@ router.get('/finalise', function (req, res, next) {
 
                 let min_section_id = sectionRes[0].min_section_id;
                 let max_section_id = sectionRes[0].max_section_id;
-                let total = 0;
 
                 last_section_index = sectionRes[0].min_section_id;
 
@@ -172,10 +171,6 @@ router.get('/finalise', function (req, res, next) {
 
                         let min_question_id = question1Res[1][0].min_question_id;
                         let max_question_id = question1Res[1][0].max_question_id;
-
-                        // if (i == max_section_id) {
-                        //     total = max_question_id;
-                        // }
 
                         if (i == max_section_id) {
                             csvContent += 'section_index,';
@@ -280,7 +275,7 @@ router.get('/finalise', function (req, res, next) {
                 }
             });
         });
-        
+
         res.send(SUCCESSFUL);
     }
 });
