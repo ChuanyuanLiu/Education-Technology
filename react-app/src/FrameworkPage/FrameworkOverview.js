@@ -232,7 +232,7 @@ function FrameworkOverview({history}) {
             </NavBar>
 
             <div className='content scrollable'>
-                {/* {isAdmin?
+                {isAdmin?
                    (finalised ? (
                         <Reminder is_hidden={!ediable}>
                             <span>
@@ -247,7 +247,7 @@ function FrameworkOverview({history}) {
                         <span>
                             You only have read permission to framework
                         </span>
-                    </Reminder>} */}
+                    </Reminder>}
                 <div className='section_header'>Status</div>
                 <StatusSwitch
                     handleChange={setActive}
