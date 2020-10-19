@@ -4,6 +4,8 @@ import TextInput from "../Utils/TextInput";
 import NavBar from "../Utils/NavBar";
 import StatusSwitch from "../Utils/StatusSwitch";
 import TextArea from "../Utils/TextArea";
+import BigButton from "../Utils/BigButton";
+import { Popconfirm } from "antd";
 
 import "./UserOverview.css";
 
@@ -82,8 +84,28 @@ function UserOverview({history}) {
                 return response.json()
             })
             .then((data) => {
-                if (status === 200) {
+                if (status === 200 && data.statusCode/100 !== 4) {
                     setUserActive(data.user_metadata.active);
+                }
+            })
+            .catch(console.error);
+    }
+
+    const deleteUser = () => {
+        let param = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "POST"
+        }
+        let status;
+
+        fetch(`http://localhost:3001/user/delete?user_id=${user_id}`, param)
+            .then((response) => {
+                status = response.status;
+                if (status === 200) {
+                    console.log("success");
+                    history.goBack();
                 }
             })
             .catch(console.error);
@@ -149,6 +171,22 @@ function UserOverview({history}) {
                     short={true}
                 />
             </div>
+
+            {!userActive &&
+                <div className='footer'>
+                    <Popconfirm
+                        title="Are you sure you want to delete this user?"
+                        onConfirm={deleteUser}
+                        onCancel={() => console.log("cancel")}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <BigButton>
+                            Delete
+                        </BigButton>
+                    </Popconfirm>
+                </div> 
+            }
         </div>
     );
 }

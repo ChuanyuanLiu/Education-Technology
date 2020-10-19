@@ -40,6 +40,7 @@ function recurseRoles(index, users, res) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${users[index].user_id}/roles`;
 
         auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
+            // console.log(auth0Res);
             users[index].role = JSON.parse(auth0Res)[0].name;
             recurseRoles(index + 1, users, res);
         });
@@ -65,6 +66,17 @@ router.post('/update', function (req, res, next) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
 
         auth0Adapter.auth0Call("PATCH", url, req.body, function (auth0Res) {
+            console.log(auth0Res);
+            res.send(auth0Res);
+        });
+    }
+});
+
+router.post('/delete', function (req, res, next) {
+    if (req.query.user_id != null) {
+        const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
+
+        auth0Adapter.auth0Call("DELETE", url, req.body, function (auth0Res) {
             console.log(auth0Res);
             res.send(auth0Res);
         });
