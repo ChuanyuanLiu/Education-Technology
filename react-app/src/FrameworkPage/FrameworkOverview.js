@@ -108,7 +108,7 @@ function FrameworkOverview({history}) {
         });
     };
 
-    const hadnleFinalize = () => {
+    const handleFinalize = () => {
         const url = `http://localhost:3001/framework/finalisedstatus/update?framework_id=${framework_data.framework_id}`;
         const newPublishStatus = {
             framework_finalised_status: 1,
@@ -175,7 +175,7 @@ function FrameworkOverview({history}) {
         setExpandedSections(state.session);
         history.replace({...history.location, state});
     };
-    const deletExpand = (section_id) => {
+    const deleteExpand = (section_id) => {
         //alert("Unregister" + section_id)
 
         var state = history.location.state;
@@ -206,7 +206,7 @@ function FrameworkOverview({history}) {
             .catch(console.err);
         return () => {
             isCancelled = true;
-            };
+        };
         }, []);
 
     if (framework_data === null || expandedSections === []) {
@@ -249,7 +249,7 @@ function FrameworkOverview({history}) {
                     sections={sections}
                     published={published}
                     registerExpand={saveExpand}
-                    registerUnexpand={deletExpand}
+                    registerUnexpand={deleteExpand}
                     checkExpand={checkExpand}
                     expandedSections={expandedSections}
                 />
@@ -258,7 +258,7 @@ function FrameworkOverview({history}) {
                 <ButtomButton
                     hasPublished={published}
                     isActive={activeStatus}
-                    hadnleFinalize={hadnleFinalize}
+                    handleFinalize={handleFinalize}
                     handleNewVersion={handleNewVersion}
                 />
             </div>
@@ -472,7 +472,7 @@ function Question(props) {
     );
 }
 
-function ButtomButton({hasPublished, hadnleFinalize, handleNewVersion}) {
+function ButtomButton({hasPublished, handleFinalize, handleNewVersion}) {
     return (
         <div>
             {hasPublished ? (
@@ -480,7 +480,7 @@ function ButtomButton({hasPublished, hadnleFinalize, handleNewVersion}) {
                     <div>Save As New</div>
                 </BigButton>
             ) : (
-                <BigButton onClick={hadnleFinalize}>
+                <BigButton onClick={handleFinalize}>
                     Finalize
                 </BigButton>
             )}

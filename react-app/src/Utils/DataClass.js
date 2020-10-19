@@ -2,6 +2,8 @@
  *  Encapsulates #data using a class
  */
 
+import { useRole } from "./UseRole";
+
 /**
  * Compares two lists containting primative elements only
  */
@@ -192,5 +194,41 @@ class ReportInfoData extends Data {
     }
 }
 
-export {EvaluationInfoData, FrameworkInfoData, ReportInfoData};
+class UserInfoData extends Data {
+
+    static #propertyToFieldName = {
+        createdAt   : "created_at",
+        email       : "email",
+        name        : "name",
+        id          : "user_id",
+        role        : "role",
+        userMetadata: "user_metadata",
+    }
+
+    constructor(backendData) {
+        super(backendData, UserInfoData.#propertyToFieldName, "UserInfoData");
+    }
+
+    createdAt() {
+        return this.get("createdAt");
+    }
+    email() {
+        return this.get("email");
+    }
+    name() {
+        return this.get("name");
+    }
+    id() {
+        return this.get("id");
+    }
+    role() {
+        return this.get("role");
+    }
+    userMetadata() {
+        return this.get("userMetadata");
+    }
+
+}
+
+export { EvaluationInfoData, FrameworkInfoData, ReportInfoData, UserInfoData };
 export default Data;

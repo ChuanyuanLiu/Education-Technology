@@ -26,19 +26,22 @@ function CardList({list, searchProperty, sortByProperty, CardReactComponent, onC
 
     // Filter then sort
     useEffect(()=>{
-        var comparisionFunction;
+        var comparisonFunction;
         if (isAscending) {
-            comparisionFunction = compareCards;
+            comparisonFunction = compareCards;
         } else {
-            comparisionFunction = (e1, e2) => compareCards(e2, e1);
+            comparisonFunction = (e1, e2) => compareCards(e2, e1);
         }
         setFilteredList(
-            filteredList.sort(comparisionFunction)
+            filteredList.sort(comparisonFunction)
         )
     }, [filteredList, isAscending]);
 
     function compareCards(e1, e2) {
-        return compareDateTime(e1.get(SORTBY_PROPERTY), e2.get(SORTBY_PROPERTY));
+        if (SORTBY_PROPERTY !== "name") {
+            return compareDateTime(e1.get(SORTBY_PROPERTY), e2.get(SORTBY_PROPERTY));
+        }
+        return e1.get(SORTBY_PROPERTY).localeCompare(e2.get(SORTBY_PROPERTY));
     }
 
     function filterList(text) {
@@ -58,9 +61,12 @@ function CardList({list, searchProperty, sortByProperty, CardReactComponent, onC
         <div className='CardList'>
             <SearchBar onSearch={filterList} />
             <div className="search_result_control">
-                <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em> 
+                <strong>{filteredList.length}</strong> result(s) found <em>{queryText === ""? null : " on " + "\"" + queryText + "\""}</em>
                 <span className="right clickable" onClick={toggleAscending}>
-                    <strong><em>{isAscending? "Old to New": "New to Old"} <FilterOutlined></FilterOutlined></em></strong>
+                    {SORTBY_PROPERTY !== "name"
+                        ? <strong><em>{isAscending ? "Old to New": "New to Old"} <FilterOutlined></FilterOutlined></em></strong>
+                        : <strong><em>{isAscending ? "Z to A": "A to Z"} <FilterOutlined></FilterOutlined></em></strong>
+                    }
                 </span>
             </div>
             {filteredList.map((data, i) => (

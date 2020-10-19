@@ -285,8 +285,10 @@ body,
 .TextArea .container {
     height: 100px;
     width: 100%;
-    
-    
+}
+.TextArea .short-container {
+    height: 25px;
+    width: 100%;
 }
 .TextArea textarea{
     width: 100%;
