@@ -127,13 +127,13 @@ router.get('/finalise', function (req, res, next) {
             csvContent += report_modified_time + '\n';
 
             csvContent += 'Report recommendation: ';
-            csvContent += report_recommendation + '\n';
+            csvContent += '"' + report_recommendation + '"\n';
 
             csvContent += 'Based on evaluation '
-            csvContent += evaluation_title + '\n';
+            csvContent += '"' + evaluation_title + '"\n';
 
             csvContent += 'Based on framework '
-            csvContent += framework_title + '\n'
+            csvContent += '"' + framework_title + '"\n'
 
             csvContent += 'section_index,';
             csvContent += 'section_title\n';
@@ -168,7 +168,7 @@ router.get('/finalise', function (req, res, next) {
                         let section_title = question1Res[0][0].section_title;
 
                         csvContent += section_id + ',';
-                        csvContent += section_title + '\n';
+                        csvContent += '"' + section_title + '"\n';
 
                         section_indexforsection++;
 
@@ -223,15 +223,15 @@ router.get('/finalise', function (req, res, next) {
 
                                 csvContent += section_id + ',';
 
-                                csvContent += question_id + ',';
-                                csvContent += question_title + ',';
-                                csvContent += rate_1_criterion + ',';
-                                csvContent += rate_2_criterion + ',';
-                                csvContent += rate_3_criterion + ',';
-                                csvContent += rate_4_criterion + ',';
-                                csvContent += rate_5_criterion + ',';
+                                csvContent += '"' + question_id + '",';
+                                csvContent += '"' + question_title + '",';
+                                csvContent += '"' + rate_1_criterion + '",';
+                                csvContent += '"' + rate_2_criterion + '",';
+                                csvContent += '"' + rate_3_criterion + '",';
+                                csvContent += '"' + rate_4_criterion + '",';
+                                csvContent += '"' + rate_5_criterion + '",';
                                 csvContent += rate_chosen + ',';
-                                csvContent += response_comment + '\n';
+                                csvContent += '"' + response_comment + '"\n';
 
                                 question_index++;
 
