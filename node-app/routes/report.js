@@ -117,30 +117,21 @@ router.get('/finalise', function (req, res, next) {
             let framework_id = reportRes[0].framework_id;
             let framework_title = reportRes[0].framework_title;
 
-            var csvContent = '\ufeffreport_id,';
-            csvContent += 'report_author,';
-            csvContent += 'report_title,';
-            csvContent += 'report_creation_time,';
-            csvContent += 'report_modified_time,';
-            csvContent += 'report_recommendation\n';
-            csvContent += report_id + ',';
-            csvContent += report_author + ',';
-            csvContent += report_title + ',';
-            csvContent += report_creation_time + ',';
-            csvContent += report_modified_time + ',';
-            csvContent += report_recommendation + '\n';
-            csvContent += 'Evaluation Details\n'
-            csvContent += 'evaluation_id,';
-            csvContent += 'evaluation_title\n';
-            csvContent += evaluation_id + ',';
+            var csvContent = report_title + ' ';
+            csvContent += 'by ';
+            csvContent += report_author + ' ';
+            csvContent += 'created on ';
+            csvContent += report_creation_time + ' ';
+            csvContent += 'last modified on ';
+            csvContent += report_modified_time + '\n';
+
+            csvContent += 'Based on evaluation '
             csvContent += evaluation_title + '\n';
-            csvContent += 'Framework Details\n'
-            csvContent += 'framework_id,';
-            csvContent += 'framework_title\n';
-            csvContent += framework_id + ',';
+
+            csvContent += 'Based on framework '
             csvContent += framework_title + '\n'
 
-            csvContent += 'section_id,';
+            csvContent += 'section_index,';
             csvContent += 'section_title\n';
 
             //2. Returns min section_id and max section_id 
@@ -181,7 +172,8 @@ router.get('/finalise', function (req, res, next) {
                         }
 
                         if (i == max_section_id) {
-                            csvContent += 'question_id,';
+                            csvContent += 'section_index,';
+                            csvContent += 'question_index,';
                             csvContent += 'question_title,';
                             csvContent += 'rate_1_criterion,';
                             csvContent += 'rate_2_criterion,';
@@ -192,7 +184,7 @@ router.get('/finalise', function (req, res, next) {
 
                         for (let i = min_question_id; i <= max_question_id; i++) {
                             //4. Return question details 
-                            const sql4 = "SELECT question_id, question_title, rate_1_criterion, rate_2_criterion, "
+                            const sql4 = "SELECT question_id, section_id, question_title, rate_1_criterion, rate_2_criterion, "
                                 + "rate_3_criterion, rate_4_criterion, rate_5_criterion "
                                 + "FROM framework_section_question "
                                 + "WHERE question_id = " + i;
@@ -202,13 +194,15 @@ router.get('/finalise', function (req, res, next) {
                                     res.send(UNSUCCESSFUL);
                                 }
                                 let question_id = responseRes[0].question_id;
+                                let section_id = responseRes[0].section_id;
                                 let question_title = responseRes[0].question_title;
                                 let rate_1_criterion = responseRes[0].rate_1_criterion;
                                 let rate_2_criterion = responseRes[0].rate_2_criterion;
                                 let rate_3_criterion = responseRes[0].rate_3_criterion;
                                 let rate_4_criterion = responseRes[0].rate_4_criterion;
                                 let rate_5_criterion = responseRes[0].rate_5_criterion;
-
+                                
+                                csvContent += section_id + ',';
                                 csvContent += question_id + ',';
                                 csvContent += question_title + ',';
                                 csvContent += rate_1_criterion + ',';
@@ -218,7 +212,7 @@ router.get('/finalise', function (req, res, next) {
                                 csvContent += rate_5_criterion + '\n';
 
                                 if (i == total) {
-                                    csvContent += 'question_id,';
+                                    csvContent += 'question_index,';
                                     csvContent += 'rate_chosen,';
                                     csvContent += 'response_comment\n';
                                 }
