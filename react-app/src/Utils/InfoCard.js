@@ -7,12 +7,13 @@ import {Divider} from "antd";
  * @param {function} [onClick=()=>{}] optional event to be triggered when you click on the entire infoCard
  * @param {object} children
  */
-function InfoCard({title, onClick=()=>{}, children}) {
+function InfoCard({title, onClick=()=>{}, children, hideTitle=false}) {
     return (
-        <div className="InfoCard clickable breakWord" onClick={onClick}>
-            <div className="elementTitle">
-                {title}
-            </div>
+        <div className={hideTitle? "InfoCard breakWord":"InfoCard clickable breakWord"} onClick={onClick}>
+            {hideTitle? null :             
+                <div className="elementTitle">
+                    {title}
+                </div>}
             <Divider/>
             {children}
         </div>

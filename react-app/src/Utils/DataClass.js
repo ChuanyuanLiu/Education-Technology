@@ -153,7 +153,7 @@ class ReportInfoData extends Data {
         creationTime   : "report_creation_time",
         modifiedTime   : "report_modified_time",
         recommendation : "report_recommendation",
-        wasFinalised   : "report_published",
+        wasFinalised   : "report_finalised",
         evaluationId   : "evaluation_id",
         csv            : "report_csv",
         evaluationTitle: "evaluation_title"

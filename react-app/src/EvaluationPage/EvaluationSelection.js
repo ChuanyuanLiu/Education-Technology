@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import NavBar from "../Utils/NavBar";
 import EvaluationInfo from "./EvaluationInfo";
-import BigButton from "./../Utils/BigButton";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
+import {useAuth0} from "@auth0/auth0-react";
 
 /**
  * Route from Homepage
@@ -19,6 +19,7 @@ function EvaluationSelection() {
     const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
+    const {user, isAuthenticated, isLoading} = useAuth0();
 
     // initalize data
     useEffect(() => {
@@ -31,7 +32,18 @@ function EvaluationSelection() {
     }, []);
 
     function selectEvaluation(id) {
-        // TODO
+        const requestURL = `http://localhost:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
+        // console.log(requestURL);
+        fetch(requestURL)
+            .then((response) => response.json())
+            .then(({report_id}) =>
+                history.replace({
+                    pathname: "/report_overview",
+                    state: {
+                        report_id
+                    },
+                })
+            );
     };
 
     function convertToDataClass(data) {
