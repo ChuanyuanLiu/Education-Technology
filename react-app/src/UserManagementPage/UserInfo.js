@@ -23,7 +23,7 @@ function UserInfo ({data, onClick}) {
             <div className='rightContent'>
                 {data.userMetadata().active ? "Active" : "Inactive"}
                 <br/>
-                {data.role()}
+                {data.role().name}
             </div>
         </InfoCard>
     ); 

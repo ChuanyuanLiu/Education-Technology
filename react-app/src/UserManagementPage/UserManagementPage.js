@@ -32,7 +32,7 @@ function UserManagementPage() {
     };
 
     useEffect(() => {
-        fetch("http://localhost:3001/user/all/withroles")
+        fetch("http://localhost:3001/user")
             .then((response) => response.json())
             .then((data) => {
                 setUserList(convertToDataClass(data));
