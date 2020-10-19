@@ -179,7 +179,11 @@ router.get('/finalise', function (req, res, next) {
                             csvContent += 'rate_2_criterion,';
                             csvContent += 'rate_3_criterion,';
                             csvContent += 'rate_4_criterion,';
-                            csvContent += 'rate_5_criterion\n';
+                            csvContent += 'rate_5_criterion,';
+
+                            csvContent += 'rate_chosen,';
+                            csvContent += 'response_comment\n';
+                            
                         }
 
                         for (let i = min_question_id; i <= max_question_id; i++) {
@@ -187,51 +191,37 @@ router.get('/finalise', function (req, res, next) {
                             const sql4 = "SELECT question_id, section_id, question_title, rate_1_criterion, rate_2_criterion, "
                                 + "rate_3_criterion, rate_4_criterion, rate_5_criterion "
                                 + "FROM framework_section_question "
-                                + "WHERE question_id = " + i;
+                                + "WHERE question_id = " + i + ";"
+                                + "SELECT question_id, rate_chosen, response_comment "
+                                + "FROM evaluation_response WHERE question_id = " + i;
 
                             sqlAdapter.sqlCall(sql4, function (responseRes) {
                                 if (responseRes == null) {
                                     res.send(UNSUCCESSFUL);
                                 }
-                                let question_id = responseRes[0].question_id;
-                                let section_id = responseRes[0].section_id;
-                                let question_title = responseRes[0].question_title;
-                                let rate_1_criterion = responseRes[0].rate_1_criterion;
-                                let rate_2_criterion = responseRes[0].rate_2_criterion;
-                                let rate_3_criterion = responseRes[0].rate_3_criterion;
-                                let rate_4_criterion = responseRes[0].rate_4_criterion;
-                                let rate_5_criterion = responseRes[0].rate_5_criterion;
+                                let question_id = responseRes[0][0].question_id;
+                                let section_id = responseRes[0][0].section_id;
+                                let question_title = responseRes[0][0].question_title;
+                                let rate_1_criterion = responseRes[0][0].rate_1_criterion;
+                                let rate_2_criterion = responseRes[0][0].rate_2_criterion;
+                                let rate_3_criterion = responseRes[0][0].rate_3_criterion;
+                                let rate_4_criterion = responseRes[0][0].rate_4_criterion;
+                                let rate_5_criterion = responseRes[0][0].rate_5_criterion;
+                                
+                                let response_comment = responseRes[1][0].response_comment;
+                                let rate_chosen = responseRes[1][0].rate_chosen;
                                 
                                 csvContent += section_id + ',';
+
                                 csvContent += question_id + ',';
                                 csvContent += question_title + ',';
                                 csvContent += rate_1_criterion + ',';
                                 csvContent += rate_2_criterion + ',';
                                 csvContent += rate_3_criterion + ',';
                                 csvContent += rate_4_criterion + ',';
-                                csvContent += rate_5_criterion + '\n';
-
-                                if (i == total) {
-                                    csvContent += 'question_index,';
-                                    csvContent += 'rate_chosen,';
-                                    csvContent += 'response_comment\n';
-                                }
-
-                                //5. Returns evaluation_response details
-                                const sql5 = "SELECT question_id, rate_chosen, response_comment "
-                                    + "FROM evaluation_response WHERE question_id = " + question_id;
-
-                                sqlAdapter.sqlCall(sql5, function (response1Res) {
-                                    if (response1Res == null) {
-                                        res.send(UNSUCCESSFUL);
-                                    }
-                                    let question_id = response1Res[0].question_id;
-                                    let response_comment = response1Res[0].response_comment;
-                                    let rate_chosen = response1Res[0].rate_chosen;
-
-                                    csvContent += question_id + ',';
-                                    csvContent += rate_chosen + ',';
-                                    csvContent += response_comment + '\n';
+                                csvContent += rate_5_criterion + ',';
+                                csvContent += rate_chosen + ',';
+                                csvContent += response_comment + '\n';
 
                                     // The .csv file is stored in '$REPORTS_FILEPATH'
                                     // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
@@ -267,7 +257,7 @@ router.get('/finalise', function (req, res, next) {
                                        // res.send(cleanRes);
                                     });
 
-                                });
+                                //});
 
                             });
                         }
