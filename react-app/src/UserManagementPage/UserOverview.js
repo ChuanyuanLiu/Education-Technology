@@ -132,18 +132,21 @@ function UserOverview({history}) {
                     text={userEmail}
                     onSave={updateText("email", false)}
                     disabled={userActive}
+                    short={true}
                 />
                 <TextArea
                     title='Employer'
                     text={userEmployer}
                     onSave={updateText("employer", true)}
                     disabled={userActive}
+                    short={true}
                 />
                 <TextArea
                     title='Phone Number'
                     text={userPhoneNumber}
                     onSave={updateText("contact_number", true)}
                     disabled={userActive}
+                    short={true}
                 />
             </div>
         </div>
