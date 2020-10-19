@@ -3,32 +3,43 @@ var request = require('request');
 var router = express.Router();
 var auth0Adapter = require('../utils/auth0Adapter');
 
+// Retrieve a user with their respective roles
+// Endpoint: "localhost:3001/user/withroles?user_id={uid}"
+router.get('/withroles', function (req, res, next) {
+    const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
+
+    auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
+        recurseRoles(0, [JSON.parse(auth0Res)], res);
+    });
+});
+
 // Retrieve all users
 // Endpoint: "localhost:3001/user/all"
 router.get('/all', function (req, res, next) {
     const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
 
-    auth0Adapter.auth0Call("GET", url, function (auth0Res) {
+    auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
         res.send(auth0Res);
     });
 });
 
 // Retrieve all users with their respective roles
-// Endpoint: "localhost:3001/user/all/roles"
-router.get('/all/roles', function (req, res, next) {
+// Endpoint: "localhost:3001/user/all/withroles"
+router.get('/all/withroles', function (req, res, next) {
     const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
 
-    auth0Adapter.auth0Call("GET", url, function (auth0Res) {
+    auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
         recurseRoles(0, JSON.parse(auth0Res), res);
     });
 });
 
 // Attach roles to each user recursively
 function recurseRoles(index, users, res) {
+    console.log(index + " " + users.length);
     if (index < users.length) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${users[index].user_id}/roles`;
 
-        auth0Adapter.auth0Call("GET", url, function (auth0Res) {
+        auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
             users[index].role = JSON.parse(auth0Res)[0].name;
             recurseRoles(index + 1, users, res);
         });
@@ -43,7 +54,18 @@ router.get('/roles', function (req, res, next) {
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}/roles`;
 
-        auth0Adapter.auth0Call("GET", url, function (auth0Res) {
+        auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
+            res.send(auth0Res);
+        });
+    }
+});
+
+router.post('/update', function (req, res, next) {
+    if (req.query.user_id != null) {
+        const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
+
+        auth0Adapter.auth0Call("PATCH", url, req.body, function (auth0Res) {
+            console.log(auth0Res);
             res.send(auth0Res);
         });
     }

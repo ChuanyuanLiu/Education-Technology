@@ -20,16 +20,20 @@ request(tokenOptions, function (error, response, body) {
  * @param {*} callUrl 
  * @param {*} callback 
  */
-function auth0Call(callMethod, callUrl, callback) {
+function auth0Call(callMethod, callUrl, postBody, callback) {
     var options = {
         method: callMethod,
         url: callUrl,
         headers: {
-            authorization: `${token.token_type} ${token.access_token}`
-        }
+            authorization: `${token.token_type} ${token.access_token}`,
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(postBody),
     };
     // Return the response back to the callback
+    console.log(options);
     request(options, function (error, response, body) {
+        if (error) throw new Error(error);
         callback(body);
     });
 }
