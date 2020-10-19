@@ -36,6 +36,7 @@ function recurseRoles(index, users, res) {
             recurseRoles(index + 1, users, res);
         });
     } else {
+        console.log(users);
         res.send(users);
     }
 }
@@ -92,11 +93,55 @@ router.post('/update/role', function (req, res, next) {
     }
 });
 
-router.post('/delete', function (req, res, next) {
+// Create a new user with default role Consultant
+router.get('/new', function (req, res, next) {
+    const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
+    const body = {
+        "connection": "Username-Password-Authentication",
+        "name": "New User",
+        "email": "placeholder@email.com",
+        "password": "placeholder_password",
+        "user_metadata": {
+            "active": false
+        }
+    }
+
+    // Create a new user
+    auth0Adapter.auth0Call("POST", url, body, function (auth0UserRes) {
+        console.log(auth0UserRes);
+        let userRes = JSON.parse(auth0UserRes);
+        const roleUrl = `https://edtechevaluation.au.auth0.com/api/v2/roles`;
+        
+        // Get all roles
+        auth0Adapter.auth0Call("GET", roleUrl, body, function (auth0RoleRes) {
+            console.log(auth0RoleRes);
+            let roleRes = JSON.parse(auth0RoleRes);
+            let roleId;
+            for (let i = 0; i < roleRes.length; i++) {
+                if (roleRes[i].name === "Consultant") {
+                    roleId = roleRes[i].id;
+                    break;
+                }
+            }
+
+            const assignUrl = `https://edtechevaluation.au.auth0.com/api/v2/users/${userRes.user_id}/roles`;
+            const assignBody = {"roles": [roleId]};
+            // Assign consultant role to new user
+            auth0Adapter.auth0Call("POST", assignUrl, assignBody, function (auth0AssignRes) {
+                console.log(auth0AssignRes);
+                res.send(userRes);
+            })
+        });
+    })
+});
+
+// Delete a user
+// Endpoint: "localhost:3001/user/delete?user_id={uid}"
+router.get('/delete', function (req, res, next) {
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
 
-        auth0Adapter.auth0Call("DELETE", url, req.body, function (auth0Res) {
+        auth0Adapter.auth0Call("DELETE", url, {}, function (auth0Res) {
             console.log(auth0Res);
             res.send(auth0Res);
         });

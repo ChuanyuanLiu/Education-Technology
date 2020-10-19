@@ -131,7 +131,7 @@ function UserOverview({history}) {
             headers: {
                 "Content-Type": "application/json",
             },
-            method: "POST"
+            method: "GET"
         }
 
         fetch(`http://localhost:3001/user/delete?user_id=${user_id}`, param)
@@ -190,7 +190,7 @@ function UserOverview({history}) {
                     <Select
                         defaultValue="Senior Consultant"
                         style={{width: "100%"}}
-                        disabled={false}
+                        disabled
                     >
                     </Select>
                     :
@@ -230,7 +230,7 @@ function UserOverview({history}) {
                 />
             </div>
 
-            {!userActive &&
+            {!userActive && userRole.name !== "Senior Consultant" &&
                 <div className='footer'>
                     <Popconfirm
                         title="Are you sure you want to delete this user?"
