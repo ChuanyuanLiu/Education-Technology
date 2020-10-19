@@ -74,6 +74,10 @@ function HomePage(props) {
     // if (isLoading) {
         return <div>Loading...</div>;
     }
+
+    if (error) {
+        console.log(error);
+    }
     
     return (
         isAuthenticated && (

@@ -89,7 +89,7 @@ function EvaluationOverviewPage({history}) {
     const post_summary_request = (url, title) => (text) => {
         post_request(url, title, text);
     };
-    const post_finailized_request = (url) => {
+    const post_finalized_request = (url) => {
         const param = {
             headers: {
                 "Content-Type": "application/json",
@@ -187,7 +187,7 @@ function EvaluationOverviewPage({history}) {
             <div className='footer'>
                 {evaluation_data.evaluation_completed && canBeEdit?                 
                     <BigButton
-                        onClick={()=> post_finailized_request(finalize_url)}
+                        onClick={()=> post_finalized_request(finalize_url)}
                     >
                         Finalize
                     </BigButton>

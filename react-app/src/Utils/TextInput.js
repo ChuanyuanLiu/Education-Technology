@@ -7,7 +7,7 @@ import { EditOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons"
  * @param onSave(text): triggers when the save button is pressed
  * @ignore children
  */
-function TextInput({disabled, textAlign,text, onSave=f=>f}) {
+function TextInput({disabled, textAlign, text, onSave=f=>f}) {
     const [getText, setText] = useState(text);
     const [getActive, setActive] = useState(false);
     const text_input = useRef(null);

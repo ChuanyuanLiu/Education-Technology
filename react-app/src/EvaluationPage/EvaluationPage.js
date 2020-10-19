@@ -39,7 +39,7 @@ function EvaluationPage() {
             .catch(console.error);
     }, []);
 
-    const goToEvaluationOverivew = (id) => {
+    const goToEvaluationOverview = (id) => {
         history.push({
             pathname: "/evaluation_overview",
             state: {
@@ -89,7 +89,7 @@ function EvaluationPage() {
                     list={renderList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
-                    onClick={goToEvaluationOverivew}
+                    onClick={goToEvaluationOverview}
                     role={roles[0].name}
                     user={user.name}
                 />
