@@ -126,6 +126,9 @@ router.get('/finalise', function (req, res, next) {
             csvContent += 'last modified on ';
             csvContent += report_modified_time + '\n';
 
+            csvContent += 'Report recommendation: ';
+            csvContent += report_recommendation + '\n';
+
             csvContent += 'Based on evaluation '
             csvContent += evaluation_title + '\n';
 
@@ -185,7 +188,7 @@ router.get('/finalise', function (req, res, next) {
                             csvContent += 'rate_chosen,';
                             csvContent += 'response_comment\n';
                         }
-                        
+
                         for (let i = min_question_id; i <= max_question_id; i++) {
                             //4. Return question details 
                             const sql4 = "SELECT question_id, section_id, question_title, rate_1_criterion, rate_2_criterion, "
@@ -199,11 +202,10 @@ router.get('/finalise', function (req, res, next) {
                                 if (responseRes == null) {
                                     res.send(UNSUCCESSFUL);
                                 }
-                                
-                                
-                                if(last_section_index != responseRes[0][0].section_id)
-                                {
-                                    section_indexforquestion ++;
+
+
+                                if (last_section_index != responseRes[0][0].section_id) {
+                                    section_indexforquestion++;
                                     last_section_index = responseRes[0][0].section_id;
                                 }
 
@@ -231,7 +233,6 @@ router.get('/finalise', function (req, res, next) {
                                 csvContent += rate_chosen + ',';
                                 csvContent += response_comment + '\n';
 
-                                // section_indexforquestion++;
                                 question_index++;
 
                                 // The .csv file is stored in '$REPORTS_FILEPATH'
@@ -266,7 +267,7 @@ router.get('/finalise', function (req, res, next) {
                                         return;
                                     }
                                 });
-                                //});
+
 
                             });
                         }
