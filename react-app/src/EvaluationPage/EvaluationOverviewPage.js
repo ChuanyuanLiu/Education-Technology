@@ -5,6 +5,7 @@ import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
 import {CheckOutlined} from "@ant-design/icons";
+import Reminder from "../Utils/Reminder";
 import {
     RightOutlined,
     DownOutlined,
@@ -25,8 +26,9 @@ import {
 function EvaluationOverviewPage({history}) {
     //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
-    const {evaluation_id} = history.location.state;
+    const {evaluation_id, user, role} = history.location.state;
     const [expandedSections, setExpandedSections] = useState([])
+    const AUTH_ROLE = "Senior Consultant"
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
@@ -61,6 +63,8 @@ function EvaluationOverviewPage({history}) {
     if (evaluation_data == null ) {
         return <h1>Loading...</h1>;
     }
+
+
 
     const post_url = `http://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
     const finalize_url = `http://localhost:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
@@ -130,9 +134,13 @@ function EvaluationOverviewPage({history}) {
     const checkExpand = (section_id) =>{
         return expandedSections.includes(section_id)
     }
-    const handleClick = ()=>{
-        history.goBack();
-    }
+
+
+
+    const hasEditAuthority = (user === evaluation_data.evaluation_author) || (role === AUTH_ROLE)
+    //The page can only be edited if it is not finalised and the user has edit authority
+    const canBeEdit = !evaluation_data.evaluation_finalised && hasEditAuthority
+
     return (
         <div className='EvaluationPage flex_container'>
             <NavBar>
@@ -142,10 +150,18 @@ function EvaluationOverviewPage({history}) {
                         post_url,
                         evaluation_data.evaluation_summary
                     )}
-                    disabled={evaluation_data.evaluation_finalised}
+                    disabled={!canBeEdit}
                 />
             </NavBar>
+            {hasEditAuthority? null : 
+                    <Reminder is_hidden={true}>
+                        <span>
+                            This page is read-only since you aren't the author of the evaluation
+                        </span>
+                    </Reminder>
+                } 
             <div className='content scrollable '>
+              
                 <div>
                     <TextArea
                         title='Summary'
@@ -154,7 +170,7 @@ function EvaluationOverviewPage({history}) {
                             post_url,
                             evaluation_data.evaluation_title
                         )}
-                        disabled={evaluation_data.evaluation_finalised}
+                        disabled={!canBeEdit}
                     />
                 </div>
 
@@ -165,10 +181,11 @@ function EvaluationOverviewPage({history}) {
                     registerUnexpand={deletExpand}
                     checkExpand={checkExpand}
                     expandedSections={expandedSections}
+                    editable={canBeEdit}
                 />
             </div>
             <div className='footer'>
-                {evaluation_data.evaluation_completed && !evaluation_data.evaluation_finalised?                 
+                {evaluation_data.evaluation_completed && canBeEdit?                 
                     <BigButton
                         onClick={()=> post_finalized_request(finalize_url)}
                     >
@@ -198,10 +215,11 @@ function EvaluationOverviewPage({history}) {
  * @param {registerExpand} register expanded sections for last editing
  * @param {registerUnexpand} unregister expanded sections for laste editing 
  * @param {checkExpand} check which section is expanded
+ * @param {editable} check whether the page is editable
  */
 
-function SectionsList({evaluation_id, evaluation_finalised, sections, registerExpand,
-                    registerUnexpand,checkExpand}) 
+function SectionsList({evaluation_id, sections, registerExpand,
+                    registerUnexpand,checkExpand, editable}) 
 {
     return (
         <>
@@ -212,10 +230,10 @@ function SectionsList({evaluation_id, evaluation_finalised, sections, registerEx
                     evaluation_id={evaluation_id}
                     section_index={i}
                     {...section}
-                    evaluation_finalised={evaluation_finalised}
                     defaultExpand={checkExpand(section.section_id)}
                     registerExpand={registerExpand}
                     registerUnexpand={registerUnexpand}
+                    editable={editable}
                 />
             ))}
         </>
@@ -225,7 +243,7 @@ function SectionsList({evaluation_id, evaluation_finalised, sections, registerEx
 // Display a list of questions
 function Section({evaluation_id, section_title, section_index, 
                   questions, registerExpand, section_id, section_completed,
-                  evaluation_finalised, registerUnexpand, defaultExpand}) {
+                   registerUnexpand, defaultExpand, editable}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -264,7 +282,7 @@ function Section({evaluation_id, section_title, section_index,
                               evaluation_id={evaluation_id}
                               section_index={section_index}
                               question_index={i}
-                              finalized={evaluation_finalised}
+                              editable={editable}
                               key={i}
                           />
                       ))
@@ -282,7 +300,7 @@ function Question({
     question_index,
     question_title,
     question_completed,
-    finalized
+    editable
 }) {
     const history = useHistory();
     function handleClick() {
@@ -291,10 +309,11 @@ function Question({
             state: {
                 evaluation_id,
                 question_id,
-                finalized
+                editable
             },
         });
     }
+    console.log(editable)
     return (
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}

@@ -14,7 +14,7 @@ Question Page
 */
 
 function QuestionPage({history}) {
-    const {evaluation_id, question_id, finalized} = history.location.state;
+    const {evaluation_id, question_id, editable} = history.location.state;
     const [question_data, setQuestion] = useState(null);
 
     //TODO, catch connection reused error on screen
@@ -62,13 +62,13 @@ function QuestionPage({history}) {
                 <RateList 
                     {...question_data} 
                     onChange={post_rate_request(url, question_data.response_comment)}
-                    finalized={finalized} 
+                    editable={editable} 
                 />
                 <TextArea
                     title='Comment'
                     text={question_data.response_comment}
                     onSave={post_comment_request(url, question_data.rate_chosen)}
-                    finalized={finalized}
+                    disabled={!editable}
                 />
             </div>
             <div className='footer'>
@@ -84,24 +84,24 @@ function QuestionPage({history}) {
     );
 }
 
-function RateList({rates, onChange, rate_chosen, finalized}) {
+function RateList({rates, onChange, rate_chosen, editable}) {
     return (
         <>
             <div className='section_header'>Rating</div>
-            <form onChange={finalized? null: (e)=>{onChange(e.target.value)}}>
+            <form onChange={!editable? null: (e)=>{onChange(e.target.value)}}>
                 {rates.map((rate, i) => (
-                    <Rating finalized={finalized} {...rate} rate_chosen={rate_chosen} key={i} />
+                    <Rating editable={editable} {...rate} rate_chosen={rate_chosen} key={i} />
                 ))}
             </form>
         </>
     );
 }
 
-function Rating({rate_number, rate_title, rate_criterion, rate_chosen,finalized}) {
+function Rating({rate_number, rate_title, rate_criterion, rate_chosen, editable}) {
     return (
         <>
             <label id="radio_button" className="clickable no_bold">
-                <input type='radio' name='rating' value={rate_number} defaultChecked={rate_chosen===rate_number} disabled={finalized}/>
+                <input type='radio' name='rating' value={rate_number} defaultChecked={rate_chosen===rate_number} disabled={!editable}/>
                 <span id='rate_title' > {rate_title}</span>
                 <div id='rate_criteria'>{rate_criterion}</div>
             </label>

@@ -20,7 +20,7 @@ const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a p
 
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
-    const disabled = published === PUBLISHED_TRUE;
+    const disabled = published;
 
     const [questionData, setQuestion] = useState(null);
     // GET
@@ -88,7 +88,7 @@ function FrameworkQuestionPage({history}) {
                 </NavBar>
             </div>
             <div className='content scrollable'>
-                <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
+                {/* <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder> */}
                 <RatingList
                     post_request={post_request}
                     {...questionData}

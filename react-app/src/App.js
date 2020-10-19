@@ -19,6 +19,7 @@ import UserOverview from "./UserManagementPage/UserOverview";
 import ReportOverview from "./ReportPage/ReportOverview";
 import ReportPublishPage from "./ReportPage/ReportPublishPage";
 function App(){
+    const AUTH_ROLE = "Senior Consultant"
     return (
         <div className='element_container'>
             <React.StrictMode>

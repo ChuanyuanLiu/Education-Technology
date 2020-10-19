@@ -28,6 +28,7 @@ function PageOptionList({role}) {
     const guest_fuctions = [
         "Evaluations",
         "Reports",
+        "Frameworks"
         // "Settings",
     ];
 

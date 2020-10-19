@@ -4,7 +4,8 @@ import NavBar from "../Utils/NavBar";
 import EvaluationInfo from "./EvaluationInfo";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
-import {useAuth0} from "@auth0/auth0-react";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useRole } from "../Utils/UseRole";
 
 /**
  * Route from Homepage
@@ -19,8 +20,11 @@ function EvaluationSelection() {
     const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
-    const {user, isAuthenticated, isLoading} = useAuth0();
 
+    const AUTH_ROLE = "Senior Consultant"
+    const CONSULTANT = "Consultant"
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { error, roles, loading: rolesLoading, refresh } = useRole();
     // initalize data
     useEffect(() => {
         fetch("http://localhost:3001/report/new")
@@ -50,9 +54,15 @@ function EvaluationSelection() {
         return data.map(data=>new EvaluationInfoData(data));
     }
 
-    if (evaluationList == null )
+    if (evaluationList == null || isLoading || rolesLoading)
         return <h1> Loading ... </h1>;
 
+    //User can only make report based on own evaluations except administrator
+    const renderList = evaluationList.filter((data) => {
+        if(data.author() === user.name || roles[0].name === AUTH_ROLE){
+            return data
+        }
+    })
     return (
         <div className='flex_container'>
             <div className='header'>
@@ -62,7 +72,7 @@ function EvaluationSelection() {
             </div>
             <div className='content scrollable'>
                 <CardList 
-                    list={evaluationList}
+                    list={renderList}
                     searchProperty={SEARCH_PROPERTY} 
                     sortByProperty={SORTBY_PROPERTY}
                     CardReactComponent={EvaluationInfo}
