@@ -7,6 +7,10 @@ export function resolveTime(time){
     return year + '/'+ month + '/' + day
 }
 
+export function resolveUserTime(time) {
+    return resolveTime(time).split('T')[0];
+}
+
 /** 
  * Return positive number if d1 > d2
  */

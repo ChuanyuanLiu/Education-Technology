@@ -28,6 +28,7 @@ function PageOptionList({role}) {
     const guest_fuctions = [
         "Evaluations",
         "Reports",
+        "Frameworks"
         // "Settings",
     ];
 
@@ -73,6 +74,10 @@ function HomePage(props) {
     if (isLoading || rolesLoading) {
     // if (isLoading) {
         return <div>Loading...</div>;
+    }
+
+    if (error) {
+        console.log(error);
     }
     
     return (

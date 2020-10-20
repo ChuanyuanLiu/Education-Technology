@@ -18,6 +18,7 @@ function TextArea({
     text = "",
     disabled = false,
     onSave = (f) => f,
+    short = false,
 }) {
     // track changes to text
     const [getText, setText] = useState(text);
@@ -61,7 +62,7 @@ function TextArea({
                         <EditOutlined onClick={toggleActive}/>}
                 </div>
             </div>
-            <div className="container">
+            <div className={short ? "short-container" : "container"}>
                 <textarea
                     name={title}
                     id={title}
