@@ -18,7 +18,6 @@ import {
 Framework Overview Page
     |-- Status
         |--  Active Switch
-        |--  Published Switch
     |-- SectionList
             |-- Section
                     |-- Question (rout to Question Page)
