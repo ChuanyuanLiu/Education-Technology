@@ -1,7 +1,7 @@
 var express = require('express');
 var request = require('request');
 var router = express.Router();
-var auth0Adapter = require('../utils/auth0Adapter');
+var auth0Adapter = require('../dataSource/auth0Adapter');
 
 router.get('/', function (req, res, next) {
 
