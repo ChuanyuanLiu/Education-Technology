@@ -31,7 +31,6 @@ function auth0Call(callMethod, callUrl, postBody, callback) {
         body: JSON.stringify(postBody),
     };
     // Return the response back to the callback
-    console.log(options);
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
         callback(body);

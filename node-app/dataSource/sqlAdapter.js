@@ -1,4 +1,4 @@
-var mysql = require('mysql');      //Import mysql module
+mysql = require('mysql');      //Import mysql module
 
 /*
 Create an instance of MySQL.

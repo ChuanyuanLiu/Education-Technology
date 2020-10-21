@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var sqlAdapter = require('../utils/sqlAdapter');
+var sqlAdapter = require('../dataSource/sqlAdapter');
 var jsonUtils = require('../utils/jsonUtils');
 
 const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";

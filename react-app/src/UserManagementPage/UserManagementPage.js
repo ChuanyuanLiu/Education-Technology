@@ -4,6 +4,7 @@ import { UserInfoData } from "../Utils/DataClass.js";
 import UserInfo from "./UserInfo";
 import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
+import BigButton from "../Utils/BigButton";
 
 /**
  * Route from Homepage
@@ -31,8 +32,16 @@ function UserManagementPage() {
         });
     };
 
+    const createNewUser = () => {
+        fetch("http://localhost:3001/user/new")
+            .then((response) => response.json())
+            .then((data) => {
+                goToUserOverview(data.user_id)
+            });
+    }
+
     useEffect(() => {
-        fetch("http://localhost:3001/user/all/withroles")
+        fetch("http://localhost:3001/user")
             .then((response) => response.json())
             .then((data) => {
                 setUserList(convertToDataClass(data));
@@ -59,6 +68,9 @@ function UserManagementPage() {
                     CardReactComponent={UserInfo}
                     onClick={goToUserOverview}
                 />
+            </div>
+            <div className='footer'>
+                <BigButton onClick={createNewUser}>New User</BigButton>
             </div>
         </div>
     );
