@@ -1,11 +1,6 @@
-import React, {useEffect, useState} from "react"
+import React, {useState} from "react"
 import NavBar from "../Utils/NavBar";
-import TextInput from "../Utils/TextInput";
 import BigButton from "../Utils/BigButton";
-import StatusSwitch from "../Utils/StatusSwitch";
-import Reminder from "../Utils/Reminder";
-import ReportInfo from "./ReportInfo";
-import {ReportInfoData} from "../Utils/DataClass.js";
 import "./ReportPage.css"
 import {PlusOutlined, CloseOutlined} from "@ant-design/icons";
 
@@ -30,7 +25,6 @@ function ReportPublishPage({history}){
             } 
         }
         url += "report_id=" + report_id
-        console.log(url)
         if(count > 0){
             fetch(url)
                 .then(response => response.text())
