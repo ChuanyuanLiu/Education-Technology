@@ -5,6 +5,8 @@ import ReportInfo from "./ReportInfo";
 import BigButton from "./../Utils/BigButton";
 import {ReportInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useRole } from "../Utils/UseRole";
 
 /**
  * Route from Homepage
@@ -19,6 +21,12 @@ function ReportPage() {
     const SORTBY_PROPERTY = "modifiedTime";
     const history = useHistory();
     const [reportList, setReportList] = useState(null);
+
+    const AUTH_ROLE = "Senior Consultant"
+    const CONSULTANT = "Consultant"
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { error, roles, loading: rolesLoading, refresh } = useRole();
+
 
     // initalize data by getting the data and wrap response in DataClass
     useEffect(() => {
@@ -49,9 +57,14 @@ function ReportPage() {
         });
     }
 
-    if (reportList == null )
+    if (reportList == null || isLoading || rolesLoading)
         return <h1> Loading ... </h1>;
 
+    const renderList = reportList.filter((data) => {
+        if(data.author() === user.name || roles[0].name === AUTH_ROLE ){
+            return data
+        }
+    })
     return (
         <div className='flex_container'>
             <div className='header'>
@@ -63,7 +76,7 @@ function ReportPage() {
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 
                     sortByProperty={SORTBY_PROPERTY}
-                    list={reportList}
+                    list={renderList}
                     CardReactComponent={ReportInfo}
                     dataClass={ReportInfoData}
                     onClick={goToReportOverview}

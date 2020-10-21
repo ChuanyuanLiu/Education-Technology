@@ -32,14 +32,15 @@ Framework Overview Page
  * @param {int} history.location.state.framework_id
  * */
 function FrameworkOverview({history}) {
-    const {framework_id} = history.location.state;
+    const {framework_id, role} = history.location.state;
     const [framework_data, setFramework] = useState(null);
     const [activeStatus, setActiveStatus] = useState(0);
-    const [published, setFinalized] = useState(0);
+    const [finalised, setFinalized] = useState(0);
     const [frameworkTitle, setFrameworkTitle] = useState("");
     const [sections, setSections] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
-
+  
+    const AUTH_ROLE = "Senior Consultant"
     function initializeFramework(data) {
         // console.log(data);
         setFrameworkTitle(data.framework_title);
@@ -212,6 +213,10 @@ function FrameworkOverview({history}) {
     if (framework_data === null || expandedSections === []) {
         return <h1>Loading...</h1>;
     }
+
+    //framework is editable only if the user has authority and it is not finalised
+    const isAdmin = role === AUTH_ROLE
+    const ediable = ( isAdmin && !finalised)
     return (
         <div className='flex_container '>
             <NavBar>
@@ -220,34 +225,41 @@ function FrameworkOverview({history}) {
                     text={frameworkTitle}
                     title={"Framework Title"}
                     onSave={postTitle(framework_id)}
-                    disabled={published}
+                    disabled={!ediable}
                 />
                 </div>
 
             </NavBar>
 
             <div className='content scrollable'>
-                {published ? (
-                    <Reminder is_hidden={published}>
+                {isAdmin?
+                   (finalised ? (
+                        <Reminder is_hidden={!ediable}>
+                            <span>
+                                This framework cannot be edited as it has been
+                                published, click "Save as New" to generate a new
+                                copy
+                            </span>
+                        </Reminder>
+                    ) : null)
+                    :                  
+                    <Reminder is_hidden={!isAdmin}>
                         <span>
-                            This framework cannot be edited as it has been
-                            published, click "Save as New" to generate a new
-                            copy
+                            You only have read permission to framework
                         </span>
-                    </Reminder>
-                ) : null}
+                    </Reminder>}
                 <div className='section_header'>Status</div>
                 <StatusSwitch
                     handleChange={setActive}
                     value={activeStatus}
                     switchName='Active'
-                    disabled={!published}
+                    disabled={!finalised || !isAdmin}
                 />
                 <SectionList
                     addSection={addSection}
                     addQuestion={addQuestion}
                     sections={sections}
-                    published={published}
+                    published={!ediable}
                     registerExpand={saveExpand}
                     registerUnexpand={deleteExpand}
                     checkExpand={checkExpand}
@@ -256,10 +268,11 @@ function FrameworkOverview({history}) {
             </div>
             <div className='footer'>
                 <ButtomButton
-                    hasPublished={published}
+                    hasPublished={finalised}
                     isActive={activeStatus}
                     handleFinalize={handleFinalize}
                     handleNewVersion={handleNewVersion}
+                    hidden={!isAdmin}
                 />
             </div>
         </div>
@@ -472,18 +485,19 @@ function Question(props) {
     );
 }
 
-function ButtomButton({hasPublished, handleFinalize, handleNewVersion}) {
+function ButtomButton({hasPublished, handleFinalize, handleNewVersion, hidden}) {
     return (
         <div>
-            {hasPublished ? (
+            {hidden? null : 
+                hasPublished ? 
                 <BigButton onClick={handleNewVersion}>
                     <div>Save As New</div>
                 </BigButton>
-            ) : (
+                :
                 <BigButton onClick={handleFinalize}>
                     Finalize
                 </BigButton>
-            )}
+            }
         </div>
     );
 }
