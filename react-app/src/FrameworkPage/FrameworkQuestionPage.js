@@ -2,22 +2,18 @@ import React, {useEffect, useState} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
 import Reminder from "../Utils/Reminder";
-import {Divider} from 'antd'
 import TextInput from "../Utils/TextInput"
+
+const PUBLISHED_TRUE = 1;
+const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
 
 /**
  * Route from Framework Overview Page
  * FrameworkQuestionPage
  *  |-- NavBar
  *  |-- RatingList
- *      |-- Rating
- *          |-- TextArea
- *          |-- TextArea
+ *        |-- TextArea
  */
-
-const PUBLISHED_TRUE = 1;
-const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
-
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
     const disabled = published;
