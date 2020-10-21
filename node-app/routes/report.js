@@ -408,12 +408,12 @@ router.get('/sendemail', function (req, res, next) {
                 mailTransport.sendMail(options, function (err, msg) {
                     if (err) {
                         console.log(err);
-                        res.send("Failed!");
+                        res.send(UNSUCCESSFUL);
                         res.render('index', { title: err });
                     }
                     else {
                         console.log(msg);
-                        res.send("Successful!");
+                        res.send(SUCCESSFUL);
                         res.render('index', { title: "Received：" + msg.accepted });
                     }
                 });
