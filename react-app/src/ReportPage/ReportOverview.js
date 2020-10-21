@@ -16,6 +16,7 @@ function ReportOverview ({history}){
     const post_title_url = `http://localhost:3001/report/update/title?report_id=${report_id}`
     const post_summary_url = `http://localhost:3001/report/update/recommendation?report_id=${report_id}`
     const post_finailized_url = `http://localhost:3001/report/finalise?report_id=${report_id}`
+    const download_url = `http://localhost:3001/report/download?report_id=${report_id}`
     useEffect(() => 
         {
             let isCancelled = false;
@@ -70,10 +71,10 @@ function ReportOverview ({history}){
     }
 
     const post_finailized_request = (url) => {
-        console.log(url)
         fetch(url)
             .then((data) => data.text())
             .then((response) => {
+                console.log(response)
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
@@ -103,9 +104,18 @@ function ReportOverview ({history}){
         });
     }
 
-    const handleDownload = () =>{
-        //TODO
-    }
+
+
+    const handleDownload = () => {
+        let iframe = document.createElement('iframe');
+        iframe.style.display = 'none'
+        iframe.src = download_url
+        iframe.onload = function () {
+        document.body.removeChild(iframe)
+        }
+        document.body.appendChild(iframe)
+  }; 
+
     return (
         <div className='flex_container'>
             <NavBar>
@@ -145,7 +155,7 @@ function ReportOverview ({history}){
                         (<span>
 
                             <BigButton
-                            onClick={() => handleDownload}
+                                onClick={handleDownload}
                             >
                                 Download
                             </BigButton>
