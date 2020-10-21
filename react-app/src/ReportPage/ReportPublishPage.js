@@ -36,7 +36,7 @@ function ReportPublishPage({history}){
                 .then(response => response.text())
                 .then(data => {
                         console.log(data)
-                        if(data === "Successful!") alert("Email is sent successful")
+                        if(data === "The call to the SQL database was successful.") alert("Email is sent successful")
                         else alert("Publish failed")
                     }
                 )
