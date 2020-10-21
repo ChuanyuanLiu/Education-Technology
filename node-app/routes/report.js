@@ -239,7 +239,7 @@ router.get('/finalise', function (req, res, next) {
                                 // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
                                 var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
                                 const REPORTS_DIR = './reports';
-                                const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_id + '-' + time + '.csv';
+                                const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_title + '.csv';
 
                                 // Generate the directory
                                 fs.mkdir(REPORTS_DIR, (err) => {
