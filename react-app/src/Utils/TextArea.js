@@ -19,6 +19,7 @@ function TextArea({
     disabled = false,
     onSave = (f) => f,
     short = false,
+    password = false,
 }) {
     // track changes to text
     const [getText, setText] = useState(text);
@@ -33,7 +34,12 @@ function TextArea({
         // Save when the button transition from active (save) to edit
         if (getActive) {
             onSave(getText);
-            setPrevText(getText);
+            // Don't store previous input for passwords
+            if (password) {
+                setText(getPrevText);
+            } else {
+                setPrevText(getText);
+            }
         }
         setActive(!getActive);
     };
@@ -63,13 +69,26 @@ function TextArea({
                 </div>
             </div>
             <div className={short ? "short-container" : "container"}>
-                <textarea
-                    name={title}
-                    id={title}
-                    disabled={!getActive}
-                    onChange={appendText}
-                    value={getText}
-                />
+                {
+                    password ?
+                    <input
+                        name={title}
+                        id={title}
+                        disabled={!getActive}
+                        onChange={appendText}
+                        value={getText}
+                        type="password"
+                    />
+                    :
+                    <textarea
+                        name={title}
+                        id={title}
+                        disabled={!getActive}
+                        onChange={appendText}
+                        value={getText}
+                    />
+                }
+                
             </div>
                 {/* <div className='hidden'>{text_to_html(getText)}</div> */}
 

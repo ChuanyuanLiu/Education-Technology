@@ -5,6 +5,7 @@ import NavBar from "../Utils/NavBar";
 import StatusSwitch from "../Utils/StatusSwitch";
 import TextArea from "../Utils/TextArea";
 import BigButton from "../Utils/BigButton";
+import { useAuth0 } from '@auth0/auth0-react';
 import { Select, Popconfirm } from "antd";
 
 import "./UserOverview.css";
@@ -16,21 +17,26 @@ function UserOverview({history}) {
     const [userName, setUserName] = useState("");
     const [userActive, setUserActive] = useState(false);
     const [userRole, setUserRole] = useState(null);
+    const [userPassword, setUserPassword] = useState("");
+    const [userPermission, setUserPermission] = useState(false);
     const [userEmail, setUserEmail] = useState("");
     const [userEmployer, setUserEmployer] = useState("");
-    const [userPhoneNumber, setUserPhoneNumber] = useState("");
+    const [userContactNumber, setUserContactNumber] = useState("");
     const [roleList, setRoleList] = useState(null);
 
     const { Option } = Select;
+
+    const { user: selfUser, isAuthenticated, isLoading } = useAuth0();
 
     function initialiseUser(data) {
         console.log(data);
         setUserName(data.name);
         setUserActive(data.user_metadata.active);
         setUserRole(data.role);
+        setUserPermission(data.user_metadata.create_report);
         setUserEmail(data.email);
         setUserEmployer(data.user_metadata.employer);
-        setUserPhoneNumber(data.user_metadata.contact_number);
+        setUserContactNumber(data.user_metadata.contact_number);
 
         setUserData(data);
     }
@@ -66,7 +72,7 @@ function UserOverview({history}) {
                     } else if (field === "employer") {
                         setUserEmployer(data.user_metadata.employer);
                     } else if (field === "contact_number") {
-                        setUserPhoneNumber(data.user_metadata.contact_number);
+                        setUserContactNumber(data.user_metadata.contact_number);
                     }
                 }
             })
@@ -92,6 +98,30 @@ function UserOverview({history}) {
             .then((data) => {
                 if (status === 200 && data.statusCode/100 !== 4) {
                     setUserActive(data.user_metadata.active);
+                }
+            })
+            .catch(console.error);
+    }
+
+    // Toggle the user's active status
+    const togglePermission = () => {
+        let param = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: `{"user_metadata":{"create_report": ${!userPermission}}}`,
+            method: "POST"
+        }
+        let status;
+        
+        fetch(`http://localhost:3001/user/update?user_id=${user_id}`, param)
+            .then((response) => {
+                status = response.status;
+                return response.json()
+            })
+            .then((data) => {
+                if (status === 200 && data.statusCode/100 !== 4) {
+                    setUserPermission(data.user_metadata.create_report);
                 }
             })
             .catch(console.error);
@@ -161,7 +191,7 @@ function UserOverview({history}) {
         return () => {isInit = true};
     }, []);
 
-    if (userData == null) {
+    if (userData == null | isLoading) {
         return <div>Loading...</div>;
     }
 
@@ -171,19 +201,21 @@ function UserOverview({history}) {
                 <TextInput
                     text={userName}
                     onSave={updateText("name", false)}
+                    // onSave={setUserName(text)}
                     disabled={userActive}
                 />
             </NavBar>
 
             <div className='content scrollable'>
+
                 <div className='section_header'>Status</div>
                 <StatusSwitch
                     handleChange={toggleActive}
                     value={userActive}
                     switchName='Active'
-                    disabled={false}
+                    disabled={userRole.name === "Senior Consultant"}
                 />
-
+                
                 <div className='section_header'>Role</div>
                 {userRole.name === "Senior Consultant"
                     ?
@@ -205,27 +237,48 @@ function UserOverview({history}) {
                     </Select>
                 }
 
+                {userRole.name === "Educational Leader" &&
+                    <div className='section_header'>Permissions</div>
+                }
+                {userRole.name === "Educational Leader" &&
+                    <StatusSwitch
+                        handleChange={togglePermission}
+                        value={userPermission}
+                        switchName='Create Report'
+                        disabled={userActive}
+                    />
+                }
+                
                 <TextArea
                     title='Email'
                     text={userEmail}
                     onSave={updateText("email", false)}
-                    disabled={userActive}
+                    disabled={true}
                     short={true}
+                />
+
+                <TextArea
+                    title='Password'
+                    text={""}
+                    onSave={updateText("password", false)}
+                    disabled={userActive && userRole.name !== "Senior Consultant"}
+                    short={true}
+                    password={true}
                 />
 
                 <TextArea
                     title='Employer'
                     text={userEmployer}
                     onSave={updateText("employer", true)}
-                    disabled={userActive}
+                    disabled={userActive && userRole.name !== "Senior Consultant"}
                     short={true}
                 />
 
                 <TextArea
-                    title='Phone Number'
-                    text={userPhoneNumber}
+                    title='Contact Number'
+                    text={userContactNumber}
                     onSave={updateText("contact_number", true)}
-                    disabled={userActive}
+                    disabled={userActive && userRole.name !== "Senior Consultant"}
                     short={true}
                 />
             </div>
