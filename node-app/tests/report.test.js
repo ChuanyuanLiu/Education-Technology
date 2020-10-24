@@ -97,7 +97,7 @@ describe("POST /report/update/recommendation?report_id={rid}", () => {
     const inputCheckAll = `SELECT report_recommendation`
         + ` FROM report;`;
 
-    // Obtain the previous title
+    // Obtain the previous recommendation
     beforeEach(done => {
         sqlAdapter.sqlCall(inputCheck, function(prevRes) {
             prev_recommendation = prevRes[0].report_recommendation;
@@ -105,7 +105,7 @@ describe("POST /report/update/recommendation?report_id={rid}", () => {
         });
     });
 
-    // Reset the title to the previous title after each test
+    // Reset the recommendation to the previous recommendation after each test
     afterEach(done => {
         const resetTable = `UPDATE report`
             + ` SET report_recommendation = '${prev_recommendation}'`
