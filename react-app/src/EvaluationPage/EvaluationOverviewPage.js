@@ -189,19 +189,12 @@ function EvaluationOverviewPage({history}) {
                     <BigButton
                         onClick={()=> post_finalized_request(finalize_url)}
                     >
-                        Finalize
+                        Finalise
                     </BigButton>
                     :
                     null
                 }
                 <span> </span>
-                <BigButton
-                    onClick={() => {
-                        history.goBack();
-                    }}
-                >
-                    Back
-                </BigButton>
             </div>
         </div>
     );
@@ -312,7 +305,7 @@ function Question({
         });
     }
     return (
-        <li onClick={handleClick} className='clickable'>
+        <li onClick={handleClick} className='question clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
             <span className="right">
                     {question_completed? "Completed" : null}
