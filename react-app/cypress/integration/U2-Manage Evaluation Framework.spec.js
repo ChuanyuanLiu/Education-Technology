@@ -1,19 +1,8 @@
 /// <reference types="Cypress" />
+import {INPUT_BUTTON, goToTestFramework, NEW_FRAMEWORK_NAME, TICK_BUTTON, editTitle, back} from "../support/constants";
 
 // assumes already logged in as Senior consultant
 describe("U2 Manage Evaluation Framework", function () {
-
-    function editTitle(title) {
-        cy.get(".NavBar").within(()=> {
-            cy.get(INPUT_BUTTON).click();
-            cy.get("input").type("{selectall}").type(title);
-            cy.get(TICK_BUTTON).click();
-        });
-    }
-
-    function back() {
-        cy.get(BACK_BUTTON).click();
-    }
 
     beforeEach(function() {
         // visit page
@@ -23,19 +12,16 @@ describe("U2 Manage Evaluation Framework", function () {
         cy.contains("Frameworks").click();
     });
 
-    xit("2.1 Create new framework", function () {
+    it("2.1 Create new framework", function () {
         // create a new framework
         cy.contains('button', 'New Framework').click();
         // edit question title
-        back();
+        editTitle(NEW_FRAMEWORK_NAME);
     });
 
     // assumes that NEW_FRAMEWORK_NAME was created and editable
-    xit("2.2 Add questions and sections", () => {
-        // search
-        cy.get('.ant-input').type(NEW_FRAMEWORK_NAME);
-        // go to framework
-        cy.contains(".CardList", NEW_FRAMEWORK_NAME).first().click();
+    it("2.2 Add questions and sections", () => {
+        cy.contains('Not Finalised').first().click()
         // add a section and edit it
         cy.contains("Add Section").click();
         cy.get('.editable_section').first().as("section").within(() => {
@@ -65,7 +51,7 @@ describe("U2 Manage Evaluation Framework", function () {
     // assumes a framework is not fianlized
     it("2.3.1 mark a framework as finalized", ()=>{
         // go to a framework
-        cy.contains("Not Finalized").first().click();
+        cy.contains('Not Finalised').first().click()
         // click finalize
         cy.contains('button', "Finalise").click();
     });
@@ -73,7 +59,7 @@ describe("U2 Manage Evaluation Framework", function () {
     // assumes a framework is inactive
     it("2.3.2 mark a framework as active", ()=>{
         // go to a framework
-        cy.contains("Inactive").first().click();
+        cy.contains('Active').first().click()
         // toggle button
         cy.get('.ant-switch').click();
     });
@@ -81,16 +67,17 @@ describe("U2 Manage Evaluation Framework", function () {
     // assumes a framework is active
     it("2.3.2 mark a framework as inactive", ()=>{
         // go to a framework
-        cy.contains("Active").first().click();
+        cy.contains('Active').first().click()
         // toggle button
         cy.get('.ant-switch').click();
     });
 
-     // assumes a framework is finalized
-     it("2.4 create a copy of a finalized framework", ()=>{
+    // assumes a framework is finalized
+    it("2.4 create a copy of a finalized framework", ()=>{
         // go to a framework
-        cy.contains("Inactive").first().click();
+        cy.contains('Active').first().click()
         // click finalize
         cy.contains('button', "Save As New").click();
     });
+
 });
