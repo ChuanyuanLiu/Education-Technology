@@ -20,7 +20,7 @@ function NavBar({children, disableBack} ) {
     return (
         <div className='NavBar'>
             {canGoback?
-                <span className="left clickable" onClick={()=> {
+                <span className="left clickable" id="backButton" onClick={()=> {
                     if (window.location.pathname !== "/home_page") {
                         history.goBack();
                     }
