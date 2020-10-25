@@ -1,4 +1,4 @@
-var sqlAdapter = require('../utils/sqlAdapter');
+var sqlAdapter = require('../dataSource/sqlAdapter');
 
 afterAll(() => {
     sqlAdapter.closeConnection();
