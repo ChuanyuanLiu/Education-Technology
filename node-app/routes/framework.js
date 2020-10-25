@@ -67,7 +67,6 @@ router.get('/', function (req, res, next) {
 
             res.send(cleanRes);
         });
-
     }
 
     /**
@@ -107,6 +106,7 @@ router.get('/', function (req, res, next) {
                 };
                 cleanRes.rates[i] = cleanRate;
             }
+            
             res.send(cleanRes);
         });
     }

@@ -191,7 +191,6 @@ router.get('/', function (req, res, next) {
             res.send(sqlRes);
         });
     }
-
 });
 
 /**
@@ -252,7 +251,7 @@ router.get('/new', function (req, res, next) {
          */
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_finalised = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
-            if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
+            if (frameworkRes == null) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
