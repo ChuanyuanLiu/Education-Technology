@@ -10,7 +10,7 @@ import InfoCard from "../Utils/InfoCard";
  * @param {ReportInfoData} data
  * @param {function} handleClick(data.id)
  */
-function ReportInfo({data, onClick}) {
+function ReportInfo({data, onClick, hideTitle=false}) {
 
     if (!(data instanceof ReportInfoData)) {
         console.error(
@@ -19,7 +19,7 @@ function ReportInfo({data, onClick}) {
     }
 
     return (
-        <InfoCard title={data.title()} onClick={()=>onClick(data.id())}>
+        <InfoCard hideTitle={hideTitle} title={data.title()} onClick={()=>onClick(data.id())}>
             <div className='leftContent'>
                 <UserOutlined style={{fontSize: "20px"}} />
                 {data.author()}
@@ -28,9 +28,7 @@ function ReportInfo({data, onClick}) {
             </div>
             <div className='rightContent'>
                 {data.wasFinalised()
-                    ? data.isActive()
-                        ? "Active"
-                        : "Inactive"
+                    ? "Finalized"
                     : "Not Finalized"}
                 <br />
                 Last modified: &nbsp;

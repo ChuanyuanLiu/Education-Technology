@@ -6,6 +6,8 @@ import EvaluationInfo from "./EvaluationInfo";
 import BigButton from "./../Utils/BigButton";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useRole } from "../Utils/UseRole";
 
 
 /**
@@ -22,7 +24,10 @@ function EvaluationPage() {
     const history = useHistory();
     const [evaluationList, setEvaluationList] = useState(null);
 
-
+    const AUTH_ROLE = "Senior Consultant"
+    const CONSULTANT = "Consultant"
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { error, roles, loading: rolesLoading, refresh } = useRole();
 
     // initalize data
     useEffect(() => {
@@ -34,24 +39,42 @@ function EvaluationPage() {
             .catch(console.error);
     }, []);
 
-    const goToEvaluationOverivew = (id) => {
+    const goToEvaluationOverview = (id) => {
         history.push({
             pathname: "/evaluation_overview",
             state: {
                 evaluation_id: id,
+                user: user.name,
+                role: roles[0].name
             },
         });
     };
 
-    const goToNewEvaluation = () => history.push("./new_evaluation");
+    const goToNewEvaluation = () => {
+        history.push({
+            pathname: "./new_evaluation",
+            state: {
+                user: user.name,
+                role: roles[0].name
+            },
+        });
+    };
 
     function convertToDataClass(data) {
-        return data.map(data=>new EvaluationInfoData(data));
+        return data.map(data => new EvaluationInfoData(data));
     }
 
-    if (evaluationList == null )
+    if (evaluationList == null|| isLoading || rolesLoading)
         return <h1> Loading ... </h1>;
+    
+        
 
+    //Senior Consultant and consultant can access all evaluations
+    const renderList = evaluationList.filter((data) => {
+        if(data.author() === user.name || roles[0].name === AUTH_ROLE || roles[0].name === CONSULTANT){
+            return data
+        }
+    })
     return (
         <div className='flex_container'>
             <div className='header'>
@@ -59,14 +82,16 @@ function EvaluationPage() {
                     Evaluations
                 </NavBar>
             </div>
-            <div className='content scrollable'>
+            <div className='content scrollable'>                   
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 
                     sortByProperty={SORTBY_PROPERTY}
-                    list={evaluationList}
+                    list={renderList}
                     CardReactComponent={EvaluationInfo}
                     dataClass={EvaluationInfoData}
-                    onClick={goToEvaluationOverivew}
+                    onClick={goToEvaluationOverview}
+                    role={roles[0].name}
+                    user={user.name}
                 />
             </div>
             <div className='footer'>

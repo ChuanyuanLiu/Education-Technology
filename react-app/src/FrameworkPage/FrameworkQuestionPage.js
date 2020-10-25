@@ -2,25 +2,21 @@ import React, {useEffect, useState} from "react";
 import NavBar from "../Utils/NavBar";
 import TextArea from "../Utils/TextArea";
 import Reminder from "../Utils/Reminder";
-import {Divider} from 'antd'
 import TextInput from "../Utils/TextInput"
+
+const PUBLISHED_TRUE = 1;
+const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
 
 /**
  * Route from Framework Overview Page
  * FrameworkQuestionPage
  *  |-- NavBar
  *  |-- RatingList
- *      |-- Rating
- *          |-- TextArea
- *          |-- TextArea
+ *        |-- TextArea
  */
-
-const PUBLISHED_TRUE = 1;
-const PUBLISHED_MESSAGE = "This question can be edited because it belongs to a published framework";
-
 function FrameworkQuestionPage({history}) {
     const {question_id, published} = history.location.state;
-    const disabled = published === PUBLISHED_TRUE;
+    const disabled = published;
 
     const [questionData, setQuestion] = useState(null);
     // GET
@@ -88,7 +84,7 @@ function FrameworkQuestionPage({history}) {
                 </NavBar>
             </div>
             <div className='content scrollable'>
-                <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder>
+                {/* <Reminder is_hidden={disabled}>{PUBLISHED_MESSAGE}</Reminder> */}
                 <RatingList
                     post_request={post_request}
                     {...questionData}

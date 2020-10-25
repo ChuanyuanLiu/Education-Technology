@@ -1,9 +1,24 @@
-var sqlAdapter = require('../utils/sqlAdapter');
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used to implement tests for evaluation.js
+ * @confluence The test report of this test is documented in Back-end Integration Test Report
+ * @tool Jest https://jestjs.io/
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
 
+ // Import the required modules
+var sqlAdapter = require('../dataSource/sqlAdapter');
+
+// Defind afterAll() function to close SQL connection after test
 afterAll(() => {
     sqlAdapter.closeConnection();
 });
 
+/**
+ * @testedapi test for GET /evaluation/new API
+ * @description 4 test cases in total
+ */
 describe("GET /evaluation/new", () => {
 
     const input = "SELECT * FROM framework WHERE framework_active_status = 1";
@@ -49,6 +64,10 @@ describe("GET /evaluation/new", () => {
     });
 });
 
+/**
+ * @testedapi GET /evaluation/new?framework_id={id}
+ * @description 1 test case in total
+ */
 describe("GET /evaluation/new?framework_id={id}", () => {
 
     let framework_id = 1;
@@ -84,6 +103,10 @@ describe("GET /evaluation/new?framework_id={id}", () => {
 
 });
 
+/**
+ * @testedapi POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
+ * @description 3 test cases in total
+ */
 describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}", () => {
 
     // Evaluation and question ID assumed to be valid
@@ -144,6 +167,10 @@ describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
     });
 });
 
+/**
+ * @testedapi POST /evaluation/update/title?evaluation_id={id}
+ * @description 1 test case in total
+ */
 describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
     const evaluation_title = "St.Arthur Evaluation v2";
@@ -183,20 +210,11 @@ describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
 });
 
-//1. Get /evaluation -- Yao
+/**
+ * @testedapi Get /evaluation
+ * @description 1 test case in total
+ */
 describe("Get /evaluation", () => {
-    // test("it should return all the evaluations. so count(sqlresult) should be equal to max(evaluation_id)", done => {
-
-    //     const sql = "SELECT e.*, f.framework_title "
-    //         + "FROM evaluation e, framework f "
-    //         + "WHERE e.framework_id = f.framework_id;";
-    //     sqlConnector.sqlCall(sql, function (evaluationRes) {
-    //         let max_evaluation_id = evaluationRes[evaluationRes.length - 1].evaluation_id;
-    //         expect(evaluationRes.length).toEqual(max_evaluation_id);
-    //         done();
-    //     });
-    // });
-
     test("evaluation_completed must be 0 or 1", done => {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
@@ -213,6 +231,10 @@ describe("Get /evaluation", () => {
     });
 });
 
+/**
+ * @testedapi GET /evaluation?evaluation_id={eid}&question_id={qid}
+ * @description 2 test cases in total
+ */
 describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
     test("It should return 5 rates", done => {
 
@@ -255,26 +277,11 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
     });
 });
 
+/**
+ * @testedapi GET /evaluation?evaluation_id={eid}
+ * @description 1 test case in total
+ */
 describe("GET /evaluation?evaluation_id={eid}", () => {
-    // test("It should return all sections with questions namely,count(questions) should be equal to max(question_id)", done => {
-
-    //     let evaluation_id = 1;
-    //     const sql = "SELECT * "
-    //     + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
-    //     + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
-    //     + "WHERE evaluation.evaluation_id = " + evaluation_id + ";"
-    //     + "SELECT * "
-    //     + "FROM evaluation_response "
-    //     + "WHERE evaluation_id = " + evaluation_id + ";";
-
-    //     sqlConnector.sqlCall(sql, function (Res) {
-    //         let sectionRes = Res[0];
-    //         let max_question_id = sectionRes[sectionRes.length - 1].question_id;
-    //         expect(sectionRes.length).toEqual(max_question_id);
-    //         done();
-    //     });
-    // });
-
     test("question_id should be unique", done => {
 
         let evaluation_id = 1;

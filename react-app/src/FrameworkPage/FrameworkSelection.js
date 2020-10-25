@@ -4,14 +4,13 @@ import NavBar from "../Utils/NavBar";
 import CardList from "../Utils/CardList";
 import FrameworkInfo from "../FrameworkPage/FrameworkInfo";
 import {FrameworkInfoData} from "../Utils/DataClass";
-import {useAuth0} from "@auth0/auth0-react";
 
 function FrameworkSelection() {
     const SEARCH_PROPERTY = "title";
     const SORTBY_PROPERTY = "creationTime";
     const [frameworks, setFrameworks] = useState([]);
     const history = useHistory();
-    const {user, isAuthenticated, isLoading} = useAuth0();
+    const {user, role} = history.location.state;
 
     const convertToDataClass = (data) => {
         return data.map((data) => new FrameworkInfoData(data));
@@ -27,14 +26,13 @@ function FrameworkSelection() {
                         frameworks.push(frameworkData);
                     }
                 }
-                console.log(data);
                 setFrameworks(frameworks);
             });
     }, []);
 
     const createNewEvaluation = (id) => {
-        const requestURL = `http://localhost:3001/evaluation/new?framework_id=${id}&author_name=${user.name}`;
-        console.log(requestURL);
+        const requestURL = `http://localhost:3001/evaluation/new?framework_id=${id}&author_name=${user}`;
+        // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())
             .then(({evaluation_id}) =>
@@ -43,12 +41,14 @@ function FrameworkSelection() {
                     state: {
                         evaluation_id,
                         framework_id: id,
+                        user,
+                        role
                     },
                 })
             );
     };
 
-    if (frameworks.length === 0) {
+    if (frameworks.length === 0 ) {
         return <h1>Loading .. </h1>;
     }
 

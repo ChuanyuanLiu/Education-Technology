@@ -1,17 +1,37 @@
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used to process all the back-end logic related to the evaluation business function
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
+
+// Import the required modules
 var express = require('express');
 var router = express.Router();
 
-var sqlAdapter = require('../utils/sqlAdapter');
+var sqlAdapter = require('../dataSource/sqlAdapter');
 var jsonUtils = require('../utils/jsonUtils');
 
+// Define SqlCall execution result statements 
 const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
 const SUCCESSFUL = "The call to the SQL database was successful."
 
-//Evaluation Home page & edit previous evaluation
+/**
+ * @description API for displaying information of evaluations
+ *              If SqlCall excutes successfully, send the corresponding result. If not, send UNSUCCESSFUL
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.get('/', function (req, res, next) {
 
-    // Question_rate page, display all rates with answer and comment.
-    // Example: http://localhost:3001/evaluation?evaluation_id=1&question_id=1
+    /**
+     * @api: GET /evaluation?evaluation_id={eid}&question_id={qid}
+     * @description API for getting the rate for chosen questions included response.
+     * @example http://localhost:3001/evaluation?evaluation_id=1&question_id=1
+     * @param {number} req.query.evaluation_id - evalaution_id
+     * @param {number} req.query.question_id - question_id
+     */
     if (req.query.evaluation_id != null && req.query.question_id != null) {
 
         // return all rates of the chosen question
@@ -24,7 +44,9 @@ router.get('/', function (req, res, next) {
 
         sqlAdapter.sqlCall(sql, function (rateRes) {
 
+            // If SqlCall excutes unseccessfully
             if (rateRes == null || JSON.stringify(rateRes) == '[[],[]]') {
+                // send UNSECCESSFUL information
                 res.send(UNSUCCESSFUL);
                 return;
             }
@@ -67,23 +89,27 @@ router.get('/', function (req, res, next) {
                     cleanRes.rates[index++] = cleanRate;
                 }
             }
-
+            
+            // Send the result.
             res.send(cleanRes);
         });
     }
 
-    // Choose one evaluation
-    // Example: http://localhost:3001/evaluation?evaluation_id=1
+    /**
+     * @api: GET /evaluation?evaluation_id={eid}
+     * @description API for getting all information of an evaluation
+     * @example http://localhost:3001/evaluation?evaluation_id=1
+     * @param {number} req.query.evaluation_id - evalaution_id
+     */
     else if (req.query.evaluation_id != null) {
-
         // Excute 2 SQL statements:
-
         // 1. Return general data about this evaluation.
         const evalSql = "SELECT * FROM evaluation e WHERE e.evaluation_id = " + req.query.evaluation_id;
 
         sqlAdapter.sqlCall(evalSql, function (evalRes) {
-
+            // If SqlCall excutes unseccessfully
             if (evalRes == null || JSON.stringify(evalRes) == '[]') {
+                // Send UNSUCCESSFUL information
                 res.send(UNSUCCESSFUL);
                 return;
             }
@@ -100,8 +126,9 @@ router.get('/', function (req, res, next) {
                 + "AND r.evaluation_id = " + req.query.evaluation_id;
 
             sqlAdapter.sqlCall(respSql, function (respRes) {
-
+                // If SqlCall excutes unseccessfully
                 if (respRes == null || JSON.stringify(respRes) == '[]') {
+                    // Send UNSUCCESSFUL information
                     res.send(UNSUCCESSFUL);
                     return;
                 }
@@ -126,8 +153,9 @@ router.get('/', function (req, res, next) {
 
                         const updateCompletedSql = "UPDATE evaluation SET evaluation_completed = 1 WHERE evaluation_id = " + req.query.evaluation_id;
                         sqlAdapter.sqlCall(updateCompletedSql, function (updateCompletedRes) {
-
+                            // If SqlCall excutes unseccessfully
                             if (updateCompletedRes == null || JSON.stringify(updateCompletedRes) == '[]') {
+                                // Send UNSUCCESSFUL information
                                 res.send(UNSUCCESSFUL);
                                 return;
                             }
@@ -135,37 +163,55 @@ router.get('/', function (req, res, next) {
                     }
                 }
 
+                // Send the result
                 res.send(cleanRes);
             });
         });
 
     }
-    //Evaluation Home page
+
+    /**
+     * @api: GET /evaluation
+     * @description API for returning a list of all evaluations.
+     * @example http://localhost:3001/evaluation
+     */
     else {
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.framework_id = f.framework_id;"
         sqlAdapter.sqlCall(sql, function (sqlRes) {
+            // If SqlCall excutes unseccessfully
             if (sqlRes == null) {
+                // Send UNSUCCESSFUL information
                 res.send(UNSUCCESSFUL);
                 return;
             }
 
+            // Send result
             res.send(sqlRes);
         });
     }
-
 });
 
-//New evaluation page
+/**
+ * @description API for newing evaluations
+ *              If SqlCall excutes successfully, send the corresponding result. If not, send UNSUCCESSFUL
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.get('/new', function (req, res, next) {
 
-    // Select an active and finalised framework to generate evaluation
-    // API: /evaluation/new?framework_id={id}&author_name={author_name}
-    // Example: http://localhost:3001/evaluation/new?framework_id=1&author_name=Tony
-    // Excute 4 SQL statements:
+    /**
+     * @api: GET /evaluation/new?framework_id={id}&author_name={author_name}
+     * @description API for generating a new evaluation
+     *              Select an active and finalised framework to generate evaluation
+     * @example http://localhost:3001/evaluation/new?framework_id=1&author_name=Tony
+     * @param {number} req.query.framework_id - framework_id used to generate the evaluation
+     * @param {string} req.query.author_name - author_name used to generate the evaluation
+     */
     if (req.query.framework_id != null && req.query.author_name != null) {
-
+        // Excute 4 SQL statements:
         // 1. Create a new evaluation, Insert a new evaluation_id
         const sql = "INSERT INTO evaluation ( framework_id, evaluation_author ) VALUES ( " + req.query.framework_id + ", '" + req.query.author_name + "' );"
             // 2. Return the evaluation_id of newly created evaluation
@@ -189,6 +235,7 @@ router.get('/new', function (req, res, next) {
             }
 
             let cleanRes = sqlRes[2][0];
+            // Format the section Hierarchy
             cleanRes.sections = jsonUtils.formatSectionHierarchy(sqlRes[3], true);
 
             res.send(cleanRes);
@@ -197,10 +244,14 @@ router.get('/new', function (req, res, next) {
 
     } else {
 
-        // Default; return all active and finalised frameworks.
+        /**
+         * @api: GET /evaluation/new
+         * @description API for returning all active and finalised frameworks.
+         * @example http://localhost:3001/evaluation/new
+         */
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_finalised = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
-            if (frameworkRes == null || JSON.stringify(frameworkRes) == '[]') {
+            if (frameworkRes == null) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
@@ -211,7 +262,14 @@ router.get('/new', function (req, res, next) {
     }
 });
 
-// Update the title or summary of an evaluation
+/**
+ * @api POST /evaluation/update/title?evaluation_id={id}
+ * @description API for Updating an evaluation's title and summary
+ *              If SqlCall excutes successfully, send SUCCESSFUL. If not, send UNSUCCESSFUL
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.post('/update/title', function (req, res, next) {
     let id = req.query.evaluation_id;
     let title = req.body.evaluation_title;
@@ -232,10 +290,18 @@ router.post('/update/title', function (req, res, next) {
     });
 });
 
-// Create a new response to a question as part of an evaluation
+/**
+ * @api /evaluation/update/response?evaluation_id={id}&question_id={id}
+ * @description API for updating an evaluation's question
+ *              If SqlCall excutes successfully, send SUCCESSFUL. If not, send UNSUCCESSFUL
+ * @example http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {number} evaluation_id - evaluation_id
+ * @param {number} question_id - question_id
+ */
 router.post('/update/response', function (req, res, next) {
-
-    // Example: http://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12
     if (req.query.evaluation_id != null && req.query.question_id != null) {
         var rate_chosen = req.body.rate_chosen;
         var response_comment = req.body.response_comment;
@@ -257,10 +323,19 @@ router.post('/update/response', function (req, res, next) {
     }
 });
 
-// Update the finalised status
-router.post('/finalised/update', function (req, res, next) {
+/**
+ * @api POST /evaluation/finalised/update?evaluation_id={id}
+ * @description API for updating the unfinalised evaluation as finalised
+ *              If SqlCall excutes successfully, send SUCCESSFUL. If not, send UNSUCCESSFUL
+ * @example http://localhost:3001/evaluation/finalised/update?evaluation_id=1
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {number} evaluation_finalised - evaluation_finalised status --- 0: Not finalised; 1: Finalised
+ * @param {number} req.query.evaluation_id - question_id
+ */
 
-    // Example: http://localhost:3001/evaluation/finalised/update?evaluation_id={eid}
+router.post('/finalised/update', function (req, res, next) {
     if (req.query.evaluation_id != null) {
         let evaluation_finalised = req.body.evaluation_finalised;
         const sql = "UPDATE evaluation "

@@ -5,6 +5,7 @@ import BigButton from "../Utils/BigButton";
 import TextInput from "../Utils/TextInput";
 import {useHistory} from "react-router-dom";
 import {CheckOutlined} from "@ant-design/icons";
+import Reminder from "../Utils/Reminder";
 import {
     RightOutlined,
     DownOutlined,
@@ -25,14 +26,18 @@ import {
 function EvaluationOverviewPage({history}) {
     //TODO bug when evaluation_data is undefined, this happens when you just access evaluation_overview page without directing from evaluation page
     const [evaluation_data, setEvaluation] = useState(null);
-    const {evaluation_id} = history.location.state;
+    const {evaluation_id, user, role} = history.location.state;
     const [expandedSections, setExpandedSections] = useState([])
+    const AUTH_ROLE = "Senior Consultant"
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
         fetch(`http://localhost:3001/evaluation?evaluation_id=${evaluation_id}`)
             .then((response) => response.json())
-            .then(setEvaluation)
+            .then((data) => {
+                setEvaluation(data)
+                // setFinalised(data.evaluation_finalised)
+            })
             .catch(console.error);
         //TODO, Why is session included in useEffect?
         if(history.location.state.session === undefined){
@@ -55,11 +60,14 @@ function EvaluationOverviewPage({history}) {
         );
     }
 
-    if (evaluation_data == null) {
+    if (evaluation_data == null ) {
         return <h1>Loading...</h1>;
     }
 
+
+
     const post_url = `http://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
+    const finalize_url = `http://localhost:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
     const post_request = (url, title, summary) => {
         const param = {
             headers: {
@@ -81,6 +89,22 @@ function EvaluationOverviewPage({history}) {
     const post_summary_request = (url, title) => (text) => {
         post_request(url, title, text);
     };
+    const post_finalized_request = (url) => {
+        const param = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                evaluation_finalised: 1,
+            }),
+            method: "POST",
+        };
+        fetch(url, param)
+            .then(data=>console.log(data))
+            .then(setEvaluation({...evaluation_data, evaluation_finalised: 1}))
+            .catch((error) => console.log(error));
+        
+    }
 
     const saveExpand = (section_id) => {
         var state = history.location.state
@@ -110,6 +134,13 @@ function EvaluationOverviewPage({history}) {
     const checkExpand = (section_id) =>{
         return expandedSections.includes(section_id)
     }
+
+
+
+    const hasEditAuthority = (user === evaluation_data.evaluation_author) || (role === AUTH_ROLE)
+    //The page can only be edited if it is not finalised and the user has edit authority
+    const canBeEdit = !evaluation_data.evaluation_finalised && hasEditAuthority
+
     return (
         <div className='EvaluationPage flex_container'>
             <NavBar>
@@ -119,9 +150,18 @@ function EvaluationOverviewPage({history}) {
                         post_url,
                         evaluation_data.evaluation_summary
                     )}
+                    disabled={!canBeEdit}
                 />
             </NavBar>
+            {hasEditAuthority? null : 
+                    <Reminder is_hidden={true}>
+                        <span>
+                            This page is read-only since you aren't the author of the evaluation
+                        </span>
+                    </Reminder>
+                } 
             <div className='content scrollable '>
+              
                 <div>
                     <TextArea
                         title='Summary'
@@ -130,6 +170,7 @@ function EvaluationOverviewPage({history}) {
                             post_url,
                             evaluation_data.evaluation_title
                         )}
+                        disabled={!canBeEdit}
                     />
                 </div>
 
@@ -140,9 +181,20 @@ function EvaluationOverviewPage({history}) {
                     registerUnexpand={deletExpand}
                     checkExpand={checkExpand}
                     expandedSections={expandedSections}
+                    editable={canBeEdit}
                 />
             </div>
             <div className='footer'>
+                {evaluation_data.evaluation_completed && canBeEdit?                 
+                    <BigButton
+                        onClick={()=> post_finalized_request(finalize_url)}
+                    >
+                        Finalize
+                    </BigButton>
+                    :
+                    null
+                }
+                <span> </span>
                 <BigButton
                     onClick={() => {
                         history.goBack();
@@ -155,9 +207,18 @@ function EvaluationOverviewPage({history}) {
     );
 }
 
-// Display a list of sections
+/*
+ * Evaluation List component
+ * @param {evaluation_id} the evaluation id that the sections belongs to
+ * @param {evaluation_finalised} whether the evaluation is allowed to edited
+ * @param {sections} all sections info of evaluation
+ * @param {registerExpand} register expanded sections for last editing
+ * @param {registerUnexpand} unregister expanded sections for laste editing 
+ * @param {checkExpand} check which section is expanded
+ * @param {editable} check whether the page is editable
+ */
 function SectionsList({evaluation_id, sections, registerExpand,
-                    registerUnexpand,checkExpand,expandedSections}) 
+                    registerUnexpand,checkExpand, editable}) 
 {
     return (
         <>
@@ -171,6 +232,7 @@ function SectionsList({evaluation_id, sections, registerExpand,
                     defaultExpand={checkExpand(section.section_id)}
                     registerExpand={registerExpand}
                     registerUnexpand={registerUnexpand}
+                    editable={editable}
                 />
             ))}
         </>
@@ -178,8 +240,9 @@ function SectionsList({evaluation_id, sections, registerExpand,
 }
 
 // Display a list of questions
-function Section({evaluation_id, section_title, section_index, questions,
-                  registerExpand, section_id, section_completed,registerUnexpand, defaultExpand}) {
+function Section({evaluation_id, section_title, section_index, 
+                  questions, registerExpand, section_id, section_completed,
+                   registerUnexpand, defaultExpand, editable}) {
     // track expand or not
     const [getExpand, setExpand] = useState(false);
     const toggleExpand = (event) => {
@@ -218,6 +281,7 @@ function Section({evaluation_id, section_title, section_index, questions,
                               evaluation_id={evaluation_id}
                               section_index={section_index}
                               question_index={i}
+                              editable={editable}
                               key={i}
                           />
                       ))
@@ -234,7 +298,8 @@ function Question({
     section_index,
     question_index,
     question_title,
-    question_completed
+    question_completed,
+    editable
 }) {
     const history = useHistory();
     function handleClick() {
@@ -243,6 +308,7 @@ function Question({
             state: {
                 evaluation_id,
                 question_id,
+                editable
             },
         });
     }
