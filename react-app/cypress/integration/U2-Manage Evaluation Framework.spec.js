@@ -1,13 +1,12 @@
 /// <reference types="Cypress" />
-import {INPUT_BUTTON, goToTestFramework, NEW_FRAMEWORK_NAME, TICK_BUTTON, editTitle, back} from "../support/constants";
+import {INPUT_BUTTON, searchTitleAndGo, NEW_FRAMEWORK_NAME, TICK_BUTTON, editTitle, back} from "../support/constants";
 
 // assumes already logged in as Senior consultant
 describe("U2 Manage Evaluation Framework", function () {
 
     beforeEach(function() {
         // visit page
-        cy.viewport(960, 978);
-        cy.visit("http://localhost:3000/home_page");
+        cy.home();
         // go to framework page
         cy.contains("Frameworks").click();
     });
@@ -21,7 +20,7 @@ describe("U2 Manage Evaluation Framework", function () {
 
     // assumes that NEW_FRAMEWORK_NAME was created and editable
     it("2.2 Add questions and sections", () => {
-        cy.contains('Not Finalised').first().click()
+        cy.contains(NEW_FRAMEWORK_NAME).first().click()
         // add a section and edit it
         cy.contains("Add Section").click();
         cy.get('.editable_section').first().as("section").within(() => {
@@ -48,20 +47,12 @@ describe("U2 Manage Evaluation Framework", function () {
         // TODO check if data persists
     })
 
-    // assumes a framework is not fianlized
+    // assumes new framework has been created 
     it("2.3.1 mark a framework as finalized", ()=>{
         // go to a framework
-        cy.contains('Not Finalised').first().click()
+        cy.contains(NEW_FRAMEWORK_NAME).first().click()
         // click finalize
         cy.contains('button', "Finalise").click();
-    });
-
-    // assumes a framework is inactive
-    it("2.3.2 mark a framework as active", ()=>{
-        // go to a framework
-        cy.contains('Active').first().click()
-        // toggle button
-        cy.get('.ant-switch').click();
     });
 
     // assumes a framework is active
@@ -72,10 +63,18 @@ describe("U2 Manage Evaluation Framework", function () {
         cy.get('.ant-switch').click();
     });
 
+    // assumes new framework has been created and finalized
+    it("2.3.3 mark a framework as active", ()=>{
+        // go to a framework
+        cy.contains('.InfoCard',NEW_FRAMEWORK_NAME).contains('Inactive').first().click()
+        // toggle button
+        cy.get('.ant-switch').click();
+    });
+
     // assumes a framework is finalized
     it("2.4 create a copy of a finalized framework", ()=>{
         // go to a framework
-        cy.contains('Active').first().click()
+        cy.contains('active').first().click()
         // click finalize
         cy.contains('button', "Save As New").click();
     });

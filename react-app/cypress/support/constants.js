@@ -19,12 +19,13 @@ function back() {
     cy.get(BACK_BUTTON).click();
 }
 
-function goToTestFramework() {
+// Search a framework or evaluation and to the first result returned
+function searchTitle(title) {
     // search
-    cy.get(".ant-input").type(NEW_FRAMEWORK_NAME);
+    cy.get(".ant-input").type(title);
     // go to framework
-    cy.contains(".CardList", NEW_FRAMEWORK_NAME).first().click();
+    return cy.contains(".InfoCard", title).first();
 }
 
 export{BACK_BUTTON, NEW_FRAMEWORK_NAME, NEW_EVALUATION_NAME, INPUT_BUTTON, TICK_BUTTON,
-editTitle, goToTestFramework, back};
+editTitle, searchTitle, back};
