@@ -17,7 +17,7 @@ const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
 const SUCCESSFUL = "The call to the SQL database was successful."
 
 /**
- * @description API for Evaluation Home page & edit previous evaluation
+ * @description API for displaying information of evaluations
  *              If SqlCall excutes successfully, send the corresponding result. If not, send UNSUCCESSFUL
  * @param {any} req - ReqBody
  * @param {any} res - ResBody
@@ -27,7 +27,7 @@ router.get('/', function (req, res, next) {
 
     /**
      * @api: GET /evaluation?evaluation_id={eid}&question_id={qid}
-     * @description API for Evaluation Home page & edit previous evaluation 
+     * @description API for getting the rate for chosen questions included response.
      * @example http://localhost:3001/evaluation?evaluation_id=1&question_id=1
      * @param {number} req.query.evaluation_id - evalaution_id
      * @param {number} req.query.question_id - question_id
@@ -172,7 +172,7 @@ router.get('/', function (req, res, next) {
 
     /**
      * @api: GET /evaluation
-     * @description API for Evaluation homepage. Returns a list of all evaluations.
+     * @description API for returning a list of all evaluations.
      * @example http://localhost:3001/evaluation
      */
     else {

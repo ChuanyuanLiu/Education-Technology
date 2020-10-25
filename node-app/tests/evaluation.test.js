@@ -1,7 +1,7 @@
 /**
  * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
  * @description This file is used to implement tests for evaluation.js
- * @confluence The test report of this test is stored in Back-end Integration Test Report
+ * @confluence The test report of this test is documented in Back-end Integration Test Report
  * @tool Jest https://jestjs.io/
  * @author EdTech Evaluation-Budgerigar Team
  * @date 2020/10/25
@@ -10,13 +10,14 @@
  // Import the required modules
 var sqlAdapter = require('../dataSource/sqlAdapter');
 
+// Defind afterAll() function to close SQL connection after test
 afterAll(() => {
     sqlAdapter.closeConnection();
 });
 
 /**
  * @testedapi test for GET /evaluation/new API
- * @testcases 4 test cases in total
+ * @description 4 test cases in total
  */
 describe("GET /evaluation/new", () => {
 
@@ -65,7 +66,7 @@ describe("GET /evaluation/new", () => {
 
 /**
  * @testedapi GET /evaluation/new?framework_id={id}
- * @testcases 1 test case in total
+ * @description 1 test case in total
  */
 describe("GET /evaluation/new?framework_id={id}", () => {
 
@@ -104,7 +105,7 @@ describe("GET /evaluation/new?framework_id={id}", () => {
 
 /**
  * @testedapi POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
- * @testcases 3 test cases in total
+ * @description 3 test cases in total
  */
 describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}", () => {
 
@@ -168,7 +169,7 @@ describe("POST /evaluation/update/response?evaluation_id={eid}&question_id={qid}
 
 /**
  * @testedapi POST /evaluation/update/title?evaluation_id={id}
- * @testcases 1 test case in total
+ * @description 1 test case in total
  */
 describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
@@ -211,7 +212,7 @@ describe("POST /evaluation/update/title?evaluation_id={id}", () => {
 
 /**
  * @testedapi Get /evaluation
- * @testcases 1 test case in total
+ * @description 1 test case in total
  */
 describe("Get /evaluation", () => {
     test("evaluation_completed must be 0 or 1", done => {
@@ -232,7 +233,7 @@ describe("Get /evaluation", () => {
 
 /**
  * @testedapi GET /evaluation?evaluation_id={eid}&question_id={qid}
- * @testcases 2 test cases in total
+ * @description 2 test cases in total
  */
 describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
     test("It should return 5 rates", done => {
@@ -278,7 +279,7 @@ describe("GET /evaluation?evaluation_id={eid}&question_id={qid}", () => {
 
 /**
  * @testedapi GET /evaluation?evaluation_id={eid}
- * @testcases 1 test case in total
+ * @description 1 test case in total
  */
 describe("GET /evaluation?evaluation_id={eid}", () => {
     test("question_id should be unique", done => {

@@ -1,4 +1,13 @@
-// Format joined tables of section and questions into nested hierarchy
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used as an util to help with formatting joined tables of section and questions into nested hierarchy
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
+
+/**
+ * @description Format joined tables of section and questions into nested hierarchy
+ */
 function formatSectionHierarchy(joined, checkCompleteness = false) {
 
     // Setup map for section indices to formatted index
@@ -63,7 +72,6 @@ function formatSectionHierarchy(joined, checkCompleteness = false) {
     }
 
     return formatted;
-
 }
 
 module.exports = { formatSectionHierarchy };

@@ -1,12 +1,28 @@
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used as an util to help with interacting with Auth0
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
+
+ // Import the required modules
 var request = require('request');
 
-// Options for token retrieval
+/**
+* @description Options for token retrieval
+* @param {string} method - define the method used for Auth0
+* @param {string} url - define the url used for Auth0
+* @param {boolean} headers - define the header used for Auth0
+* @param {string} body - define the post body used for Auth0
+*/
 var tokenOptions = { method: 'POST',
     url: 'https://edtechevaluation.au.auth0.com/oauth/token',
     headers: { 'content-type': 'application/json' },
     body: '{"client_id":"UmFMaTcN3f4VyiHsj0DG4sLvU1o3RdEx","client_secret":"oWVLKgCtsZCasVR9OPeMwUSpcBnUuLtWXkCzSCGDaDLsNyg8MsmUsd-R-rJ-lIgz","audience":"https://edtechevaluation.au.auth0.com/api/v2/","grant_type":"client_credentials"}' };
 
-// Request and store the Auth0 Management API token
+/**
+* @description Request and store the Auth0 Management API token
+*/
 var token = null;
 request(tokenOptions, function (error, response, body) {
     if (error) throw new Error(error);

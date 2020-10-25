@@ -378,16 +378,13 @@ router.get('/sendemail', function (req, res, next) {
     /**
     * @api: GET /report/sendemail?emailaddress={emailaddress}&report_id={rid}
     * @description API for sending the csv file to an email.
+    * Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
+    * For example: 2 email addresses:
+    * http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
     * @example http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
     * @param {number} req.query.report_id - report_id
     * @param {string} req.query.emailaddress - emailaddress
     */
-    
-    // Example: http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
-    // Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
-    // For example: 2 email addresses:
-    // http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
-    
     if (req.query.emailaddress != null && req.query.report_id != null) {
         let emailaddress = req.query.emailaddress;
         let emailaddresscount;
