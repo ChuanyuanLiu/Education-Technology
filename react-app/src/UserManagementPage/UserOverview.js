@@ -10,6 +10,20 @@ import { Select, Popconfirm } from "antd";
 
 import "./UserOverview.css";
 
+/*
+(Route from FrameworkPage)
+Framework Overview Page
+    |-- NavBar
+        |--  User Name
+    |-- StatusSwitch (Active)
+    |-- Select (Role)
+    |-- StatusSwitch (Permission)
+    |-- TextAreas (Details)
+    |-- Footer
+        |-- Delete User
+ * UserOverview Page that lists the details of a user
+ * @param {int} history.location.state.user_id
+ * */
 function UserOverview({history}) {
     const {user_id} = history.location.state;
 
@@ -136,6 +150,7 @@ function UserOverview({history}) {
         }
         let newRole;
 
+        // Iterate over roles and find appropriate one
         for (let i = 0; i < roleList.length; i++) {
             newRole = roleList[i];
             if (value === newRole.name) {

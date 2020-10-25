@@ -10,6 +10,17 @@ import { Select, Popconfirm, Form, Input } from "antd";
 
 import "./UserOverview.css";
 
+/*
+(Route from FrameworkPage)
+Framework Overview Page
+    |-- NavBar
+    |-- Form
+        |-- Form.Items (Details)
+            |-- Select (Role)
+    |-- Footer
+        |-- Create User
+ * UserCreation Page that provides a form to create a new user
+ * */
 function UserCreation({history}) {
     const [userRole, setUserRole] = useState(null);
     const [userPermission, setUserPermission] = useState(false);
@@ -34,6 +45,7 @@ function UserCreation({history}) {
         setUserPermission(!userPermission);
     }
 
+    // Create a new user
     const createUser = (values) => {
         let param = {
             headers: {
