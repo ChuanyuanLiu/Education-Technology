@@ -86,7 +86,7 @@ function ReportPage() {
             </div>
             <div className='footer'>
                 {
-                    metadata.create_report &&
+                    (roles[0].name !== "Educational Leader" || metadata.create_report) &&
                     <BigButton onClick={goToEvaluationSelection}>
                         New Report
                     </BigButton>
