@@ -106,7 +106,7 @@ router.get('/', function (req, res, next) {
                 };
                 cleanRes.rates[i] = cleanRate;
             }
-            
+
             res.send(cleanRes);
         });
     }
@@ -474,8 +474,6 @@ router.post('/activestatus/update', function (req, res, next) {
  * @param {number} req.query.framework_id - framework_id
  */
 router.post('/finalisedstatus/update', function (req, res, next) {
-
-    // Example: http://localhost:3001/framework/finalisedstatus/update?framework_id={fid}
     if (req.query.framework_id != null) {
         let framework_finalised_status = req.body.framework_finalised_status;
         const sql = "UPDATE framework "
