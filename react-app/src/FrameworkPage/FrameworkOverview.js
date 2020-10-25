@@ -232,7 +232,7 @@ function FrameworkOverview({history}) {
                         <Reminder is_hidden={!ediable}>
                             <span>
                                 This framework cannot be edited as it has been
-                                published, click "Save as New" to generate a new
+                                finalised, click "Save as New" to generate a new
                                 copy
                             </span>
                         </Reminder>
