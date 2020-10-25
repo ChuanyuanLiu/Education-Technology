@@ -490,7 +490,7 @@ function ButtomButton({hasPublished, handleFinalize, handleNewVersion, hidden}) 
                 </BigButton>
                 :
                 <BigButton onClick={handleFinalize}>
-                    Finalize
+                    Finalise
                 </BigButton>
             }
         </div>
