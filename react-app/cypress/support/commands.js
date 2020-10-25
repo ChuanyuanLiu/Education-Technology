@@ -7,19 +7,29 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+/// <reference type="Cypress">
+
+Cypress.Commands.add('SeniorConsultantLogin', (overrides = {}) => {
+    Cypress.log({
+      name: 'loginViaAuth0',
+    });
+  
+    const options = {
+      method: 'POST',
+      url: "https://edtechevaluation.au.auth0.com/",
+      body: {
+        grant_type: 'password',
+        username: "gerald@edtechevaluation.com.au",
+        password: "Gerald@Edtech",
+        audience: "https://edtechevaluation.au.auth0.com/",
+        scope: 'openid profile email',
+        client_id: "f7XkkPm5SPP79RC22KdVMTvyHddTR3p6",
+        client_secret: "RTEaE0RjeosZLfnhMVEDkK2gm1xBL1JQBAcMbJ4tlrHnBtyvXM0tPkAewhS0pdCl",
+      },
+    };
+    cy.request(options);
+  });
+
+Cypress.Commands.add('home', (overrides = {}) => {
+    cy.visit(Cypress.env('WEB_ADDRESS'));
+});

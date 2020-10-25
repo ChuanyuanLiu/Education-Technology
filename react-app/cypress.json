@@ -1,1 +1,7 @@
-{}
+{
+    "viewportWidth": 500,
+    "viewportHeight": 900,
+    "env":{
+        "WEB_ADDRESS": "http://localhost:3000"
+    }
+}
