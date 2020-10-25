@@ -1,22 +1,39 @@
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used to process all the back-end logic related to the report business function
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
+
+// Import the required modules
 var express = require('express');
 var router = express.Router();
-
-var sqlAdapter = require('../dataSource/sqlAdapter');
-const { response } = require('express');
-const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
-const SUCCESSFUL = "The call to the SQL database was successful."
-
 const fs = require('fs');
 var sd = require('silly-datetime');
 var nodemailer = require('nodemailer');
-const jsonUtils = require('../utils/jsonUtils');
-//const fastcsv = require('fast-csv');
+var sqlAdapter = require('../dataSource/sqlAdapter');
+const { response } = require('express');
 
+// Define SqlCall execution result statements 
+const UNSUCCESSFUL = "The call to the SQL database was unsuccessful.";
+const SUCCESSFUL = "The call to the SQL database was successful."
+
+/**
+ * @description APIs for report listing logic
+ *              If SqlCall excutes successfully, send the corresponding result. If not, send UNSUCCESSFUL
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.get('/', function (req, res, next) {
-    if (req.query.report_id != null) {
-        // Example: http://localhost:3001/report?report_id=1
-        // Returns all details about a report
 
+    /**
+    * @api: GET /report?report_id={rid}
+    * @description API for returning all information of a report
+    * @example http://localhost:3001/report?report_id=1
+    * @param {number} req.query.report_id - report_id
+    */
+    if (req.query.report_id != null) {
         const sql = "SELECT r.*, e.evaluation_title "
             + "FROM report r, evaluation e "
             + "WHERE r.report_id = " + req.query.report_id + " AND r.evaluation_id = e.evaluation_id";
@@ -26,11 +43,17 @@ router.get('/', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
+
             res.send(reportRes[0]);
         });
 
     }
-    // Default; return all reports
+
+    /**
+    * @api: GET /report
+    * @description API for returning a list of all reports
+    * @example http://localhost:3001/report
+    */
     else {
         const sql = "SELECT r.*, e.evaluation_title FROM report r, evaluation e WHERE r.evaluation_id = e.evaluation_id";
         sqlAdapter.sqlCall(sql, function (sqlRes) {
@@ -38,20 +61,28 @@ router.get('/', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
+
             res.send(sqlRes);
         });
     }
 });
 
-//New report page
+/**
+* @description API for generating a new report
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+*/
 router.get('/new', function (req, res, next) {
-
-    // Select a completed evaluation to generate report
-    // API: /report/new?evaluation_id={eid}&author_name={author_name}
-    // Example: http://localhost:3001/report/new?evaluation_id=1&author_name=Tony
-    // Excute 3 SQL statements:
+    /**
+    * @api: GET /report/new?evaluation_id={eid}&author_name={author_name}
+    * @description API for selecting a completed evaluation to generate a report, and return all data about the newly created report.
+    * @example http://localhost:3001/report/new?evaluation_id=1&author_name=Tony
+    * @param {number} req.query.evaluation_id - evaluation_id
+    * @param {number} req.query.author_name - author_name
+    */
     if (req.query.evaluation_id != null && req.query.author_name != null) {
-
+        // Excute 3 SQL statements:
         // 1. Create a new report, Insert a new evaluation_id
         const sql = "INSERT INTO report ( evaluation_id, report_author ) VALUES ( " + req.query.evaluation_id + ", '" + req.query.author_name + "' );"
             // 2. Return the report_id of newly created report
@@ -65,12 +96,17 @@ router.get('/new', function (req, res, next) {
                 return;
             }
             let cleanRes = newReportRes[2][0];
+
             res.send(cleanRes);
         });
     }
+
+    /**
+    * @api: GET /report/new
+    * @description API for returning all completed evaluations
+    * @example http://localhost:3001/report/new
+    */
     else {
-        // Default; return all finalised evaluations.
-        // Example: http://localhost:3001/report/new
         const sql = "SELECT e.*, f.framework_title "
             + "FROM evaluation e, framework f "
             + "WHERE e.evaluation_finalised = 1 AND e.framework_id = f.framework_id";
@@ -79,15 +115,26 @@ router.get('/new', function (req, res, next) {
                 res.send(UNSUCCESSFUL);
                 return;
             }
+
             res.send(evaluationRes);
         });
     }
 });
 
-//Finalise report page
+/**
+* @description API for finalising a report
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+*/
 router.get('/finalise', function (req, res, next) {
+    /**
+    * @api: GET /report/finalise?report_id={rid}
+    * @description API for finalising a report
+    * @example http://localhost:3001/report/finalise?report_id=1
+    * @param {number} req.query.report_id - report_id
+    */
     if (req.query.report_id != null) {
-        // Example: http://localhost:3001/report/finalise?report_id=1
         let report_id = req.query.report_id;
         //1. Returns report, evaluation, framework details
         const sql = "SELECT r.*, e.evaluation_id, e.evaluation_title, "
@@ -236,8 +283,7 @@ router.get('/finalise', function (req, res, next) {
                                 question_index++;
 
                                 // The .csv file is stored in '$REPORTS_FILEPATH'
-                                // Current filepath of .csv file is './reports/$report_id-YYYY-MM-DD-HH-mm-ss'
-                                var time = sd.format(new Date(), 'YYYY-MM-DD-HH-mm-ss');
+                                // Current filepath of .csv file is './reports/report_title.csv'
                                 const REPORTS_DIR = './reports';
                                 const REPORTS_FILEPATH = REPORTS_DIR + '/' + report_title + '.csv';
 
@@ -267,8 +313,6 @@ router.get('/finalise', function (req, res, next) {
                                         return;
                                     }
                                 });
-
-
                             });
                         }
                     });
@@ -281,11 +325,21 @@ router.get('/finalise', function (req, res, next) {
     }
 });
 
-// Download function 
+/**
+* @description API for downloading the report.
+* @param {number} req.query.report_id - report_id
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+*/
 router.get('/download', function (req, res, next) {
+    /**
+    * @api: GET /report/download?report_id={rid}
+    * @description API for downloading the report.
+    * @example http://localhost:3001/report/download?report_id=1
+    * @param {number} req.query.report_id - report_id
+    */
     if (req.query.report_id != null) {
-        // Example: http://localhost:3001/report/download?report_id=1
-
         const sql = "SELECT report_csv "
             + "FROM report "
             + "WHERE report_id = " + req.query.report_id;
@@ -314,12 +368,26 @@ router.get('/download', function (req, res, next) {
     }
 });
 
-// Send report to an email
+/**
+* @description API for sending the csv file to an email.
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+*/
 router.get('/sendemail', function (req, res, next) {
+    /**
+    * @api: GET /report/sendemail?emailaddress={emailaddress}&report_id={rid}
+    * @description API for sending the csv file to an email.
+    * @example http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
+    * @param {number} req.query.report_id - report_id
+    * @param {string} req.query.emailaddress - emailaddress
+    */
+    
     // Example: http://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
     // Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
     // For example: 2 email addresses:
     // http://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
+    
     if (req.query.emailaddress != null && req.query.report_id != null) {
         let emailaddress = req.query.emailaddress;
         let emailaddresscount;
@@ -333,6 +401,7 @@ router.get('/sendemail', function (req, res, next) {
         }
         let report_id = req.query.report_id;
 
+        // The configuration of Email used
         var mailTransport = nodemailer.createTransport({
             service: 'Gmail',
             secureConnection: true, // Use SSL to login
@@ -369,13 +438,7 @@ router.get('/sendemail', function (req, res, next) {
                                     filename: report_title + '.csv', // Attachment name
                                     path: report_csv, // Attachment file path
                                     cid: '00000001' // Can be used by email      
-                                },
-                                // If need another attachement :file2
-                                // {
-                                //     filename: 'img2.png',            
-                                //     path: 'public/images/img2.png',  
-                                //     cid : '00000002'                 
-                                // },
+                                }
                             ]
                     };
                 }
@@ -395,13 +458,7 @@ router.get('/sendemail', function (req, res, next) {
                                     filename: report_title + '.csv', // Attachment name
                                     path: report_csv, // Attachment file path
                                     cid: '00000001' // Can be used by email      
-                                },
-                                // If need another attachement :file2
-                                // {
-                                //     filename: 'img2.png',            
-                                //     path: 'public/images/img2.png',  
-                                //     cid : '00000002'                 
-                                // },
+                                }
                             ]
                     };
                 }
@@ -422,9 +479,16 @@ router.get('/sendemail', function (req, res, next) {
     }
 });
 
-// Update the title of the report
+/**
+* @api: POST /report/update/title?report_id={rid}
+* @description API for updating the title of a report
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+* @param {number} req.query.report_id - report_id
+* @param {string} req.query.emailaddress - emailaddress
+*/
 router.post('/update/title', function (req, res, next) {
-
     const sql = "UPDATE report "
         + "SET report_title = '" + req.body.report_title
         + "' WHERE report_id = " + req.query.report_id;
@@ -434,11 +498,20 @@ router.post('/update/title', function (req, res, next) {
             res.send(UNSUCCESSFUL);
             return;
         }
+
         res.send(SUCCESSFUL);
     });
 });
 
-// Update the recommendation of the report
+/**
+* @api: POST /report/update/recommendation?report_id={rid}
+* @description API for updating the recommendation of the report
+* @param {any} req - ReqBody
+* @param {any} res - ResBody
+* @param {any} next - ResQuery
+* @param {number} req.body.report_recommendation - report_recommendation
+* @param {string} req.query.report_id - report_id
+*/
 router.post('/update/recommendation', function (req, res, next) {
 
     const sql = "UPDATE report "
@@ -450,6 +523,7 @@ router.post('/update/recommendation', function (req, res, next) {
             res.send(UNSUCCESSFUL);
             return;
         }
+
         res.send(SUCCESSFUL);
     });
 });

@@ -1,30 +1,52 @@
+/**
+ * This project is used for University of Melbourne Masters Software Engineering Project (SWEN90014_2020_SM2)
+ * @description This file is used to process all the back-end logic related to the authentication deployed by Auth0
+ * @author EdTech Evaluation-Budgerigar Team
+ * @date 2020/10/25
+ */
+
+ // Import the required modules
 var express = require('express');
 var request = require('request');
 var router = express.Router();
 var auth0Adapter = require('../dataSource/auth0Adapter');
 
+/**
+ * @description APIs for retrieving user data
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.get('/', function (req, res, next) {
-
-    // Retrieve a single user
-    // Endpoint: "localhost:3001/user?user_id={uid}"
+    /**
+    * @api: GET localhost:3001/user?user_id={uid}
+    * @description API for retrieving a single user
+    * @param {number} req.query.user_id - user_id
+    */
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
         auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
             recurseRoles(0, [JSON.parse(auth0Res)], res);
         });
 
-    // Retrieve all users
-    // Endpoint: "localhost:3001/user"
+    /**
+    * @api: GET localhost:3001/user
+    * @description API for retrieving all users
+    */
     } else {
         const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
         auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
             recurseRoles(0, JSON.parse(auth0Res), res);
         });
     }
-    
 });
 
-// Attach roles to each user recursively
+/**
+ * @description APIs for attaching roles to each user recursively
+ * @param {any} index - index
+ * @param {any} users - users
+ * @param {any} res - res
+ */
 function recurseRoles(index, users, res) {
     console.log(index + " " + users.length);
     if (index < users.length) {
@@ -41,18 +63,29 @@ function recurseRoles(index, users, res) {
     }
 }
 
+/**
+ * @description APIs for retrieving user's roles
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ */
 router.get('/roles', function (req, res, next) {
-
-    // Retrieve a user's roles
-    // Endpoint: "localhost:3001/user/roles?user_id={uid}"
+    /**
+     * @api: GET https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}/roles
+     * @description APIs for retrieving a user's role
+     * @param {number} req.query.user_id - user_id
+     */
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}/roles`;
         auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
             res.send(auth0Res);
         });
 
-    // Retrieve all roles
-    // Endpoint: "localhost:3001/user/roles"
+    /**
+     * @api: GET https://localhost:3001/user/roles
+     * @description APIs for retrieving all roles
+     * @param {number} req.query.user_id - user_id
+     */
     } else {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/roles`;
         auth0Adapter.auth0Call("GET", url, {}, function (auth0Res) {
@@ -61,8 +94,14 @@ router.get('/roles', function (req, res, next) {
     }
 });
 
-// Update a user's details
-// Endpoint: "localhost:3001/user/update?user_id={uid}"
+/**
+ * @api: GET https://localhost:3001/user/update?user_id={uid}
+ * @description APIs for updating a user's details
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {any} req.query.user_id - user_id
+ */
 router.post('/update', function (req, res, next) {
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
@@ -73,8 +112,13 @@ router.post('/update', function (req, res, next) {
     }
 });
 
-// Update a user's role
-// Endpoint: "localhost:3001/user/update/role?user_id={uid}"
+/**
+ * @description APIs for updating a user's role
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {any} req.query.user_id - user_id
+ */
 router.post('/update/role', function (req, res, next) {
     console.log("update role");
     if (req.query.user_id != null) {
@@ -93,7 +137,13 @@ router.post('/update/role', function (req, res, next) {
     }
 });
 
-// Create a new user with default role Consultant
+/**
+ * @description APIs for creating a new user with default role Consultant
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {any} req.query.user_id - user_id
+ */
 router.post('/new', function (req, res, next) {
     const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
 
@@ -118,8 +168,14 @@ router.post('/new', function (req, res, next) {
     })
 });
 
-// Delete a user
-// Endpoint: "localhost:3001/user/delete?user_id={uid}"
+/**
+ * @description APIs for deleting a user
+ * @api GET https://localhost:3001/user/delete?user_id={uid}
+ * @param {any} req - ReqBody
+ * @param {any} res - ResBody
+ * @param {any} next - ResQuery
+ * @param {any} req.query.user_id - user_id
+ */
 router.get('/delete', function (req, res, next) {
     if (req.query.user_id != null) {
         const url = `https://edtechevaluation.au.auth0.com/api/v2/users/${req.query.user_id}`;
