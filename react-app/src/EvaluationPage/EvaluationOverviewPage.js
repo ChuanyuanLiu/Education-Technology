@@ -313,7 +313,6 @@ function Question({
             },
         });
     }
-    console.log(editable)
     return (
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}

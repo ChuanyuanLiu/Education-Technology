@@ -8,14 +8,21 @@ import ReportInfo from "./ReportInfo";
 import {ReportInfoData} from "../Utils/DataClass.js";
 import TextArea from "../Utils/TextArea";
 import "./ReportPage.css"
+import { useMetadata } from "../Utils/UseMetadata";
+import { useRole } from "../Utils/UseRole";
 
 function ReportOverview ({history}){
     const [reportData, setReport] = useState(null)
     const {report_id} = history.location.state
 
+    const GUEST = "Educational Leader"
+    const { error: metadataError, metadata, loading: metadataLoading } = useMetadata();
+    const { error, roles, loading: rolesLoading} = useRole();
+
     const post_title_url = `http://localhost:3001/report/update/title?report_id=${report_id}`
     const post_summary_url = `http://localhost:3001/report/update/recommendation?report_id=${report_id}`
     const post_finailized_url = `http://localhost:3001/report/finalise?report_id=${report_id}`
+    const download_url = `http://localhost:3001/report/download?report_id=${report_id}`
     useEffect(() => 
         {
             let isCancelled = false;
@@ -42,6 +49,7 @@ function ReportOverview ({history}){
         fetch(url, param)
             .then((data) => data.text())
             .then((response) => {
+                console.log(response)
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
@@ -70,10 +78,10 @@ function ReportOverview ({history}){
     }
 
     const post_finailized_request = (url) => {
-        console.log(url)
         fetch(url)
             .then((data) => data.text())
             .then((response) => {
+                console.log(response)
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
@@ -103,9 +111,22 @@ function ReportOverview ({history}){
         });
     }
 
-    const handleDownload = () =>{
-        //TODO
-    }
+
+
+    const handleDownload = () => {
+        let iframe = document.createElement('iframe');
+        iframe.style.display = 'none'
+        iframe.src = download_url
+        iframe.onload = function () {
+        document.body.removeChild(iframe)
+        }
+        document.body.appendChild(iframe)
+    }; 
+
+    if (reportData == null || rolesLoading || metadataLoading)
+        return <h1> Loading ... </h1>;
+
+    const has_permission =  roles[0].name !== GUEST|| metadata.create_report
     return (
         <div className='flex_container'>
             <NavBar>
@@ -114,10 +135,16 @@ function ReportOverview ({history}){
                         text={reportData.report_title}
                         title={"Report Title"}
                         onSave={post_title_request(post_title_url)}
-                        disabled={reportData.report_finalised}
+                        disabled={reportData.report_finalised || !has_permission}
                     />
                 </div>
             </NavBar>
+            {!has_permission &&                         
+                    <Reminder is_hidden={true}>
+                        <span>
+                            You don't have permission for creating report. Please contact Adminstrator to gain the authority.
+                        </span>
+                    </Reminder>}
             <ReportInfo data={new ReportInfoData(reportData)} hideTitle={true} onClick={()=>{}}/>
             <div className='content scrollable'>
                 <div className='section_header'>Evaluation Used</div>
@@ -130,12 +157,13 @@ function ReportOverview ({history}){
                         title='Recommendation'
                         text={reportData.report_recommendation}
                         onSave={post_recommendation_request(post_summary_url)}
-                        disabled={reportData.report_finalised}
+                        disabled={reportData.report_finalised || !has_permission}
                     />
                 </div>
             </div>
             <div className='footer'>
-                    {!reportData.report_finalised?               
+                    {has_permission &&
+                    (!reportData.report_finalised?               
                         <BigButton
                             onClick={()=> post_finailized_request(post_finailized_url)}
                         >
@@ -143,9 +171,8 @@ function ReportOverview ({history}){
                         </BigButton>
                         :
                         (<span>
-
                             <BigButton
-                            onClick={() => handleDownload}
+                                onClick={handleDownload}
                             >
                                 Download
                             </BigButton>
@@ -156,6 +183,7 @@ function ReportOverview ({history}){
                                 Publish
                             </BigButton>
                         </span>)
+                    )
                     }
                 </div>
         </div>
