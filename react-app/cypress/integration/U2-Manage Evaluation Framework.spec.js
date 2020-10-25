@@ -1,12 +1,5 @@
 /// <reference types="Cypress" />
 
-const { BackTop } = require("antd");
-
-const BACK_BUTTON = "#backButton";
-const NEW_FRAMEWORK_NAME = "Framework Title editable";
-const INPUT_BUTTON = ".section_input_button"; // the pen like button
-const TICK_BUTTON = ".anticon-check"; // the tick beside input boxes
-
 // assumes already logged in as Senior consultant
 describe("U2 Manage Evaluation Framework", function () {
 
@@ -88,7 +81,7 @@ describe("U2 Manage Evaluation Framework", function () {
     // assumes a framework is active
     it("2.3.2 mark a framework as inactive", ()=>{
         // go to a framework
-        cy.contains("active").first().click();
+        cy.contains("Active").first().click();
         // toggle button
         cy.get('.ant-switch').click();
     });
