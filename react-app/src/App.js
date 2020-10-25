@@ -16,6 +16,7 @@ import FrameworkQuestionPage from "./FrameworkPage/FrameworkQuestionPage";
 import ReportPage from "./ReportPage/ReportPage";
 import UserManagementPage from "./UserManagementPage/UserManagementPage";
 import UserOverview from "./UserManagementPage/UserOverview";
+import UserCreation from "./UserManagementPage/UserCreation";
 import ReportOverview from "./ReportPage/ReportOverview";
 import ReportPublishPage from "./ReportPage/ReportPublishPage";
 function App(){
@@ -37,6 +38,7 @@ function App(){
                     <Route path='/new_report' component={EvaluationSelection} />
                     <Route path='/user_management' component={UserManagementPage} />
                     <Route path='/user_overview' component={UserOverview} />
+                    <Route path='/user_creation' component={UserCreation} />
                     <Route path='/report_overview' component={ReportOverview} />
                     <Route path='/report_publish' component={ReportPublishPage} />
                 </Router>

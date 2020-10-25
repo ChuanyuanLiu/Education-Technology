@@ -94,44 +94,27 @@ router.post('/update/role', function (req, res, next) {
 });
 
 // Create a new user with default role Consultant
-router.get('/new', function (req, res, next) {
+router.post('/new', function (req, res, next) {
     const url = "https://edtechevaluation.au.auth0.com/api/v2/users";
-    const body = {
-        "connection": "Username-Password-Authentication",
-        "name": "New User",
-        "email": "placeholder@email.com",
-        "password": "placeholder_password",
-        "user_metadata": {
-            "active": false
-        }
-    }
+
+    // Extract role
+    const role = req.body.role;
+    let body = req.body;
+    delete body["role"];
 
     // Create a new user
     auth0Adapter.auth0Call("POST", url, body, function (auth0UserRes) {
         console.log(auth0UserRes);
         let userRes = JSON.parse(auth0UserRes);
-        const roleUrl = `https://edtechevaluation.au.auth0.com/api/v2/roles`;
-        
-        // Get all roles
-        auth0Adapter.auth0Call("GET", roleUrl, body, function (auth0RoleRes) {
-            console.log(auth0RoleRes);
-            let roleRes = JSON.parse(auth0RoleRes);
-            let roleId;
-            for (let i = 0; i < roleRes.length; i++) {
-                if (roleRes[i].name === "Consultant") {
-                    roleId = roleRes[i].id;
-                    break;
-                }
-            }
 
-            const assignUrl = `https://edtechevaluation.au.auth0.com/api/v2/users/${userRes.user_id}/roles`;
-            const assignBody = {"roles": [roleId]};
-            // Assign consultant role to new user
-            auth0Adapter.auth0Call("POST", assignUrl, assignBody, function (auth0AssignRes) {
-                console.log(auth0AssignRes);
-                res.send(userRes);
-            })
-        });
+        const assignUrl = `https://edtechevaluation.au.auth0.com/api/v2/users/${userRes.user_id}/roles`;
+        const assignBody = {"roles": [role.id]};
+
+        // Assign role to new user
+        auth0Adapter.auth0Call("POST", assignUrl, assignBody, function (auth0AssignRes) {
+            console.log(auth0AssignRes);
+            res.send(userRes);
+        })
     })
 });
 
