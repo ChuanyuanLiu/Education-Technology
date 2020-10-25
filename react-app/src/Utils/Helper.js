@@ -13,6 +13,7 @@ export function resolveUserTime(time) {
 
 /** 
  * Return positive number if d1 > d2
+ * Ascending by default
  */
 function compareDateTime(d1, d2) {
     const result = Date.parse(d1) - Date.parse(d2);

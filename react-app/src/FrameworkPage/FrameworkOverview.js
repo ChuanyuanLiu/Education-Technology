@@ -41,7 +41,6 @@ function FrameworkOverview({history}) {
   
     const AUTH_ROLE = "Senior Consultant"
     function initializeFramework(data) {
-        // console.log(data);
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
