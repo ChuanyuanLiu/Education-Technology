@@ -217,7 +217,6 @@ function EvaluationOverviewPage({history}) {
  * @param {checkExpand} check which section is expanded
  * @param {editable} check whether the page is editable
  */
-
 function SectionsList({evaluation_id, sections, registerExpand,
                     registerUnexpand,checkExpand, editable}) 
 {

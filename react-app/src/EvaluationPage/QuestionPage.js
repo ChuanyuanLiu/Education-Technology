@@ -12,7 +12,6 @@ Question Page
     |-- TextArea
     |-- BigButton
 */
-
 function QuestionPage({history}) {
     const {evaluation_id, question_id, editable} = history.location.state;
     const [question_data, setQuestion] = useState(null);

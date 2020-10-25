@@ -24,9 +24,6 @@ Framework Overview Page
                     |-- Add Question
             |-- Add Section
     |-- Footer
-*/
-
-/**
  * FrameworkOverview Page that lists all sections and questions related to the framework
  * @param {int} history.location.state.framework_id
  * */
