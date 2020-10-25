@@ -268,9 +268,8 @@ function Section({evaluation_id, section_title, section_index,
                 </div>
                 {`Section ${section_index + 1} ${section_title}`}
                 <span className="right">
-                    {section_completed? <CheckOutlined></CheckOutlined>: null}
-
                     {section_completed? "Completed" : null}
+                    {section_completed? <CheckOutlined/>: null}
                 </span>
             </div>
             <ul>
@@ -316,9 +315,8 @@ function Question({
         <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
             <span className="right">
-                    {question_completed? <CheckOutlined></CheckOutlined>: null}
-
                     {question_completed? "Completed" : null}
+                    {question_completed? <CheckOutlined/>: null}
             </span>
         </li>
     );
