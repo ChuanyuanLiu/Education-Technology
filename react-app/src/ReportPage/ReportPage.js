@@ -7,6 +7,7 @@ import {ReportInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRole } from "../Utils/UseRole";
+import { useMetadata } from "../Utils/UseMetadata";
 
 /**
  * Route from Homepage
@@ -25,8 +26,8 @@ function ReportPage() {
     const AUTH_ROLE = "Senior Consultant"
     const CONSULTANT = "Consultant"
     const { user, isAuthenticated, isLoading } = useAuth0();
-    const { error, roles, loading: rolesLoading, refresh } = useRole();
-
+    const { error, roles, loading: rolesLoading} = useRole();
+    const { error: metadataError, metadata, loading: metadataLoading } = useMetadata();
 
     // initalize data by getting the data and wrap response in DataClass
     useEffect(() => {
@@ -57,7 +58,7 @@ function ReportPage() {
         });
     }
 
-    if (reportList == null || isLoading || rolesLoading)
+    if (reportList == null || isLoading || rolesLoading || metadataLoading)
         return <h1> Loading ... </h1>;
 
     const renderList = reportList.filter((data) => {
@@ -83,9 +84,12 @@ function ReportPage() {
                 />
             </div>
             <div className='footer'>
-                <BigButton onClick={goToEvaluationSelection}>
-                    New Report
-                </BigButton>
+                {
+                    metadata.create_report &&
+                    <BigButton onClick={goToEvaluationSelection}>
+                        New Report
+                    </BigButton>
+                }
             </div>
         </div>
     );

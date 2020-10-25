@@ -32,12 +32,10 @@ function UserManagementPage() {
         });
     };
 
-    const createNewUser = () => {
-        fetch("http://localhost:3001/user/new")
-            .then((response) => response.json())
-            .then((data) => {
-                goToUserOverview(data.user_id)
-            });
+    const goToUserCreation = () => {
+        history.push({
+            pathname: "/user_creation",
+        })
     }
 
     useEffect(() => {
@@ -70,7 +68,7 @@ function UserManagementPage() {
                 />
             </div>
             <div className='footer'>
-                <BigButton onClick={createNewUser}>New User</BigButton>
+                <BigButton onClick={goToUserCreation}>Add New User</BigButton>
             </div>
         </div>
     );
