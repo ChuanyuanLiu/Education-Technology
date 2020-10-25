@@ -23,7 +23,6 @@ function App(){
     const AUTH_ROLE = "Senior Consultant"
     return (
         <div className='element_container'>
-            <React.StrictMode>
                 <Router >
                     <Route exact path='/' component={Login} />
                     <Route path='/home_page' component={HomePage}/>
@@ -42,8 +41,6 @@ function App(){
                     <Route path='/report_overview' component={ReportOverview} />
                     <Route path='/report_publish' component={ReportPublishPage} />
                 </Router>
-            </React.StrictMode>
-
         </div>
 
     )

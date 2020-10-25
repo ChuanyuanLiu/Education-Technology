@@ -12,7 +12,7 @@ export const useRole = () => {
     useEffect(() => {
         (async () => {
             try {
-                console.log(user);
+                if (user === undefined) return;
                 const url = `http://localhost:3001/user/roles?user_id=${user.sub}`;
                 const res = await fetch(url);
 

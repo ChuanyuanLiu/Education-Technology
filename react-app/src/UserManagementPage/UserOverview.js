@@ -29,7 +29,6 @@ function UserOverview({history}) {
     const { user: selfUser, isAuthenticated, isLoading } = useAuth0();
 
     function initialiseUser(data) {
-        console.log(data);
         setUserName(data.name);
         setUserActive(data.user_metadata.active);
         setUserRole(data.role);

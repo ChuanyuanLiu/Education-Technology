@@ -24,9 +24,6 @@ Framework Overview Page
                     |-- Add Question
             |-- Add Section
     |-- Footer
-*/
-
-/**
  * FrameworkOverview Page that lists all sections and questions related to the framework
  * @param {int} history.location.state.framework_id
  * */
@@ -41,7 +38,6 @@ function FrameworkOverview({history}) {
   
     const AUTH_ROLE = "Senior Consultant"
     function initializeFramework(data) {
-        // console.log(data);
         setFrameworkTitle(data.framework_title);
         setActiveStatus(data.framework_active_status);
         setSections(data.sections);
