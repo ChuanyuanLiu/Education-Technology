@@ -66,6 +66,7 @@ function ReportPage() {
             return data
         }
     })
+    console.log(metadata.create_report)
     return (
         <div className='flex_container'>
             <div className='header'>

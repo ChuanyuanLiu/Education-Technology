@@ -8,10 +8,13 @@ import ReportInfo from "./ReportInfo";
 import {ReportInfoData} from "../Utils/DataClass.js";
 import TextArea from "../Utils/TextArea";
 import "./ReportPage.css"
+import { useMetadata } from "../Utils/UseMetadata";
 
 function ReportOverview ({history}){
     const [reportData, setReport] = useState(null)
     const {report_id} = history.location.state
+
+    const { error: metadataError, metadata, loading: metadataLoading } = useMetadata();
 
     const post_title_url = `http://localhost:3001/report/update/title?report_id=${report_id}`
     const post_summary_url = `http://localhost:3001/report/update/recommendation?report_id=${report_id}`
@@ -43,6 +46,7 @@ function ReportOverview ({history}){
         fetch(url, param)
             .then((data) => data.text())
             .then((response) => {
+                console.log(response)
                 if (
                     response === "The call to the SQL database was successful."
                 ) {
@@ -114,8 +118,7 @@ function ReportOverview ({history}){
         document.body.removeChild(iframe)
         }
         document.body.appendChild(iframe)
-  }; 
-
+    }; 
     return (
         <div className='flex_container'>
             <NavBar>
@@ -153,7 +156,6 @@ function ReportOverview ({history}){
                         </BigButton>
                         :
                         (<span>
-
                             <BigButton
                                 onClick={handleDownload}
                             >
