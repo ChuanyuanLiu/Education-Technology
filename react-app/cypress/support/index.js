@@ -14,12 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-const BACK_BUTTON = "#backButton";
-const NEW_FRAMEWORK_NAME = "Framework Title editable";
-const INPUT_BUTTON = ".section_input_button"; // the pen like button
-const TICK_BUTTON = ".anticon-check"; // the tick beside input boxes
