@@ -29,7 +29,7 @@ function FrameworkInfo({data, onClick}) {
                     ? data.isActive()
                         ? "Active"
                         : "Inactive"
-                    : "Not Finalized"}
+                    : "Not Finalised"}
                 <br />
                 Created: &nbsp;
                 {resolveTime(data.creationTime())}

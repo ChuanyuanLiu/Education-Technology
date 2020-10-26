@@ -232,7 +232,7 @@ function FrameworkOverview({history}) {
                         <Reminder is_hidden={!ediable}>
                             <span>
                                 This framework cannot be edited as it has been
-                                published, click "Save as New" to generate a new
+                                finalised, click "Save as New" to generate a new
                                 copy
                             </span>
                         </Reminder>
@@ -381,11 +381,11 @@ function EditableSection(props) {
     )
     return (
         <div>
-            <div className='editable_section'>
+            <div className='editable_section clickable' 
+                    onClick={getActive ? null : toggleExpand}>
                 {/* Can be used to question edit page */}
                 <div
-                    className='section_input clickable'
-                    onClick={getActive ? null : toggleExpand}
+                    className='section_input'
                 >
                     <span>Section {props.section_index + 1}</span>
                     {getActive ? (
@@ -490,7 +490,7 @@ function ButtomButton({hasPublished, handleFinalize, handleNewVersion, hidden}) 
                 </BigButton>
                 :
                 <BigButton onClick={handleFinalize}>
-                    Finalize
+                    Finalise
                 </BigButton>
             }
         </div>
