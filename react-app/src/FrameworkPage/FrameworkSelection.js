@@ -48,7 +48,7 @@ function FrameworkSelection() {
             );
     };
 
-    if (frameworks.length === 0 ) {
+    if (frameworks == null) {
         return <h1>Loading .. </h1>;
     }
 
