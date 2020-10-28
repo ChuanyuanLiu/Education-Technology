@@ -13,7 +13,7 @@ export const useMetadata = () => {
         (async () => {
             try {
                 if (user === undefined) return;
-                const url = `http://localhost:3001/user?user_id=${user.sub}`;
+                const url = `https://localhost:3001/user?user_id=${user.sub}`;
                 const res = await fetch(url);
                 const fullUser = await res.json();
 

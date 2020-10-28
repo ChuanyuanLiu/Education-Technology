@@ -1,4 +1,4 @@
 
 module.exports = Object.freeze({
-    SERVER_ADDRESS: "http://localhost:3001"
+    SERVER_ADDRESS: "https://localhost:3001"
 });

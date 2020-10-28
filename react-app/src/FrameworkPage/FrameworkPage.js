@@ -26,7 +26,7 @@ function FrameworkPage() {
 
     useEffect(() => {
         let isCancelled = false
-        fetch("http://localhost:3001/framework")
+        fetch("https://localhost:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 if(!isCancelled){
@@ -52,7 +52,7 @@ function FrameworkPage() {
     };
 
     const createNew = () => {
-        fetch(`http://localhost:3001/framework/new?author_name=${user.name}`)
+        fetch(`https://localhost:3001/framework/new?author_name=${user.name}`)
             .then((response) => response.json())
             .then((data) => {
                 goToFrameworkOverview(data.framework_id);

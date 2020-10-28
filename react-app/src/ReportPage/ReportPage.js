@@ -33,7 +33,7 @@ function ReportPage() {
 
     // initalize data by getting the data and wrap response in DataClass
     useEffect(() => {
-        fetch("http://localhost:3001/report")
+        fetch("https://localhost:3001/report")
             .then((response) => response.json())
             .then((data) => {
                 setReportList(convertToDataClass(data));
