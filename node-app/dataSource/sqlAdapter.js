@@ -20,7 +20,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'edtech',
+    password: 'edtechevaluation',
     database: 'edtech',
     multipleStatements: true, //Enable mutiple SQL statements
     timezone: "10:00" //Set Time Zone as +10:00
