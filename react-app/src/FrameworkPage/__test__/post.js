@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 // Test post requests
-const url = "https://localhost:3001/framework/section/question/rate/update?question_id=1";
+const url = "https://139.99.155.172:3001/framework/section/question/rate/update?question_id=1";
 data = {
     rate_1_criterion: "1",
     rate_2_criterion: "2",

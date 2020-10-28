@@ -32,7 +32,7 @@ function EvaluationOverviewPage({history}) {
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
-        fetch(`https://localhost:3001/evaluation?evaluation_id=${evaluation_id}`)
+        fetch(`https://139.99.155.172:3001/evaluation?evaluation_id=${evaluation_id}`)
             .then((response) => response.json())
             .then((data) => {
                 setEvaluation(data)
@@ -66,8 +66,8 @@ function EvaluationOverviewPage({history}) {
 
 
 
-    const post_url = `https://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
-    const finalize_url = `https://localhost:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
+    const post_url = `https://139.99.155.172:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
+    const finalize_url = `https://139.99.155.172:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
     const post_request = (url, title, summary) => {
         const param = {
             headers: {

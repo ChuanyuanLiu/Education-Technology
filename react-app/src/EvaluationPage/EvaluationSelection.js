@@ -27,7 +27,7 @@ function EvaluationSelection() {
     const { error, roles, loading: rolesLoading, refresh } = useRole();
     // initalize data
     useEffect(() => {
-        fetch("https://localhost:3001/report/new")
+        fetch("https://139.99.155.172:3001/report/new")
             .then((response) => response.json())
             .then((data) => {
                 setEvaluationList(convertToDataClass(data));
@@ -36,7 +36,7 @@ function EvaluationSelection() {
     }, []);
 
     function selectEvaluation(id) {
-        const requestURL = `https://localhost:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
+        const requestURL = `https://139.99.155.172:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
         // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())

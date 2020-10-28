@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) {
     * @api: GET /framework?framework_id={id}
     * @description API for returning all information of a framework included sections and questions.
     *              If excutes successfully, returns single framework with sections and questions
-    * @example https://localhost:3001/framework?framework_id=1
+    * @example https://139.99.155.172:3001/framework?framework_id=1
     * @param {number} req.query.framework_id - framework_id
     */
     if (req.query.framework_id != null) {
@@ -72,7 +72,7 @@ router.get('/', function (req, res, next) {
     /**
     * @api: GET /framework?question_id={id}
     * @description API for returning the ratings associated with a single question
-    * @example https://localhost:3001/framework?question_id=1
+    * @example https://139.99.155.172:3001/framework?question_id=1
     * @param {number} req.query.question_id - question_id
     */
     else if (req.query.question_id != null) {
@@ -114,7 +114,7 @@ router.get('/', function (req, res, next) {
     /**
      * @api: GET /framework
      * @description API for returning a list of all frameworks
-     * @example https://localhost:3001/framework
+     * @example https://139.99.155.172:3001/framework
      */
     else {
         const sql = "SELECT * FROM framework";
@@ -134,7 +134,7 @@ router.get('/', function (req, res, next) {
 /**
  * @api: GET /framework/new?author_name={author_name}
  * @description API for creating a new report, returning a new framework with default framework title
- * @example https://localhost:3001/framework/new?author_name=Tony 
+ * @example https://139.99.155.172:3001/framework/new?author_name=Tony 
  * @param {number} req.query.author_name - author_name
  */
 router.get('/new', function (req, res, next) {
@@ -161,7 +161,7 @@ router.get('/new', function (req, res, next) {
 /**
  * @api: GET /framework/section/new?framework_id={fid}
  * @description API for creating a new blank section for a framework, returning a new section with default values
- * @example https://localhost:3001/framework/section/new?framework_id=1 
+ * @example https://139.99.155.172:3001/framework/section/new?framework_id=1 
  * @param {number} req.query.framework_id - framework_id
  */
 router.get('/section/new', function (req, res, next) {
@@ -192,7 +192,7 @@ router.get('/section/new', function (req, res, next) {
 /**
  * @api: GET /framework/section/question/new?section_id={sid}
  * @description API for creating a new blank question for a section, returning a new question with default details
- * @example https://localhost:3001/framework/section/question/new?section_id=1
+ * @example https://139.99.155.172:3001/framework/section/question/new?section_id=1
  * @param {number} req.query.section_id - section_id
  */
 router.get('/section/question/new', function (req, res, next) {
@@ -248,7 +248,7 @@ router.post('/section/update', function (req, res, next) {
  * @api: GET /framework/section/delete?section_id={sid}
  * @description API for deleting a section from a framework
                 NOTE: all questions inside the section as well as section will be deleted
- * @example https://localhost:3001/framework/section/delete?section_id=1
+ * @example https://139.99.155.172:3001/framework/section/delete?section_id=1
  * @param {number} req.query.section_id - section_id
  */
 // Delete the section of the framework
@@ -309,7 +309,7 @@ router.post('/update', function (req, res, next) {
  * @description API for version control function.
                 Creates a new framework and copied all data from the previous framework.
                 Returns single framework with sections and questions
- * @example https://localhost:3001/framework/version?framework_id=1
+ * @example https://139.99.155.172:3001/framework/version?framework_id=1
  * @param {number} req.query.framework_id - framework_id
  */
 router.get('/version', function (req, res, next) {
@@ -425,7 +425,7 @@ router.post('/section/question/update', function (req, res, next) {
 /**
  * @api: GET /framework/section/question/delete?question_id={qid}
  * @description API for deleting a question from a section
- * @example https://localhost:3001//framework/section/question/delete?question_id=1
+ * @example https://139.99.155.172:3001//framework/section/question/delete?question_id=1
  * @param {number} req.query.question_id - question_id
  */
 router.get('/section/question/delete', function (req, res, next) {
