@@ -285,6 +285,7 @@ describe("GET /evaluation?evaluation_id={eid}", () => {
     test("question_id should be unique", done => {
 
         let evaluation_id = 1;
+        
         const sql = "SELECT * "
         + "FROM (evaluation LEFT JOIN framework_section ON evaluation.framework_id = framework_section.framework_id) " 
         + "LEFT JOIN framework_section_question ON framework_section.section_id = framework_section_question.section_id "
@@ -309,4 +310,30 @@ describe("GET /evaluation?evaluation_id={eid}", () => {
             done();
         });
     });
+});
+
+/**
+ * @testedapi POST /finalised/update
+ * @description 1 test case in total
+ */
+describe("/finalised/update", () => {
+
+    let evaluation_id = 1;
+    let evaluation_finalised = 1;
+   
+    const input = "UPDATE evaluation "
+    + "SET evaluation_finalised = " + evaluation_finalised
+    + " WHERE evaluation_id = " + evaluation_id
+    + " AND evaluation_finalised = 0";
+        
+    const inputCheck = "SELECT * FROM evaluation WHERE evaluation_id = " + evaluation_id ;
+    
+    test("Should store the new finalised status", done => {
+        sqlAdapter.sqlCall(input, function(inputRes) {
+            sqlAdapter.sqlCall(inputCheck, function(checkRes) {
+                expect(checkRes[0].evaluation_finalised).toEqual(1);
+                done();
+            });
+        });
+    })
 });
