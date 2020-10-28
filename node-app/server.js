@@ -8,6 +8,8 @@
 // Import the required modules
 var express = require('express');
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var https = require('https');
 var frameworkRouter = require('./routes/framework');
 var evaluationRouter = require('./routes/evaluation');
 var reportRouter = require('./routes/report');
@@ -48,14 +50,22 @@ app.use('/user', userRouter);
  * @description Set the port listened
  */ 
 var port = normalizePort(process.env.PORT || '3001');
-app.set('port', port);
+// app.set('port', port);
 
 /**
  * @description Listen on a defined port
  */ 
-app.listen(port, function () {
+// app.listen(port, function () {
+//     console.log('Listening on ' + port);
+// });
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+}, app)
+.listen(port, function () {
     console.log('Listening on ' + port);
-});
+})
+
 /**
  * Normalize a port into a number, string, or false.
  * Taken from express-generator boilerplate
