@@ -8,7 +8,7 @@ import {FrameworkInfoData} from "../Utils/DataClass";
 function FrameworkSelection() {
     const SEARCH_PROPERTY = "title";
     const SORTBY_PROPERTY = "creationTime";
-    const [frameworks, setFrameworks] = useState([]);
+    const [frameworks, setFrameworks] = useState(null);
     const history = useHistory();
     const {user, role} = history.location.state;
 
