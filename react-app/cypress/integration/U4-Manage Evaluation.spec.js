@@ -1,12 +1,21 @@
 /// <reference types="Cypress" />
 import {INPUT_BUTTON, NEW_EVALUATION_NAME, BACK_BUTTON, TICK_BUTTON, editTitle, back, searchTitle, NEW_FRAMEWORK_NAME} from "../support/constants";
 
-describe("U3 Use Evaluation Framework", ()=>{
+describe("U4 Manage Evaluation", ()=>{
 
     beforeEach(function() {
         cy.home();
         // go to evaluation page
         cy.contains("Evaluations").click();
+    });
+
+    it("3.3 Create new evaluation", ()=> {
+        // go to framework selection page
+        cy.contains('button','New Evaluation').click();
+        // select a framework
+        cy.contains('Active').first().click();
+        // we are now in the evaluation page
+        editTitle(NEW_EVALUATION_NAME);
     });
 
     it("3.1-3.2 rate question", ()=> {
@@ -21,15 +30,6 @@ describe("U3 Use Evaluation Framework", ()=>{
         cy.get(".TextArea "+INPUT_BUTTON).click();
         cy.get("textarea").type("{selectall}comment editable");
         cy.get(TICK_BUTTON).click();
-    });
-
-    it("3.3 Create new evaluation", ()=> {
-        // go to framework selection page
-        cy.contains('button','New Evaluation').click();
-        // select a framework
-        cy.contains('Active').first().click();
-        // we are now in the evaluation page
-        editTitle(NEW_EVALUATION_NAME);
     });
 
     it("3.4 Add summary", ()=>{
@@ -74,7 +74,7 @@ describe("U3 Use Evaluation Framework", ()=>{
         // go back to evaluation page
         back();
         // check if evaluation is completed
-        cy.contains('.InfoCard', 'Short Evaluation').contains('Completed');
+        cy.get('.InfoCard').find('Short Evaluation').contains('Completed');
     });
 
     it("3.6 preivew framework", ()=>{

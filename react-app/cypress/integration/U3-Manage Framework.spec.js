@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
-import {INPUT_BUTTON, searchTitleAndGo, NEW_FRAMEWORK_NAME, TICK_BUTTON, editTitle, back} from "../support/constants";
+import {INPUT_BUTTON, SWITCH_BUTTON, NEW_FRAMEWORK_NAME, TICK_BUTTON, editTitle, back} from "../support/constants";
 
 // assumes already logged in as Senior consultant
-describe("U2 Manage Evaluation Framework", function () {
+describe("U3 Manage Framework", function () {
 
     beforeEach(function() {
         // visit page
@@ -60,7 +60,7 @@ describe("U2 Manage Evaluation Framework", function () {
         // go to a framework
         cy.contains('Active').first().click()
         // toggle button
-        cy.get('.ant-switch').click();
+        cy.get(SWITCH_BUTTON).click();
     });
 
     // assumes new framework has been created and finalized
@@ -68,7 +68,7 @@ describe("U2 Manage Evaluation Framework", function () {
         // go to a framework
         cy.contains('.InfoCard',NEW_FRAMEWORK_NAME).contains('Inactive').first().click()
         // toggle button
-        cy.get('.ant-switch').click();
+        cy.get(SWITCH_BUTTON).click();
     });
 
     // assumes a framework is finalized

@@ -167,7 +167,7 @@ function ReportOverview ({history}){
                         <BigButton
                             onClick={()=> post_finailized_request(post_finailized_url)}
                         >
-                            Finalize
+                            Finalise
                         </BigButton>
                         :
                         (<span>
