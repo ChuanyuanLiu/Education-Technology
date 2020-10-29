@@ -30,6 +30,7 @@ Cypress.Commands.add('SeniorConsultantLogin', (overrides = {}) => {
     cy.request(options);
   });
 
+// Go to home page
 Cypress.Commands.add('home', (overrides = {}) => {
     cy.visit(Cypress.env('WEB_ADDRESS'));
 });

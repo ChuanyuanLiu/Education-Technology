@@ -140,7 +140,7 @@ function ReportOverview ({history}){
                 </div>
             </NavBar>
             {!has_permission &&                         
-                    <Reminder is_hidden={true}>
+                    <Reminder is_hidden={false}>
                         <span>
                             You don't have permission for creating report. Please contact Adminstrator to gain the authority.
                         </span>
@@ -167,7 +167,7 @@ function ReportOverview ({history}){
                         <BigButton
                             onClick={()=> post_finailized_request(post_finailized_url)}
                         >
-                            Finalize
+                            Finalise
                         </BigButton>
                         :
                         (<span>

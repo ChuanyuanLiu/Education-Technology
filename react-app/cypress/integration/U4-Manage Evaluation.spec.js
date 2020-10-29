@@ -1,15 +1,29 @@
 /// <reference types="Cypress" />
-import {INPUT_BUTTON, NEW_EVALUATION_NAME, BACK_BUTTON, TICK_BUTTON, editTitle, back, searchTitle, NEW_FRAMEWORK_NAME} from "../support/constants";
+import {INPUT_BUTTON, NEW_EVALUATION_NAME, BACK_BUTTON, sortCardList, TICK_BUTTON, editTitle, back, searchTitle, NEW_FRAMEWORK_NAME} from "../support/constants";
 
-describe("U3 Use Evaluation Framework", ()=>{
+describe("U4 Manage Evaluation", ()=>{
 
     beforeEach(function() {
         cy.home();
         // go to evaluation page
         cy.contains("Evaluations").click();
+        cy.wait(1000);
     });
 
-    it("3.1-3.2 rate question", ()=> {
+    it("4.2 create new evaluation", ()=> {
+        // go to framework selection page
+        cy.contains('button','New Evaluation').click();
+        // select a framework
+        cy.contains('Active').first().click();
+        // we are now in the evaluation page
+        editTitle(NEW_EVALUATION_NAME);
+    });
+
+    it("4.1 search evaluation", ()=>{
+        searchTitle(NEW_EVALUATION_NAME).click();
+    })
+
+    it("4.3.1 rate question", ()=> {
         // go to incompleted question
         cy.contains("Not Completed").first().click();
         // go to a question
@@ -23,16 +37,7 @@ describe("U3 Use Evaluation Framework", ()=>{
         cy.get(TICK_BUTTON).click();
     });
 
-    it("3.3 Create new evaluation", ()=> {
-        // go to framework selection page
-        cy.contains('button','New Evaluation').click();
-        // select a framework
-        cy.contains('Active').first().click();
-        // we are now in the evaluation page
-        editTitle(NEW_EVALUATION_NAME);
-    });
-
-    it("3.4 Add summary", ()=>{
+    it("4.3.2 add summary", ()=>{
         // got to incomplet evaluation
         cy.contains('Not Completed').first().click();
         // fill Summary
@@ -42,15 +47,15 @@ describe("U3 Use Evaluation Framework", ()=>{
     });
 
     // assumes we have new framework completed
-    it("3.5 Complete all questions", ()=>{
+    it("4.5 complete all questions", ()=>{
         // create a new evaluation using the small framework so we can fill it fast
         cy.contains('button', 'New Evaluation').click();
         searchTitle(NEW_FRAMEWORK_NAME).click();
-        editTitle("Short Evaluation");
+        editTitle(NEW_EVALUATION_NAME);
         // // go back
         back();
         // find an evaluation
-        searchTitle('Short Evaluation').as('evaluation').click();
+        searchTitle(NEW_EVALUATION_NAME).as('evaluation').click();
         // go to a question
         cy.get(".sub_header").as('section').click();
         cy.contains("Question").as('question').click();
@@ -74,20 +79,13 @@ describe("U3 Use Evaluation Framework", ()=>{
         // go back to evaluation page
         back();
         // check if evaluation is completed
-        cy.contains('.InfoCard', 'Short Evaluation').contains('Completed');
-    });
-
-    it("3.6 preivew framework", ()=>{
-        // go to framework
-        back();
-        cy.contains("Frameworks").click();
-        // check out the first 
-        cy.get(".InfoCard").first();
+        sortCardList();
+        cy.contains('.InfoCard',NEW_EVALUATION_NAME).contains('Completed');
     });
 
     // Assumes an evaluation was completed
-    it("3.8 finalize evaluation", ()=>{
-        cy.contains(/^Completed/).click();
+    it("4.6 finalize evaluation", ()=>{
+        searchTitle(NEW_EVALUATION_NAME).click();
         cy.contains('button', 'Finalise').click();
     });
 })

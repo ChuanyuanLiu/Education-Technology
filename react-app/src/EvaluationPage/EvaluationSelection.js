@@ -30,6 +30,7 @@ function EvaluationSelection() {
         fetch("http://localhost:3001/report/new")
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 setEvaluationList(convertToDataClass(data));
             })
             .catch(console.error);
@@ -37,7 +38,6 @@ function EvaluationSelection() {
 
     function selectEvaluation(id) {
         const requestURL = `http://localhost:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
-        // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())
             .then(({report_id}) =>

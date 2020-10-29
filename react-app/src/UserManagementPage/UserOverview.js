@@ -252,7 +252,7 @@ function UserOverview({history}) {
                 }
 
                 {userRole.name === "Educational Leader" &&
-                    <div className='section_header'>Permissions</div>
+                    <div className='section_header'>Able to create report</div>
                 }
                 {userRole.name === "Educational Leader" &&
                     <StatusSwitch

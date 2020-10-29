@@ -229,7 +229,7 @@ function FrameworkOverview({history}) {
             <div className='content scrollable'>
                 {isAdmin?
                    (finalised ? (
-                        <Reminder is_hidden={!ediable}>
+                        <Reminder is_hidden={ediable}>
                             <span>
                                 This framework cannot be edited as it has been
                                 finalised, click "Save as New" to generate a new
@@ -238,7 +238,7 @@ function FrameworkOverview({history}) {
                         </Reminder>
                     ) : null)
                     :                  
-                    <Reminder is_hidden={!isAdmin}>
+                    <Reminder is_hidden={isAdmin}>
                         <span>
                             You only have read permission to framework
                         </span>

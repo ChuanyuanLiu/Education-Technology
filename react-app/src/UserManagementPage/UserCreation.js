@@ -85,7 +85,7 @@ function UserCreation({history}) {
             .then((response) => response.json())
             .then((data) => {
                 setRoleList(data);
-                setUserRole(getRole(data, "Consultant"));
+                setUserRole(getRole(data, "Educational Leader"));
             })
             .catch(console.error);
         return () => {isInit = true};
@@ -153,12 +153,12 @@ function UserCreation({history}) {
                 <div className='section_header'>Role</div>
                 <Form.Item>
                     <Select
-                        defaultValue={"Consultant"}
+                        defaultValue="Educational Leader"
                         style={{width: "100%"}}
                         onSelect={updateRole}
                     >
-                        <Option value="Consultant">Consultant</Option>
                         <Option value="Educational Leader">Educational Leader</Option>
+                        <Option value="Consultant">Consultant</Option>
                     </Select>
                 </Form.Item>
 
