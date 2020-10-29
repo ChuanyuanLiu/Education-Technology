@@ -525,7 +525,9 @@ function Question(props) {
                 {props.question.question_title}
             </span>
             &nbsp;&nbsp;
-            <DeleteOutlined onClick={()=> props.deleteQuestion(props.question.question_id)} />
+            {props.published? null : 
+                <DeleteOutlined onClick={()=> props.deleteQuestion(props.question.question_id)}/>}
+            
         </div>
     );
 }
