@@ -21,7 +21,7 @@ function FrameworkQuestionPage({history}) {
     const [questionData, setQuestion] = useState(null);
     // GET
     useEffect(() => {
-        fetch(`https://139.99.155.172:3001/framework?question_id=${question_id}`)
+        fetch(`http://139.99.155.172:3001/framework?question_id=${question_id}`)
             .then((data) => data.json())
             .then((data) => {setQuestion(data); console.log("Get request")})
             .catch(console.error);
@@ -42,7 +42,7 @@ function FrameworkQuestionPage({history}) {
             }
             i += 1;
         }
-        const url = `https://139.99.155.172:3001/framework/section/question/rate/update?question_id=${question_id}`;
+        const url = `http://139.99.155.172:3001/framework/section/question/rate/update?question_id=${question_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(new_rating),
@@ -55,7 +55,7 @@ function FrameworkQuestionPage({history}) {
     };
 
     const post_title = (question_id) => (text) => {
-        const url = `https://139.99.155.172:3001/framework/section/question/update?question_id=${question_id}`;
+        const url = `http://139.99.155.172:3001/framework/section/question/update?question_id=${question_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({"question_title": text}),

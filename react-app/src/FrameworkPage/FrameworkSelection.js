@@ -17,7 +17,7 @@ function FrameworkSelection() {
     };
 
     useEffect(() => {
-        fetch("https://139.99.155.172:3001/framework")
+        fetch("http://139.99.155.172:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 let frameworks = [];
@@ -31,7 +31,7 @@ function FrameworkSelection() {
     }, []);
 
     const createNewEvaluation = (id) => {
-        const requestURL = `https://139.99.155.172:3001/evaluation/new?framework_id=${id}&author_name=${user}`;
+        const requestURL = `http://139.99.155.172:3001/evaluation/new?framework_id=${id}&author_name=${user}`;
         // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())

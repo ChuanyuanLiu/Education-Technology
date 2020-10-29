@@ -31,7 +31,7 @@ function EvaluationPage() {
 
     // initalize data
     useEffect(() => {
-        fetch("https://139.99.155.172:3001/evaluation")
+        fetch("http://139.99.155.172:3001/evaluation")
             .then((response) => response.json())
             .then((data) => {
                 setEvaluationList(convertToDataClass(data));

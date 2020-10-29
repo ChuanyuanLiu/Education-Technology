@@ -7,7 +7,7 @@ import {PlusOutlined, CloseOutlined} from "@ant-design/icons";
 function ReportPublishPage({history}){
     const {report_id, title} = history.location.state
     const [mailList, setMailList] = useState([])
-    const post_send_email_url = "https://139.99.155.172:3001/report/sendemail?"
+    const post_send_email_url = "http://139.99.155.172:3001/report/sendemail?"
     //Regex to match email address
     const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 

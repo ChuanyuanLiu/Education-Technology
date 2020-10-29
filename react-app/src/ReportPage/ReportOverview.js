@@ -19,14 +19,14 @@ function ReportOverview ({history}){
     const { error: metadataError, metadata, loading: metadataLoading } = useMetadata();
     const { error, roles, loading: rolesLoading} = useRole();
 
-    const post_title_url = `https://139.99.155.172:3001/report/update/title?report_id=${report_id}`
-    const post_summary_url = `https://139.99.155.172:3001/report/update/recommendation?report_id=${report_id}`
-    const post_finailized_url = `https://139.99.155.172:3001/report/finalise?report_id=${report_id}`
-    const download_url = `https://139.99.155.172:3001/report/download?report_id=${report_id}`
+    const post_title_url = `http://139.99.155.172:3001/report/update/title?report_id=${report_id}`
+    const post_summary_url = `http://139.99.155.172:3001/report/update/recommendation?report_id=${report_id}`
+    const post_finailized_url = `http://139.99.155.172:3001/report/finalise?report_id=${report_id}`
+    const download_url = `http://139.99.155.172:3001/report/download?report_id=${report_id}`
     useEffect(() => 
         {
             let isCancelled = false;
-            fetch(`https://139.99.155.172:3001/report?report_id=${report_id}`)
+            fetch(`http://139.99.155.172:3001/report?report_id=${report_id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     if(!isCancelled){
