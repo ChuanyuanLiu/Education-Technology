@@ -1,5 +1,5 @@
 /// <reference types="Cypress" />
-import {INPUT_BUTTON, NEW_EVALUATION_NAME, BACK_BUTTON, TICK_BUTTON, editTitle, back, searchTitle, NEW_FRAMEWORK_NAME} from "../support/constants";
+import {INPUT_BUTTON, NEW_EVALUATION_NAME, BACK_BUTTON, sortCardList, TICK_BUTTON, editTitle, back, searchTitle, NEW_FRAMEWORK_NAME} from "../support/constants";
 
 describe("U4 Manage Evaluation", ()=>{
 
@@ -46,11 +46,11 @@ describe("U4 Manage Evaluation", ()=>{
         // create a new evaluation using the small framework so we can fill it fast
         cy.contains('button', 'New Evaluation').click();
         searchTitle(NEW_FRAMEWORK_NAME).click();
-        editTitle("Short Evaluation");
+        editTitle(NEW_EVALUATION_NAME);
         // // go back
         back();
         // find an evaluation
-        searchTitle('Short Evaluation').as('evaluation').click();
+        searchTitle(NEW_EVALUATION_NAME).as('evaluation').click();
         // go to a question
         cy.get(".sub_header").as('section').click();
         cy.contains("Question").as('question').click();
@@ -74,7 +74,8 @@ describe("U4 Manage Evaluation", ()=>{
         // go back to evaluation page
         back();
         // check if evaluation is completed
-        cy.get('.InfoCard').find('Short Evaluation').contains('Completed');
+        sortCardList();
+        cy.contains('.InfoCard',NEW_EVALUATION_NAME).contains('Completed');
     });
 
     it("3.6 preivew framework", ()=>{
@@ -87,7 +88,7 @@ describe("U4 Manage Evaluation", ()=>{
 
     // Assumes an evaluation was completed
     it("3.8 finalize evaluation", ()=>{
-        cy.contains(/^Completed/).click();
+        searchTitle(NEW_EVALUATION_NAME).click();
         cy.contains('button', 'Finalise').click();
     });
 })
