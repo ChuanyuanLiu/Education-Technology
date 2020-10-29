@@ -11,15 +11,20 @@ describe("U3 Manage Framework", function () {
         cy.contains("Frameworks").click();
     });
 
-    it("2.1 Create new framework", function () {
+    it("3.2 Create new framework", function () {
         // create a new framework
         cy.contains('button', 'New Framework').click();
         // edit question title
         editTitle(NEW_FRAMEWORK_NAME);
     });
 
+    it("3.1 Search framework ", function() {
+        searchTitle(NEW_FRAMEWORK_NAME).click();
+    })
+
+
     // assumes that NEW_FRAMEWORK_NAME was created and editable
-    it("2.2 Add questions and sections", () => {
+    it("3.3 Add questions and sections", () => {
         searchTitle(NEW_FRAMEWORK_NAME).click()
         // add a section and edit it
         cy.contains("Add Section").click();
@@ -48,7 +53,7 @@ describe("U3 Manage Framework", function () {
     })
 
     // assumes new framework has been created 
-    it("2.3.1 mark a framework as finalized", ()=>{
+    it("3.5 mark a framework as finalized", ()=>{
         // go to a framework
         searchTitle(NEW_FRAMEWORK_NAME).click()
         // click finalize
@@ -56,7 +61,7 @@ describe("U3 Manage Framework", function () {
     });
 
     // assumes a framework is inactive
-    it("2.3.2 mark a framework as inactive and active", ()=>{
+    it("3.4 mark a framework as inactive and active", ()=>{
         // go to a framework
         searchTitle(NEW_FRAMEWORK_NAME).click()
         // toggle button
@@ -66,7 +71,7 @@ describe("U3 Manage Framework", function () {
     });
 
     // assumes a framework is finalized
-    it("2.4 create a copy of a finalized framework", ()=>{
+    it("3.6 create a copy of a finalized framework", ()=>{
         // go to a framework
         cy.contains('Active').first().click()
         // click finalize

@@ -7,9 +7,10 @@ describe("U4 Manage Evaluation", ()=>{
         cy.home();
         // go to evaluation page
         cy.contains("Evaluations").click();
+        cy.wait(1000);
     });
 
-    it("3.3 Create new evaluation", ()=> {
+    it("4.2 create new evaluation", ()=> {
         // go to framework selection page
         cy.contains('button','New Evaluation').click();
         // select a framework
@@ -18,7 +19,11 @@ describe("U4 Manage Evaluation", ()=>{
         editTitle(NEW_EVALUATION_NAME);
     });
 
-    it("3.1-3.2 rate question", ()=> {
+    it("4.1 search evaluation", ()=>{
+        searchTitle(NEW_EVALUATION_NAME).click();
+    })
+
+    it("4.3.1 rate question", ()=> {
         // go to incompleted question
         cy.contains("Not Completed").first().click();
         // go to a question
@@ -32,7 +37,7 @@ describe("U4 Manage Evaluation", ()=>{
         cy.get(TICK_BUTTON).click();
     });
 
-    it("3.4 Add summary", ()=>{
+    it("4.3.2 add summary", ()=>{
         // got to incomplet evaluation
         cy.contains('Not Completed').first().click();
         // fill Summary
@@ -42,7 +47,7 @@ describe("U4 Manage Evaluation", ()=>{
     });
 
     // assumes we have new framework completed
-    it("3.5 Complete all questions", ()=>{
+    it("4.5 complete all questions", ()=>{
         // create a new evaluation using the small framework so we can fill it fast
         cy.contains('button', 'New Evaluation').click();
         searchTitle(NEW_FRAMEWORK_NAME).click();
@@ -78,16 +83,8 @@ describe("U4 Manage Evaluation", ()=>{
         cy.contains('.InfoCard',NEW_EVALUATION_NAME).contains('Completed');
     });
 
-    it("3.6 preivew framework", ()=>{
-        // go to framework
-        back();
-        cy.contains("Frameworks").click();
-        // check out the first 
-        cy.get(".InfoCard").first();
-    });
-
     // Assumes an evaluation was completed
-    it("3.8 finalize evaluation", ()=>{
+    it("4.6 finalize evaluation", ()=>{
         searchTitle(NEW_EVALUATION_NAME).click();
         cy.contains('button', 'Finalise').click();
     });
