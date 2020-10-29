@@ -274,7 +274,10 @@ router.post('/update/title', function (req, res, next) {
     let id = req.query.evaluation_id;
     let title = req.body.evaluation_title;
     let summary = req.body.evaluation_summary;
-
+    title = title.replace(/'/g, "\\'");
+    title = title.replace(/"/g, "\\\"");
+    summary = summary.replace(/'/g, "\\'");
+    summary = summary.replace(/"/g, "\\\"");
     const sql = "UPDATE evaluation "
         + "SET evaluation_title = '" + title
         + "', evaluation_summary = '" + summary
@@ -307,6 +310,8 @@ router.post('/update/response', function (req, res, next) {
         var response_comment = req.body.response_comment;
         var evaluation_id = req.query.evaluation_id;
         var question_id = req.query.question_id;
+        response_comment = response_comment.replace(/'/g, "\\'");
+        response_comment = response_comment.replace(/"/g, "\\\"");
         const sql = "INSERT INTO evaluation_response (question_id, rate_chosen, response_comment, evaluation_id) "
             + "VALUES(" + question_id + "," + rate_chosen + ",\"" + response_comment + "\"," + evaluation_id + ") "
             + "ON DUPLICATE KEY UPDATE rate_chosen = " + rate_chosen + ", response_comment = \"" + response_comment + "\";";
