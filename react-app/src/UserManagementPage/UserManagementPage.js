@@ -39,7 +39,7 @@ function UserManagementPage() {
     }
 
     useEffect(() => {
-        fetch("http://139.99.155.172:3001/user")
+        fetch("https://139.99.155.172:3001/user")
             .then((response) => response.json())
             .then((data) => {
                 setUserList(convertToDataClass(data));

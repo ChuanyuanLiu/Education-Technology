@@ -53,7 +53,7 @@ describe("AC 2.2.9", () => {
 
         await waitForDomChange(()=> expect(fetch).toHaveBeenCalledTimes(1));
 
-        expect(fetch.mock.calls[0][0]).toBe(`http://139.99.155.172:3001/framework?question_id=${QUESTION_ID}`);
+        expect(fetch.mock.calls[0][0]).toBe(`https://139.99.155.172:3001/framework?question_id=${QUESTION_ID}`);
     });
 
     test("5 text areas", async () => {
@@ -96,7 +96,7 @@ describe("AC 2.2.9", () => {
         fireEvent.click(button);
         // Check if the correct body of the post message has been send
         expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_data));
-        expect(fetch.mock.calls[0][0]).toBe(`http://139.99.155.172:3001/framework/section/question/rate/update?question_id=${QUESTION_ID}`)
+        expect(fetch.mock.calls[0][0]).toBe(`https://139.99.155.172:3001/framework/section/question/rate/update?question_id=${QUESTION_ID}`)
         // Only called once
         expect(fetch.mock.calls.length).toBe(1);
     })
@@ -119,7 +119,7 @@ describe("AC 2.2.9", () => {
         fireEvent.click(button);
         // Check if the correct body of the post message has been send
         expect(fetch.mock.calls[0][1].body).toBe(JSON.stringify(post_question_title_data));
-        expect(fetch.mock.calls[0][0]).toBe(`http://139.99.155.172:3001/framework/section/question/update?question_id=${QUESTION_ID}`)
+        expect(fetch.mock.calls[0][0]).toBe(`https://139.99.155.172:3001/framework/section/question/update?question_id=${QUESTION_ID}`)
         // Only called once
         expect(fetch.mock.calls.length).toBe(1);
     })

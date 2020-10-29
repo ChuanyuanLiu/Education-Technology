@@ -26,7 +26,7 @@ function FrameworkPage() {
 
     useEffect(() => {
         let isCancelled = false
-        fetch("http://139.99.155.172:3001/framework")
+        fetch("https://139.99.155.172:3001/framework")
             .then((response) => response.json())
             .then((data) => {
                 if(!isCancelled){
@@ -52,7 +52,7 @@ function FrameworkPage() {
     };
 
     const createNew = () => {
-        fetch(`http://139.99.155.172:3001/framework/new?author_name=${user.name}`)
+        fetch(`https://139.99.155.172:3001/framework/new?author_name=${user.name}`)
             .then((response) => response.json())
             .then((data) => {
                 goToFrameworkOverview(data.framework_id);
