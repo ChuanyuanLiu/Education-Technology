@@ -483,7 +483,7 @@ router.get('/sendemail', function (req, res, next) {
 * @param {any} res - ResBody
 * @param {any} next - ResQuery
 * @param {number} req.query.report_id - report_id
-* @param {string} req.query.emailaddress - emailaddress
+* @param {string} req.body.report_title - report_title
 */
 router.post('/update/title', function (req, res, next) {
 
