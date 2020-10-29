@@ -154,7 +154,7 @@ function EvaluationOverviewPage({history}) {
                 />
             </NavBar>
             {hasEditAuthority? null : 
-                    <Reminder is_hidden={true}>
+                    <Reminder is_hidden={false}>
                         <span>
                             This page is read-only since you aren't the author of the evaluation
                         </span>

@@ -140,7 +140,7 @@ function ReportOverview ({history}){
                 </div>
             </NavBar>
             {!has_permission &&                         
-                    <Reminder is_hidden={true}>
+                    <Reminder is_hidden={false}>
                         <span>
                             You don't have permission for creating report. Please contact Adminstrator to gain the authority.
                         </span>
