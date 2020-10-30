@@ -81,6 +81,9 @@ function EvaluationOverviewPage({history}) {
         };
         fetch(url, param)
             .then(data=>console.log(data))
+            .then(setEvaluation(prevEval=>{
+                return {...prevEval, evaluation_title: title, evaluation_summary: summary}
+            }))
             .catch((error) => console.log(error));
     };
     const post_title_request = (url, summary) => (text) => {
@@ -154,7 +157,7 @@ function EvaluationOverviewPage({history}) {
                 />
             </NavBar>
             {hasEditAuthority? null : 
-                    <Reminder is_hidden={false}>
+                    <Reminder is_hidden={true}>
                         <span>
                             This page is read-only since you aren't the author of the evaluation
                         </span>
@@ -189,12 +192,19 @@ function EvaluationOverviewPage({history}) {
                     <BigButton
                         onClick={()=> post_finalized_request(finalize_url)}
                     >
-                        Finalise
+                        Finalize
                     </BigButton>
                     :
                     null
                 }
                 <span> </span>
+                <BigButton
+                    onClick={() => {
+                        history.goBack();
+                    }}
+                >
+                    Back
+                </BigButton>
             </div>
         </div>
     );
@@ -261,8 +271,9 @@ function Section({evaluation_id, section_title, section_index,
                 </div>
                 {`Section ${section_index + 1} ${section_title}`}
                 <span className="right">
+                    {section_completed? <CheckOutlined></CheckOutlined>: null}
+
                     {section_completed? "Completed" : null}
-                    {section_completed? <CheckOutlined/>: null}
                 </span>
             </div>
             <ul>
@@ -305,11 +316,12 @@ function Question({
         });
     }
     return (
-        <li onClick={handleClick} className='question clickable'>
+        <li onClick={handleClick} className='clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
             <span className="right">
+                    {question_completed? <CheckOutlined></CheckOutlined>: null}
+
                     {question_completed? "Completed" : null}
-                    {question_completed? <CheckOutlined/>: null}
             </span>
         </li>
     );
