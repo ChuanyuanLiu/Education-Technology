@@ -12,6 +12,7 @@ import {
     CheckOutlined,
     CloseOutlined,
     PlusOutlined,
+    DeleteOutlined
 } from "@ant-design/icons";
 /*
 (Route from FrameworkPage)
@@ -50,8 +51,6 @@ function FrameworkOverview({history}) {
         }
         setExpandedSections(history.location.state.session);
     }
-
-
     //Add section to framework, called from SectionList
     const addSection = () => {
         const url = `http://localhost:3001/framework/section/new?framework_id=${framework_id}`;
@@ -87,6 +86,42 @@ function FrameworkOverview({history}) {
             .catch(console.err);
     };
 
+    const deleteSection = (section_id) => {
+        const url = `http://localhost:3001/framework/section/delete?section_id=${section_id}`
+        fetch(url)
+            .then((response) => response.text())
+            .then((data) => {
+                setSections((prevState) => {
+                    return prevState.filter(section => {
+                        return section.section_id !== section_id
+                    })}
+                );
+            })
+        .catch(console.err);
+    }
+    const deleteQuestion = (section_id) => (question_id) => {
+        const url = `http://localhost:3001/framework/section/question/delete?question_id=${question_id}`
+        fetch(url)
+            .then((response) => response.text())
+            .then(() => {
+                setSections((prevState) => {
+                    return prevState.map(section => {
+                       if(section.section_id === section_id){
+                           let temp = [...section.questions]
+                            return {
+                                section_id: section.section_id,
+                                section_title: section.section_title,
+                                questions: temp.filter(question => {
+                                    return question.question_id !== question_id
+                                }),
+                            };
+                       }
+                       return section
+                    })}
+                );
+            })
+        .catch(console.err);
+    }
     const setActive = () => {
         const url = `http://localhost:3001/framework/activestatus/update?framework_id=${framework_data.framework_id}`;
         const newActiveStatus = {
@@ -253,6 +288,8 @@ function FrameworkOverview({history}) {
                 <SectionList
                     addSection={addSection}
                     addQuestion={addQuestion}
+                    deleteSection={deleteSection}
+                    deleteQuestion={deleteQuestion}
                     sections={sections}
                     published={!ediable}
                     registerExpand={saveExpand}
@@ -289,6 +326,8 @@ function SectionList(props) {
                         registerExpand={props.registerExpand}
                         registerUnexpand={props.registerUnexpand}
                         expandedSections={props.expandedSections}
+                        deleteSection={props.deleteSection}
+                        deleteQuestion={props.deleteQuestion}
                         key={i}
                     />
                 ))}
@@ -298,7 +337,7 @@ function SectionList(props) {
                     className='editable_section clickable new_section'
                     onClick={props.addSection}
                 >
-                    Add Section
+                    Add Section&nbsp;
                     <PlusOutlined
                         onClick={props.handleClick}
                         className='right_button add_button'
@@ -413,7 +452,12 @@ function EditableSection(props) {
                             />
                         </span>
                     ) : (
-                        <EditOutlined onClick={toggleSave} />
+                        <span>
+                            <EditOutlined onClick={toggleSave} />
+                            &nbsp;&nbsp;&nbsp;
+                            <DeleteOutlined onClick={()=> props.deleteSection(props.section.section_id)} />
+                        </span>
+
                     )}
                 </div>
                 {/* right button to fold the section */}
@@ -437,6 +481,7 @@ function EditableSection(props) {
                                 key={i}
                                 published={props.published}
                                 expandedSections={props.expandedSections}
+                                deleteQuestion={props.deleteQuestion(props.section.section_id)}
                             />
                         ))}
 
@@ -447,7 +492,7 @@ function EditableSection(props) {
                                     props.addQuestion(props.section.section_id)
                                 }
                             >
-                                Add Question
+                                Add Question&nbsp;
                                 <PlusOutlined className='right_button add_button' />
                             </div>
                         )}
@@ -472,10 +517,17 @@ function Question(props) {
         });
     };
     return (
-        <div className='Question clickable' onClick={handleClick}>
-            {props.section_index + 1}.{props.question_index + 1}{" "}
-            {props.question.question_title}
-            <RightOutlined className='right_button' />
+        <div className='Question clickable' >
+            <span onClick={handleClick}>
+                <RightOutlined className='right_button'  />
+                &nbsp;
+                {props.section_index + 1}.{props.question_index + 1}{" "}
+                {props.question.question_title}
+            </span>
+            &nbsp;&nbsp;
+            {props.published? null : 
+                <DeleteOutlined onClick={()=> props.deleteQuestion(props.question.question_id)}/>}
+            
         </div>
     );
 }

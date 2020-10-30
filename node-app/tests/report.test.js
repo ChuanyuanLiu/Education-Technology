@@ -316,4 +316,147 @@ describe("POST /report/update/recommendation?report_id={rid}", () => {
 
 });
 
+/**
+ * @testedapi GET /report/new
+ * @description 7 test cases in total
+ */
+describe("GET /report/new", () => {
+
+    const input = "SELECT e.*, f.framework_title "
+    + "FROM evaluation e, framework f "
+    + "WHERE e.evaluation_finalised = 1 AND e.framework_id = f.framework_id";
+
+    // 1. EC1: Returned data should be a defined object
+    test("Should return a defined object", done => {
+        sqlAdapter.sqlCall(input, function(res) {
+            expect(res).not.toBeUndefined();
+            done();
+        });
+    });
+
+    // 2. EC2: Returned data should be an array
+    test("Should return an array", done => {
+        sqlAdapter.sqlCall(input, function(res) {
+            expect(res).toEqual(
+                expect.arrayContaining([])
+            );
+            done();
+        });
+    });
+
+    // 3. EC3: Returned data should contain all valid fields we need.
+    // Namely 'evaluation_id', 'evaluation_author', 'evaluation_title', 'evaluation_creation_time', 'evaluation_modified_time', 
+    // 'evaluation_summary', 'evaluation_completed', 'framework_id', 'evaluation_finalised', and 'framework_title'
+    test("Returned data should contain all valid fields we need", done => {
+        sqlAdapter.sqlCall(input, function(res) 
+        {
+            expect('evaluation_id' in res[0]).toEqual(true);
+            expect("evaluation_author" in res[0]).toEqual(true);
+            expect("evaluation_title" in res[0]).toEqual(true);
+            expect("evaluation_creation_time" in res[0]).toEqual(true);
+            expect("evaluation_modified_time" in res[0]).toEqual(true);
+            expect("evaluation_summary" in res[0]).toEqual(true);
+            expect("evaluation_completed" in res[0]).toEqual(true);
+            expect("framework_id" in res[0]).toEqual(true);
+            expect("evaluation_finalised" in res[0]).toEqual(true);
+            expect("framework_title" in res[0]).toEqual(true);
+            done();
+        });
+    });
+
+    // 4. EC4: 'evaluation_id' should be integer
+    test("'evaluation_id' should be integer", done => {
+        sqlAdapter.sqlCall(input, function(res) 
+        {
+            expect(!isNaN(Number(res[0].evaluation_id))).toEqual(true);
+            done();
+        });
+    });
+
+    // 5. EC5: 'evaluation_completed' should be 1
+    test("'evaluation_completed' should be  1", done => {
+        sqlAdapter.sqlCall(input, function(res) 
+        {
+            expect(res[0].evaluation_completed).toEqual(1);
+            done();
+        });
+    });
+
+    // 6. EC6: 'framework_id' should be integer
+    test("'framework_id' should be integer", done => {
+        sqlAdapter.sqlCall(input, function(res) 
+        {
+            expect(!isNaN(Number(res[0].framework_id))).toEqual(true);
+            done();
+        });
+    });
+
+    // 7. EC7: 'evaluation_finalised' should be 1
+    test("'evaluation_finalised' should be  1", done => {
+        sqlAdapter.sqlCall(input, function(res) 
+        {
+            expect(res[0].evaluation_finalised).toEqual(1);
+            done();
+        });
+    });
+});
+
+/**
+ * @testedapi GET /report/new?evaluation_id={eid}&author_name={author_name}
+ * @description 6 test cases in total
+ */
+describe("GET /report/new?evaluation_id={eid}&author_name={author_name}", () => {
+
+    let evaluation_id = 1;
+    let author_name = "Toby";
+
+    const input = "INSERT INTO report ( evaluation_id, report_author ) VALUES ( " + evaluation_id + ", '" + author_name + "' );"
+    + "SELECT LAST_INSERT_ID() AS 'LAST_INSERT_ID';"
+    + "SELECT r.*, e.evaluation_title FROM report r, evaluation e WHERE r.evaluation_id = e.evaluation_id AND report_id = (SELECT LAST_INSERT_ID());"
+
+    // As this API will affect the database, all test cases will be executed by 1 sql call
+    test("Combination tests", done => {
+        sqlAdapter.sqlCall(input, function(res) {
+
+            // 1. EC1: Returned data should be a defined object
+            expect(res[2]).not.toBeUndefined();
+
+            // 2. EC2: Returned data should be an array
+            expect(res[2]).toEqual(
+                expect.arrayContaining([])
+            );
+
+            // 3. EC3: Returned data should contain all valid fields we need.
+            // Namely 'report_id', 'report_author', 'report_title', 'report_creation_time', 'report_modified_time', 
+            // 'report_recommendation', 'report_finalised', 'evaluation_id', 'report_csv', and 'evaluation_title'
+            expect('report_id' in res[2][0]).toEqual(true);
+            expect("report_author" in res[2][0]).toEqual(true);
+            expect("report_title" in res[2][0]).toEqual(true);
+            expect("report_creation_time" in res[2][0]).toEqual(true);
+            expect("report_modified_time" in res[2][0]).toEqual(true);
+            expect("report_recommendation" in res[2][0]).toEqual(true);
+            expect("report_finalised" in res[2][0]).toEqual(true);
+            expect("evaluation_id" in res[2][0]).toEqual(true);
+            expect("report_csv" in res[2][0]).toEqual(true);
+            expect("evaluation_title" in res[2][0]).toEqual(true);
+            
+            // 4. EC4: 'report_id' should be integer
+            expect(!isNaN(Number(res[2][0].report_id))).toEqual(true);
+        
+            // 5. EC5: 'report_finalised' should be 0 
+            expect(res[2][0].report_finalised).toEqual(0);
+            
+            // 6. EC6: 'evaluation_id' should be integer
+            expect(!isNaN(Number(res[2][0].evaluation_id))).toEqual(true);
+
+            // Recover the database
+            const recovery = "DELETE FROM report WHERE report_id = " + res[2][0].report_id;
+            sqlAdapter.sqlCall(recovery, function(recoveryRes) {
+            });
+
+            done();
+        });
+    });
+});
+
 
