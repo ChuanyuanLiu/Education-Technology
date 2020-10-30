@@ -53,3 +53,37 @@ Ensure server is running via the MySQL notifier in the taskbar
 $ mysql -u root -p                              # Login to MySQL server, change password to 'edtech' if needed
 mysql> source <edtech.sql directory>  # Preload database with test data
 ```
+
+
+### Testing
+
+#### Overview
+- Cypress is used as the engine for the front-end tests. 
+- The front-end test requires the database to be reset, and all servers up and running!
+- All tests need to be run sequentially due to dependency!
+- Notice that login page in hosted in Auth0 and not local Server, and requires special configurations which weren't achieved, for more information visit https://auth0.com/blog/end-to-end-testing-with-cypress-and-auth0/.
+
+#### Setup
+- Position your terminal in root folder of the project.
+- Reset the database
+    - `mysql -u root -p`
+    - Type "edtech" as the password
+    - Type `source edtech.sql` to reset the database
+    - Type `exit` to exit the program
+- Start the react app
+    - if you haven't install before run `npm install ./react-app` 
+    - `npm start ./react-app`
+- Start the node app
+    - if you haven't install before run `npm install ./node-app` 
+    - `npm start ./node-app/server.js`
+- Point the "WEB_ADDRESS" value to the web address of the react server, which is found in `react-app/crypress/cypress.json`
+
+### Execution
+- position your terminal in `react-app` directory 
+- run Cypress by typing `node_modules/.bin/cypress open`
+    - You should now see the Cypress App.
+- Login
+    - Open a new tab
+    - Visit `http://localhost:3000/`
+    - Type in username: "gerald@edtechevaluation.com.au" password: "Gerald@Edtech"
+- All test files are located inside `crypress/integration`

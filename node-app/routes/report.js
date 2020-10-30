@@ -483,12 +483,17 @@ router.get('/sendemail', function (req, res, next) {
 * @param {any} res - ResBody
 * @param {any} next - ResQuery
 * @param {number} req.query.report_id - report_id
-* @param {string} req.query.emailaddress - emailaddress
+* @param {string} req.body.report_title - report_title
 */
 router.post('/update/title', function (req, res, next) {
+
+    let report_title = req.body.report_title;
+    let report_id = req.query.report_id;
+    report_title = report_title.replace(/'/g, "\\'");
+    report_title = report_title.replace(/"/g, "\\\"");
     const sql = "UPDATE report "
-        + "SET report_title = '" + req.body.report_title
-        + "' WHERE report_id = " + req.query.report_id;
+        + "SET report_title = '" + report_title
+        + "' WHERE report_id = " + report_id;
 
     sqlAdapter.sqlCall(sql, function (updateRes) {
         if (updateRes == null || JSON.stringify(updateRes) == '[]') {
@@ -511,9 +516,14 @@ router.post('/update/title', function (req, res, next) {
 */
 router.post('/update/recommendation', function (req, res, next) {
 
+    let report_recommendation = req.body.report_recommendation;
+    let report_id = req.query.report_id;
+    report_recommendation = report_recommendation.replace(/'/g, "\\'");
+    report_recommendation = report_recommendation.replace(/"/g, "\\\"");
+
     const sql = "UPDATE report "
-        + "SET report_recommendation = '" + req.body.report_recommendation
-        + "' WHERE report_id = " + req.query.report_id;
+        + "SET report_recommendation = '" + report_recommendation
+        + "' WHERE report_id = " + report_id;
 
     sqlAdapter.sqlCall(sql, function (updateRes) {
         if (updateRes == null || JSON.stringify(updateRes) == '[]') {

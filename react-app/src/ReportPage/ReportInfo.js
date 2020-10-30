@@ -28,8 +28,8 @@ function ReportInfo({data, onClick, hideTitle=false}) {
             </div>
             <div className='rightContent'>
                 {data.wasFinalised()
-                    ? "Finalized"
-                    : "Not Finalized"}
+                    ? "Finalised"
+                    : "Not Finalised"}
                 <br />
                 Last modified: &nbsp;
                 {resolveTime(data.modifiedTime())}

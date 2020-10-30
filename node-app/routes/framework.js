@@ -229,6 +229,8 @@ router.post('/section/update', function (req, res, next) {
     if (req.query.section_id != null) {
         var section_title = req.body.section_title;
         var section_id = req.query.section_id;
+        section_title = section_title.replace(/'/g, "\\'");
+        section_title = section_title.replace(/"/g, "\\\"");
         const sql = "UPDATE framework_section "
             + "SET section_title = '" + section_title
             + "' WHERE section_id = " + section_id;
@@ -290,6 +292,8 @@ router.post('/update', function (req, res, next) {
     if (req.query.framework_id != null) {
         var framework_title = req.body.framework_title;
         var framework_id = req.query.framework_id;
+        framework_title = framework_title.replace(/'/g, "\\'");
+        framework_title = framework_title.replace(/"/g, "\\\"");
         const sql = "UPDATE framework "
             + "SET framework_title = \"" + framework_title
             + "\" WHERE framework_id = " + framework_id;
@@ -380,6 +384,18 @@ router.post('/section/question/rate/update', function (req, res, next) {
         var rate_4_criterion = req.body.rate_4_criterion;
         var rate_5_criterion = req.body.rate_5_criterion;
         var question_id = req.query.question_id;
+
+        rate_1_criterion = rate_1_criterion.replace(/'/g, "\\'");
+        rate_1_criterion = rate_1_criterion.replace(/"/g, "\\\"");
+        rate_2_criterion = rate_2_criterion.replace(/'/g, "\\'");
+        rate_2_criterion = rate_2_criterion.replace(/"/g, "\\\"");
+        rate_3_criterion = rate_3_criterion.replace(/'/g, "\\'");
+        rate_3_criterion = rate_3_criterion.replace(/"/g, "\\\"");
+        rate_4_criterion = rate_4_criterion.replace(/'/g, "\\'");
+        rate_4_criterion = rate_4_criterion.replace(/"/g, "\\\"");
+        rate_5_criterion = rate_5_criterion.replace(/'/g, "\\'");
+        rate_5_criterion = rate_5_criterion.replace(/"/g, "\\\"");
+
         const sql = "UPDATE framework_section_question "
             + "SET rate_1_criterion = '" + rate_1_criterion
             + "', rate_2_criterion = '" + rate_2_criterion
@@ -408,6 +424,8 @@ router.post('/section/question/update', function (req, res, next) {
     if (req.query.question_id != null) {
         var question_id = req.query.question_id;
         var question_title = req.body.question_title;
+        question_title = question_title.replace(/'/g, "\\'");
+        question_title = question_title.replace(/"/g, "\\\"");
         const sql = "UPDATE framework_section_question "
             + "SET question_title = '" + question_title
             + "' WHERE question_id = " + question_id;

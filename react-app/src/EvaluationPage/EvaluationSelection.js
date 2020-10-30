@@ -30,6 +30,7 @@ function EvaluationSelection() {
         fetch("https://139.99.155.172:3001/report/new")
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 setEvaluationList(convertToDataClass(data));
             })
             .catch(console.error);

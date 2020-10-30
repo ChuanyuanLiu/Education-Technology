@@ -87,7 +87,7 @@ function FrameworkOverview({history}) {
     };
 
     const deleteSection = (section_id) => {
-        const url = `http://localhost:3001/framework/section/delete?section_id=${section_id}`
+        const url = `https://139.99.155.172:3001/framework/section/delete?section_id=${section_id}`
         fetch(url)
             .then((response) => response.text())
             .then((data) => {
@@ -100,7 +100,7 @@ function FrameworkOverview({history}) {
         .catch(console.err);
     }
     const deleteQuestion = (section_id) => (question_id) => {
-        const url = `http://localhost:3001/framework/section/question/delete?question_id=${question_id}`
+        const url = `https://139.99.155.172:3001/framework/section/question/delete?question_id=${question_id}`
         fetch(url)
             .then((response) => response.text())
             .then(() => {
@@ -264,16 +264,16 @@ function FrameworkOverview({history}) {
             <div className='content scrollable'>
                 {isAdmin?
                    (finalised ? (
-                        <Reminder is_hidden={!ediable}>
+                        <Reminder is_hidden={ediable}>
                             <span>
                                 This framework cannot be edited as it has been
-                                published, click "Save as New" to generate a new
+                                finalised, click "Save as New" to generate a new
                                 copy
                             </span>
                         </Reminder>
                     ) : null)
                     :                  
-                    <Reminder is_hidden={!isAdmin}>
+                    <Reminder is_hidden={isAdmin}>
                         <span>
                             You only have read permission to framework
                         </span>
@@ -420,11 +420,11 @@ function EditableSection(props) {
     )
     return (
         <div>
-            <div className='editable_section'>
+            <div className='editable_section clickable' 
+                    onClick={getActive ? null : toggleExpand}>
                 {/* Can be used to question edit page */}
                 <div
-                    className='section_input clickable'
-                    onClick={getActive ? null : toggleExpand}
+                    className='section_input'
                 >
                     <span>Section {props.section_index + 1}</span>
                     {getActive ? (
@@ -542,7 +542,7 @@ function ButtomButton({hasPublished, handleFinalize, handleNewVersion, hidden}) 
                 </BigButton>
                 :
                 <BigButton onClick={handleFinalize}>
-                    Finalize
+                    Finalise
                 </BigButton>
             }
         </div>

@@ -154,7 +154,7 @@ function EvaluationOverviewPage({history}) {
                 />
             </NavBar>
             {hasEditAuthority? null : 
-                    <Reminder is_hidden={true}>
+                    <Reminder is_hidden={false}>
                         <span>
                             This page is read-only since you aren't the author of the evaluation
                         </span>
@@ -189,19 +189,12 @@ function EvaluationOverviewPage({history}) {
                     <BigButton
                         onClick={()=> post_finalized_request(finalize_url)}
                     >
-                        Finalize
+                        Finalise
                     </BigButton>
                     :
                     null
                 }
                 <span> </span>
-                <BigButton
-                    onClick={() => {
-                        history.goBack();
-                    }}
-                >
-                    Back
-                </BigButton>
             </div>
         </div>
     );
@@ -268,9 +261,8 @@ function Section({evaluation_id, section_title, section_index,
                 </div>
                 {`Section ${section_index + 1} ${section_title}`}
                 <span className="right">
-                    {section_completed? <CheckOutlined></CheckOutlined>: null}
-
                     {section_completed? "Completed" : null}
+                    {section_completed? <CheckOutlined/>: null}
                 </span>
             </div>
             <ul>
@@ -313,12 +305,11 @@ function Question({
         });
     }
     return (
-        <li onClick={handleClick} className='clickable'>
+        <li onClick={handleClick} className='question clickable'>
             {`${section_index + 1}.${question_index + 1} ${question_title}`}
             <span className="right">
-                    {question_completed? <CheckOutlined></CheckOutlined>: null}
-
                     {question_completed? "Completed" : null}
+                    {question_completed? <CheckOutlined/>: null}
             </span>
         </li>
     );
