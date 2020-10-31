@@ -53,7 +53,7 @@ function FrameworkOverview({history}) {
     }
     //Add section to framework, called from SectionList
     const addSection = () => {
-        const url = `https://139.99.155.172:3001/framework/section/new?framework_id=${framework_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/section/new?framework_id=${framework_id}`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -66,7 +66,7 @@ function FrameworkOverview({history}) {
     };
     //Add question with given section_id, called from EditableSection
     const addQuestion = (section_id) => {
-        const url = `https://139.99.155.172:3001/framework/section/question/new?section_id=${section_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/section/question/new?section_id=${section_id}`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -87,7 +87,7 @@ function FrameworkOverview({history}) {
     };
 
     const deleteSection = (section_id) => {
-        const url = `https://139.99.155.172:3001/framework/section/delete?section_id=${section_id}`
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/section/delete?section_id=${section_id}`
         fetch(url)
             .then((response) => response.text())
             .then((data) => {
@@ -100,7 +100,7 @@ function FrameworkOverview({history}) {
         .catch(console.err);
     }
     const deleteQuestion = (section_id) => (question_id) => {
-        const url = `https://139.99.155.172:3001/framework/section/question/delete?question_id=${question_id}`
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/section/question/delete?question_id=${question_id}`
         fetch(url)
             .then((response) => response.text())
             .then(() => {
@@ -123,7 +123,7 @@ function FrameworkOverview({history}) {
         .catch(console.err);
     }
     const setActive = () => {
-        const url = `https://139.99.155.172:3001/framework/activestatus/update?framework_id=${framework_data.framework_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/activestatus/update?framework_id=${framework_data.framework_id}`;
         const newActiveStatus = {
             framework_active_status: 1 - framework_data.framework_active_status,
         };
@@ -140,7 +140,7 @@ function FrameworkOverview({history}) {
     };
 
     const handleFinalize = () => {
-        const url = `https://139.99.155.172:3001/framework/finalisedstatus/update?framework_id=${framework_data.framework_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/finalisedstatus/update?framework_id=${framework_data.framework_id}`;
         const newPublishStatus = {
             framework_finalised_status: 1,
         };
@@ -162,7 +162,7 @@ function FrameworkOverview({history}) {
     };
 
     const handleNewVersion = () => {
-        const url = `https://139.99.155.172:3001/framework/version?framework_id=${framework_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/version?framework_id=${framework_id}`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -178,7 +178,7 @@ function FrameworkOverview({history}) {
     };
 
     const postTitle = (framework_id) => (text) => {
-        const url = `https://139.99.155.172:3001/framework/update?framework_id=${framework_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/update?framework_id=${framework_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({framework_title: text}),
@@ -227,7 +227,7 @@ function FrameworkOverview({history}) {
 
     useEffect(() => {
         let isCancelled = false;
-        fetch(`https://139.99.155.172:3001/framework?framework_id=${framework_id}`)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/framework?framework_id=${framework_id}`)
             .then((response) => response.json())
             .then((data) => {
                 if(!isCancelled){
@@ -369,7 +369,7 @@ function EditableSection(props) {
     const toggleSave = (event) => {
         event.preventDefault();
         setActive(!getActive);
-        const url = `https://139.99.155.172:3001/framework/section/update?section_id=${props.section.section_id}`;
+        const url = `https://${process.env.REACT_APP_DOMAIN}:3001/framework/section/update?section_id=${props.section.section_id}`;
         const param = {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({section_title: getText}),

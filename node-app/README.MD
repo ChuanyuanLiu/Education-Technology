@@ -10,7 +10,7 @@ This project is the back-end server implementation of EdTech Evaluation.
 3. Run `npm install` to install dependencies
 ## How to compile
 Use 'node server.js' or 'npm start' to compile
-Then you can enter https://139.99.155.172:3001/ to see the result.
+Then you can enter https://localhost:3001/ to see the result.
 ## Running sql scripts
 Having downloaded the sql scripts (EdtechEvaluation.sql) save them under MySql server\bin folder
 1. Download and Install MySql workbench via link: https://dev.mysql.com/downloads/windows/installer/8.0.html

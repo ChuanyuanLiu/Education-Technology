@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) {
     /**
     * @api: GET /report?report_id={rid}
     * @description API for returning all information of a report
-    * @example https://139.99.155.172:3001/report?report_id=1
+    * @example https://localhost:3001/report?report_id=1
     * @param {number} req.query.report_id - report_id
     */
     if (req.query.report_id != null) {
@@ -52,7 +52,7 @@ router.get('/', function (req, res, next) {
     /**
     * @api: GET /report
     * @description API for returning a list of all reports
-    * @example https://139.99.155.172:3001/report
+    * @example https://localhost:3001/report
     */
     else {
         const sql = "SELECT r.*, e.evaluation_title FROM report r, evaluation e WHERE r.evaluation_id = e.evaluation_id";
@@ -77,7 +77,7 @@ router.get('/new', function (req, res, next) {
     /**
     * @api: GET /report/new?evaluation_id={eid}&author_name={author_name}
     * @description API for selecting a completed evaluation to generate a report, and return all data about the newly created report.
-    * @example https://139.99.155.172:3001/report/new?evaluation_id=1&author_name=Tony
+    * @example https://localhost:3001/report/new?evaluation_id=1&author_name=Tony
     * @param {number} req.query.evaluation_id - evaluation_id
     * @param {number} req.query.author_name - author_name
     */
@@ -104,7 +104,7 @@ router.get('/new', function (req, res, next) {
     /**
     * @api: GET /report/new
     * @description API for returning all completed evaluations
-    * @example https://139.99.155.172:3001/report/new
+    * @example https://localhost:3001/report/new
     */
     else {
         const sql = "SELECT e.*, f.framework_title "
@@ -131,7 +131,7 @@ router.get('/finalise', function (req, res, next) {
     /**
     * @api: GET /report/finalise?report_id={rid}
     * @description API for finalising a report
-    * @example https://139.99.155.172:3001/report/finalise?report_id=1
+    * @example https://localhost:3001/report/finalise?report_id=1
     * @param {number} req.query.report_id - report_id
     */
     if (req.query.report_id != null) {
@@ -336,7 +336,7 @@ router.get('/download', function (req, res, next) {
     /**
     * @api: GET /report/download?report_id={rid}
     * @description API for downloading the report.
-    * @example https://139.99.155.172:3001/report/download?report_id=1
+    * @example https://localhost:3001/report/download?report_id=1
     * @param {number} req.query.report_id - report_id
     */
     if (req.query.report_id != null) {
@@ -380,8 +380,8 @@ router.get('/sendemail', function (req, res, next) {
     * @description API for sending the csv file to an email.
     * Node: If you want to add multiple email addresses, just add '&emailaddress=xxx@gmail.com' in the url.
     * For example: 2 email addresses:
-    * https://139.99.155.172:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
-    * @example https://139.99.155.172:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
+    * https://localhost:3001/report/sendemail?emailaddress={emailaddress}&emailaddress={emailaddress}&report_id={rid}
+    * @example https://localhost:3001/report/sendemail?emailaddress=xxx@gmail.com&report_id=1
     * @param {number} req.query.report_id - report_id
     * @param {string} req.query.emailaddress - emailaddress
     */

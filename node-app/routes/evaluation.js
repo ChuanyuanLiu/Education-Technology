@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
     /**
      * @api: GET /evaluation?evaluation_id={eid}&question_id={qid}
      * @description API for getting the rate for chosen questions included response.
-     * @example https://139.99.155.172:3001/evaluation?evaluation_id=1&question_id=1
+     * @example https://localhost:3001/evaluation?evaluation_id=1&question_id=1
      * @param {number} req.query.evaluation_id - evalaution_id
      * @param {number} req.query.question_id - question_id
      */
@@ -98,7 +98,7 @@ router.get('/', function (req, res, next) {
     /**
      * @api: GET /evaluation?evaluation_id={eid}
      * @description API for getting all information of an evaluation
-     * @example https://139.99.155.172:3001/evaluation?evaluation_id=1
+     * @example https://localhost:3001/evaluation?evaluation_id=1
      * @param {number} req.query.evaluation_id - evalaution_id
      */
     else if (req.query.evaluation_id != null) {
@@ -173,7 +173,7 @@ router.get('/', function (req, res, next) {
     /**
      * @api: GET /evaluation
      * @description API for returning a list of all evaluations.
-     * @example https://139.99.155.172:3001/evaluation
+     * @example https://localhost:3001/evaluation
      */
     else {
         const sql = "SELECT e.*, f.framework_title "
@@ -206,7 +206,7 @@ router.get('/new', function (req, res, next) {
      * @api: GET /evaluation/new?framework_id={id}&author_name={author_name}
      * @description API for generating a new evaluation
      *              Select an active and finalised framework to generate evaluation
-     * @example https://139.99.155.172:3001/evaluation/new?framework_id=1&author_name=Tony
+     * @example https://localhost:3001/evaluation/new?framework_id=1&author_name=Tony
      * @param {number} req.query.framework_id - framework_id used to generate the evaluation
      * @param {string} req.query.author_name - author_name used to generate the evaluation
      */
@@ -247,7 +247,7 @@ router.get('/new', function (req, res, next) {
         /**
          * @api: GET /evaluation/new
          * @description API for returning all active and finalised frameworks.
-         * @example https://139.99.155.172:3001/evaluation/new
+         * @example https://localhost:3001/evaluation/new
          */
         const sql = "SELECT * FROM framework WHERE framework_active_status = 1 AND framework_finalised = 1";
         sqlAdapter.sqlCall(sql, function (frameworkRes) {
@@ -297,7 +297,7 @@ router.post('/update/title', function (req, res, next) {
  * @api /evaluation/update/response?evaluation_id={id}&question_id={id}
  * @description API for updating an evaluation's question
  *              If SqlCall excutes successfully, send SUCCESSFUL. If not, send UNSUCCESSFUL
- * @example https://139.99.155.172:3001/evaluation/update/response?evaluation_id=1&question_id=12
+ * @example https://localhost:3001/evaluation/update/response?evaluation_id=1&question_id=12
  * @param {any} req - ReqBody
  * @param {any} res - ResBody
  * @param {any} next - ResQuery
@@ -332,7 +332,7 @@ router.post('/update/response', function (req, res, next) {
  * @api POST /evaluation/finalised/update?evaluation_id={id}
  * @description API for updating the unfinalised evaluation as finalised
  *              If SqlCall excutes successfully, send SUCCESSFUL. If not, send UNSUCCESSFUL
- * @example https://139.99.155.172:3001/evaluation/finalised/update?evaluation_id=1
+ * @example https://localhost:3001/evaluation/finalised/update?evaluation_id=1
  * @param {any} req - ReqBody
  * @param {any} res - ResBody
  * @param {any} next - ResQuery

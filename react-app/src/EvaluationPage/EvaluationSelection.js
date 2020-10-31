@@ -27,7 +27,7 @@ function EvaluationSelection() {
     const { error, roles, loading: rolesLoading, refresh } = useRole();
     // initalize data
     useEffect(() => {
-        fetch("https://139.99.155.172:3001/report/new")
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/report/new`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -37,7 +37,7 @@ function EvaluationSelection() {
     }, []);
 
     function selectEvaluation(id) {
-        const requestURL = `https://139.99.155.172:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
+        const requestURL = `https://${process.env.REACT_APP_DOMAIN}:3001/report/new?evaluation_id=${id}&author_name=${user.name}`;
         // console.log(requestURL);
         fetch(requestURL)
             .then((response) => response.json())

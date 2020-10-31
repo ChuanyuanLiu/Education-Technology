@@ -80,7 +80,7 @@ router.get('/roles', function (req, res, next) {
         });
 
     /**
-     * @api: GET https://139.99.155.172:3001/user/roles
+     * @api: GET https://localhost:3001/user/roles
      * @description APIs for retrieving all roles
      * @param {number} req.query.user_id - user_id
      */
@@ -93,7 +93,7 @@ router.get('/roles', function (req, res, next) {
 });
 
 /**
- * @api: GET https://139.99.155.172:3001/user/update?user_id={uid}
+ * @api: GET https://localhost:3001/user/update?user_id={uid}
  * @description APIs for updating a user's details
  * @param {any} req - ReqBody
  * @param {any} res - ResBody
@@ -162,7 +162,7 @@ router.post('/new', function (req, res, next) {
 
 /**
  * @description APIs for deleting a user
- * @api GET https://139.99.155.172:3001/user/delete?user_id={uid}
+ * @api GET https://localhost:3001/user/delete?user_id={uid}
  * @param {any} req - ReqBody
  * @param {any} res - ResBody
  * @param {any} next - ResQuery

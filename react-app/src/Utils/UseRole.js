@@ -13,7 +13,7 @@ export const useRole = () => {
         (async () => {
             try {
                 if (user === undefined) return;
-                const url = `https://139.99.155.172:3001/user/roles?user_id=${user.sub}`;
+                const url = `https://${process.env.REACT_APP_DOMAIN}:3001/user/roles?user_id=${user.sub}`;
                 const res = await fetch(url);
 
                 setState({

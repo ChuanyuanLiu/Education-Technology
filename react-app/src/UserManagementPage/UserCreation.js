@@ -69,7 +69,7 @@ function UserCreation({history}) {
         }
         param.body = JSON.stringify(body);
         
-        fetch(`https://139.99.155.172:3001/user/new`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/new`, param)
             .then((response) => {
                 if (response.status === 200) {
                     console.log("success");
@@ -81,7 +81,7 @@ function UserCreation({history}) {
 
     useEffect(() => {
         let isInit = false;
-        fetch("https://139.99.155.172:3001/user/roles")
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/roles`)
             .then((response) => response.json())
             .then((data) => {
                 setRoleList(data);
