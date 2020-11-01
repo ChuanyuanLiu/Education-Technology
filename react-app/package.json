@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.7.3",
     "cypress": "^4.0.1",
+    "fs": "0.0.1-security",
     "node-fetch": "^2.6.1",
     "react": "^16.14.0",
     "react-bootstrap": "^0.32.4",

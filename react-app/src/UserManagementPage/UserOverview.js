@@ -70,7 +70,7 @@ function UserOverview({history}) {
             param.body = `{"${field}": "${text}"}`;
         }
 
-        fetch(`http://localhost:3001/user/update?user_id=${user_id}`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/update?user_id=${user_id}`, param)
             .then((response) => {
                 status = response.status;
                 return response.json()
@@ -103,7 +103,7 @@ function UserOverview({history}) {
         }
         let status;
         
-        fetch(`http://localhost:3001/user/update?user_id=${user_id}`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/update?user_id=${user_id}`, param)
             .then((response) => {
                 status = response.status;
                 return response.json()
@@ -127,7 +127,7 @@ function UserOverview({history}) {
         }
         let status;
         
-        fetch(`http://localhost:3001/user/update?user_id=${user_id}`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/update?user_id=${user_id}`, param)
             .then((response) => {
                 status = response.status;
                 return response.json()
@@ -159,7 +159,7 @@ function UserOverview({history}) {
             }
         }
 
-        fetch(`http://localhost:3001/user/update/role?user_id=${user_id}`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/update/role?user_id=${user_id}`, param)
             .then((response) => {
                 if (response.status === 200) {
                     console.log(newRole);
@@ -178,7 +178,7 @@ function UserOverview({history}) {
             method: "GET"
         }
 
-        fetch(`http://localhost:3001/user/delete?user_id=${user_id}`, param)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/delete?user_id=${user_id}`, param)
             .then((response) => {
                 if (response.status === 200) {
                     console.log("success");
@@ -190,7 +190,7 @@ function UserOverview({history}) {
 
     useEffect(() => {
         let isInit = false;
-        fetch(`http://localhost:3001/user?user_id=${user_id}`)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user?user_id=${user_id}`)
             .then((response) => response.json())
             .then((data) => {
                 if (!isInit) {
@@ -198,7 +198,7 @@ function UserOverview({history}) {
                 }
             })
             .catch(console.error);
-        fetch("http://localhost:3001/user/roles")
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user/roles`)
             .then((response) => response.json())
             .then((data) => setRoleList(data))
             .catch(console.error);

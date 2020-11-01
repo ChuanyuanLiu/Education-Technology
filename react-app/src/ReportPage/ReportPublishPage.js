@@ -21,10 +21,10 @@ Report Publish Page (route from Report Overview when report has been finalised)
     |-- BigButton
 */
 function ReportPublishPage({history}){
-    const {report_id, title} = history.location.state
-    const [mailList, setMailList] = useState([])
+    const {report_id, title} = history.location.state;
+    const [mailList, setMailList] = useState([]);
     const [emailStatus, setEmailStatus] = useState(EMAIL_STATUS.HIDDEN);
-    const post_send_email_url = "http://localhost:3001/report/sendemail?"
+    const post_send_email_url = `https://${process.env.REACT_APP_DOMAIN}:3001/report/sendemail?`
     //Regex to match email address
     const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 

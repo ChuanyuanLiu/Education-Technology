@@ -39,7 +39,7 @@ function UserManagementPage() {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/user")
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user`)
             .then((response) => response.json())
             .then((data) => {
                 setUserList(convertToDataClass(data));

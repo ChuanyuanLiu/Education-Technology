@@ -19,7 +19,7 @@ function QuestionPage({history}) {
     //TODO, catch connection reused error on screen
     useEffect(() => {
         fetch(
-            `http://localhost:3001/evaluation?evaluation_id=${evaluation_id}&question_id=${question_id}`
+            `https://${process.env.REACT_APP_DOMAIN}:3001/evaluation?evaluation_id=${evaluation_id}&question_id=${question_id}`
         )
             .then((data) => data.json())
             .then(setQuestion)
@@ -28,7 +28,7 @@ function QuestionPage({history}) {
 
     if (question_data == null) return <h1>Loading...</h1>;
     //TODO dynamic url allocation
-    const url = `http://localhost:3001/evaluation/update/response?evaluation_id=${evaluation_id}&question_id=${question_id}`
+    const url = `https://${process.env.REACT_APP_DOMAIN}:3001/evaluation/update/response?evaluation_id=${evaluation_id}&question_id=${question_id}`
     const post_request = (url, rate_chosen, comment) => {
         const param = {
             headers : {'Content-Type': "application/json"},

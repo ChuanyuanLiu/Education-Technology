@@ -32,7 +32,7 @@ function EvaluationOverviewPage({history}) {
 
     // fetch data every time evaluation or framework ID changes
     useEffect(() => {
-        fetch(`http://localhost:3001/evaluation?evaluation_id=${evaluation_id}`)
+        fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/evaluation?evaluation_id=${evaluation_id}`)
             .then((response) => response.json())
             .then((data) => {
                 setEvaluation(data)
@@ -66,8 +66,8 @@ function EvaluationOverviewPage({history}) {
 
 
 
-    const post_url = `http://localhost:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
-    const finalize_url = `http://localhost:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
+    const post_url = `https://${process.env.REACT_APP_DOMAIN}:3001/evaluation/update/title?evaluation_id=${evaluation_id}`;
+    const finalize_url = `https://${process.env.REACT_APP_DOMAIN}:3001/evaluation/finalised/update?evaluation_id=${evaluation_id}`;
     const post_request = (url, title, summary) => {
         const param = {
             headers: {
