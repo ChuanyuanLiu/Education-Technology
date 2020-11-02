@@ -53,6 +53,7 @@ describe("U2 User Management", function () {
         cy.get(':nth-child(2) > .StatusSwitch-switch > .ant-switch').click();
         // delete user
         cy.contains("button", "Delete").click();
+        cy.wait(1000);
         cy.contains("Yes").click();
     });
 
