@@ -35,11 +35,25 @@ Create a pull request on Bitbucket, add front/back end teammate and architecture
 ```
 
 ## Setup
+Further details can be found on https://confluence.cis.unimelb.edu.au:8443/display/SWEN900142020EEBudgerigar/Deployment+Guide
+
+### Files
+- /react-app: Create a `.env` file containing the domain name, use `localhost` for local testing:
+```
+REACT_APP_DOMAIN=<Insert IP address or "localhost">
+```
+- /node-app: Create a self-signed certificate using OpenSSL:
+``` bash
+$ openssl req -nodes -new -x509 -keyout server.key -out server.cert
+```
 ### Front-end
 ``` bash
-$ cd react-app  # Switch to front-end directory
-$ npm install   # Install dependencies
-$ yarn start    # Start React app on port 3000
+$ cd react-app                              # Switch to front-end directory
+$ npm install                               # Install dependencies
+# Select one of the following three based on OS and shell:
+$ set HTTPS=true&&npm start                 # Start React app on port 3000 (Windows (cmd))
+$ ($env:HTTPS = "true") -and (npm start)    # Start React app on port 3000 (Windows (powershell))
+$ HTTPS=true npm start                      # Start React app on port 3000 (Mac, Linux)
 ```
 ### Back-end
 ``` bash
@@ -50,10 +64,10 @@ $ npm start     # Start Node.js app on port 3001
 ### MySQL server
 Ensure server is running via the MySQL notifier in the taskbar
 ``` bash
-$ mysql -u root -p                              # Login to MySQL server, change password to 'edtech' if needed
-mysql> source <edtech.sql directory>  # Preload database with test data
+$ mysql -u root -p                                              # Login to MySQL server
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'edtech';    # Change password to 'edtech', if needed
+mysql> source <edtech.sql directory>                            # Preload database with test data
 ```
-
 
 ### Testing
 
@@ -84,6 +98,6 @@ mysql> source <edtech.sql directory>  # Preload database with test data
     - You should now see the Cypress App.
 - Login
     - Open a new tab
-    - Visit `http://localhost:3000/`
+    - Visit `https://localhost:3000/`
     - Type in username: "gerald@edtechevaluation.com.au" password: "Gerald@Edtech"
-- All test files are located inside `crypress/integration`
+- All test files are located inside `cypress/integration`
