@@ -9,6 +9,12 @@ This project involves creating a web-based application that can be used by the c
 * Back-end: Node.js
 * Database: MySQL
 
+## Teammates
+* Samuel Tumewa
+* Anuradha
+* Yuyao Ma
+* Zijian Ju
+
 ## Git Workflow
 ### Branch stategy
 - `master` branch: Our main branch.
