@@ -10,6 +10,7 @@ This project involves creating a web-based application that can be used by the c
 * Database: MySQL
 
 ## Teammates
+* Chuanyuan Liu
 * Samuel Tumewa
 * Anuradha
 * Yuyao Ma
