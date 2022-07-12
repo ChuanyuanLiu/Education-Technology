@@ -4,13 +4,14 @@ This project is the back-end server implementation of EdTech Evaluation.
 - Node.js Version: 12.18.3 (includes npm 6.14.6)
 - Express
 - MySQL Version: Community-8.0.21.0
-### Set up handbook
+### Set up 
 1. Install Node.js via the link: https://nodejs.org/en/download/
 2. Redirect to the '/node-app' directory
 3. Run `npm install` to install dependencies
 ## How to compile
 Use 'node server.js' or 'npm start' to compile
 Then you can enter https://localhost:3001/ to see the result.
+Click "continue with the risk" if using self signed certificates
 ## Running sql scripts
 Having downloaded the sql scripts (EdtechEvaluation.sql) save them under MySql server\bin folder
 1. Download and Install MySql workbench via link: https://dev.mysql.com/downloads/windows/installer/8.0.html
