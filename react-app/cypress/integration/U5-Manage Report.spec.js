@@ -9,7 +9,6 @@ describe("U5 Manage Report", function () {
         cy.home();
         // go to framework page
         cy.contains("Report").click();
-        cy.wait(1000);
     });
 
     it("5.1 acesss report", function (){
@@ -18,7 +17,6 @@ describe("U5 Manage Report", function () {
 
     it("5.2 generate report", function() {
         cy.contains("button", "New Report").click();
-        cy.wait(1000);
         searchTitle(NEW_EVALUATION_NAME).click();
         editTitle(NEW_REPORT_NAME);
     });
@@ -33,24 +31,19 @@ describe("U5 Manage Report", function () {
 
     it("5.4 finalised report", function() {
         cy.contains(".InfoCard", "Not Finalised").click();
-        cy.wait(1000);
         cy.contains("button", "Finalise").click();
     });
 
     it("5.5.1 download report", function() {
         cy.contains(".InfoCard", "Finalised").click();
-        cy.wait(1000);
         cy.contains("button", "Download").click();
     });
 
     it("5.5.2 send report", function() {
         cy.contains(".InfoCard", "Finalised").click();
-        cy.wait(1000);
         cy.contains("button", "Publish").click();
-        cy.wait(1000);
         // add receiver
         cy.contains("Add Receiver").click();
-        cy.wait(1000);
         cy.get("[placeholder='Type Email to send']").type(Cypress.env("EMAIL_ADDRESS"));
         // send email
         cy.contains("button", "Send").click();

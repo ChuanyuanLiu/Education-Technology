@@ -8,7 +8,7 @@ import CardList from "../Utils/CardList";
 import BigButton from "../Utils/BigButton";
 import {FrameworkInfoData} from "../Utils/DataClass";
 import { useRole } from "../Utils/UseRole";
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from 'Utils/UseAuth';
 
 function FrameworkPage() {
     const SEARCH_PROPERTY = "title";

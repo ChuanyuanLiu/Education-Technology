@@ -7,7 +7,6 @@ describe("U4 Manage Evaluation", ()=>{
         cy.home();
         // go to evaluation page
         cy.contains("Evaluations").click();
-        cy.wait(1000);
     });
 
     it("4.2 create new evaluation", ()=> {

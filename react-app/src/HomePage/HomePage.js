@@ -3,7 +3,6 @@ import NavBar from "../Utils/NavBar";
 import { Layout } from "antd"
 import "./HomePage.css";
 import { useHistory, useState } from "react-router-dom";
-import { useAuth0 } from '@auth0/auth0-react';
 import { useRole } from "../Utils/UseRole";
 import { useMetadata } from "../Utils/UseMetadata";
 const {Content} = Layout;
@@ -69,7 +68,11 @@ function PageOptionList({role}) {
 
 // Uncomment lines 50, 52, and 61 to use the UseRole hook
 function HomePage(props) {
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const user = {
+        name : "Gale"
+    } 
+    const isAuthenticated = true
+    const isLoading  = false
     const { error: roleError, roles, loading: rolesLoading } = useRole();
     const { error: metadataError , metadata, loading: metadataLoading } = useMetadata();
 

@@ -5,7 +5,7 @@ import ReportInfo from "./ReportInfo";
 import BigButton from "./../Utils/BigButton";
 import {ReportInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from 'Utils/UseAuth';
 import { useRole } from "../Utils/UseRole";
 import { useMetadata } from "../Utils/UseMetadata";
 import Reminder from "../Utils/Reminder";

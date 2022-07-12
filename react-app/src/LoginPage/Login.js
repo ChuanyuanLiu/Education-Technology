@@ -4,7 +4,7 @@ import "./Login.css"
 import 'antd/dist/antd.css';
 import BigButton from "./../Utils/BigButton"
 import { useHistory } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from "Utils/UseAuth";
 
 
 function Login(){

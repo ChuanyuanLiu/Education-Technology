@@ -4,7 +4,7 @@ import NavBar from "../Utils/NavBar";
 import EvaluationInfo from "./EvaluationInfo";
 import {EvaluationInfoData} from "../Utils/DataClass.js";
 import CardList from "../Utils/CardList";
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from 'Utils/UseAuth';
 import { useRole } from "../Utils/UseRole";
 
 /**

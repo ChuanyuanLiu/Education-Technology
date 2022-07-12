@@ -192,7 +192,7 @@ function EvaluationOverviewPage({history}) {
                     <BigButton
                         onClick={()=> post_finalized_request(finalize_url)}
                     >
-                        Finalize
+                        Finalise
                     </BigButton>
                     :
                     null

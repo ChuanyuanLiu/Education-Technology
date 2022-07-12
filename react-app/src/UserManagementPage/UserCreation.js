@@ -5,7 +5,7 @@ import NavBar from "../Utils/NavBar";
 import StatusSwitch from "../Utils/StatusSwitch";
 import TextArea from "../Utils/TextArea";
 import BigButton from "../Utils/BigButton";
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from 'Utils/UseAuth';
 import { Select, Popconfirm, Form, Input } from "antd";
 
 import "./UserOverview.css";

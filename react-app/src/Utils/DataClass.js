@@ -206,6 +206,7 @@ class UserInfoData extends Data {
     }
 
     constructor(backendData) {
+        console.log(backendData);
         super(backendData, UserInfoData.#propertyToFieldName, "UserInfoData");
     }
 

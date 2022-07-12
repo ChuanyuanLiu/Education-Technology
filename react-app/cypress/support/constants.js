@@ -5,7 +5,7 @@ const NEW_FRAMEWORK_NAME = "Framework Title Editable";
 const NEW_EVALUATION_NAME = "Evaluation Title Editable";
 const NEW_USER_NAME = "User for Cypress testing";
 const NEW_REPORT_NAME = "Rreport Title Editable";
-const INPUT_BUTTON = ".section_input_button"; // the pen like button
+const INPUT_BUTTON = ".anticon-edit"; // the pen like button
 const TICK_BUTTON = ".anticon-check"; // the tick beside input boxes
 const SWITCH_BUTTON = ".ant-switch";
 /********** Resusable methods */

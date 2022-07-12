@@ -18,7 +18,7 @@ var mysql = require('mysql');
 * @param {string} timezone - define the timezone used in MySQL
 */
 var mySqlConfig = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'edtech',
     database: 'edtech',
@@ -33,6 +33,7 @@ var connection;
  */
 function connectWithTimeoutHandling() {
     connection = mysql.createConnection(mySqlConfig);
+    console.log(mySqlConfig);
 
     connection.connect(function (err) {
         if (err) {

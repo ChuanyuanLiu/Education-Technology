@@ -18,3 +18,4 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+// Wait for pages to load for 10 seconds

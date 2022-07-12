@@ -40,11 +40,17 @@ function UserManagementPage() {
 
     useEffect(() => {
         fetch(`https://${process.env.REACT_APP_DOMAIN}:3001/user`)
-            .then((response) => response.json())
-            .then((data) => {
-                setUserList(convertToDataClass(data));
+            .then((response) => {
+                window.response = response;
+                // return response.json();
             })
-            .catch(console.error);
+            // .then((data) => {
+            //     console.log("before data converted", data);
+            //     const dataclass = convertToDataClass(data);
+            //     setUserList(dataclass);
+            //     console.log("after data converted", data);
+            // })
+            // .catch(console.error);
     }, []);
 
     if (userList.length === 0) {
@@ -58,6 +64,7 @@ function UserManagementPage() {
                     Users
                 </NavBar>
             </div>
+            {console.log("rendered")}
             <div className='content scrollable'>
                 <CardList 
                     searchProperty={SEARCH_PROPERTY} 

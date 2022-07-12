@@ -1,6 +1,8 @@
 {
     "viewportWidth": 500,
     "viewportHeight": 900,
+    "pageLoadTimeout": 600000,
+    "defaultCommandTimeout": 600000,
     "env":{
         "WEB_ADDRESS": "http://localhost:3000",
         "EMAIL_ADDRESS": "cokop66790@aieen.com"

@@ -24,7 +24,7 @@ function App(){
     return (
         <div className='element_container'>
                 <Router >
-                    <Route exact path='/' component={Login} />
+                    <Route exact path='/' component={HomePage} />
                     <Route path='/home_page' component={HomePage}/>
                     <Route path='/evaluation_overview' component={EvaluationOverviewPage}/>
                     <Route path='/evaluation' component={Evaluation}/>
